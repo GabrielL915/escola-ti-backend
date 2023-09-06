@@ -17,6 +17,9 @@ module.exports = {
       password:
         '',
     },
+    migrations: {
+      tableName: 'knex_migrations',
+    },
   },
 
   staging: {

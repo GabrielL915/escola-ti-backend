@@ -6,7 +6,7 @@ import {
   ApiTags,
   ApiBody,
   ApiParam,
-  ApiBearerAuth
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 import { LoginDto } from '../dto/login.dto';
 import { AuthResponseDto } from '../dto/auth-response.dto';
@@ -19,21 +19,6 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  @ApiParam(
-    {
-      name: 'email',
-      description: 'E-mail do entregador',
-      type: String,
-      required: true,
-      example: 'email@gmail.com',
-    })
-  @ApiParam({
-    name: 'password',
-    description: 'Senha do entregador',
-    type: String,
-    required: true,
-    example: '12345678',
-  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Login realizado com sucesso',
@@ -41,6 +26,10 @@ export class AuthController {
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
     description: 'Credenciais inválidas',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Erro interno do servidor',
   })
   @ApiBody({
     description: 'Login payload',
@@ -62,8 +51,12 @@ export class AuthController {
     status: HttpStatus.BAD_REQUEST,
     description: 'Credenciais inválidas',
   })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Erro interno do servidor',
+  })
   @ApiBody({
-    description: '',
+    description: 'SingUp payload',
     type: SingUpDto,
     required: true,
   })
@@ -80,12 +73,16 @@ export class AuthController {
     status: HttpStatus.BAD_REQUEST,
     description: 'Credenciais inválidas',
   })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Erro interno do servidor',
+  })
   @ApiParam({
     name: 'email',
     description: 'E-mail do entregador',
     type: String,
     required: true,
-    example: '',
+    example: 'teste@gmail.com',
   })
   getProfile(@Param('email') email: string): Promise<AuthResponseDto> {
     return this.authService.getProfile(email);
