@@ -11,6 +11,7 @@ import {
   import { randomBytes, scryptSync, timingSafeEqual } from 'crypto';
   import { Knex } from 'knex';
   import { InjectModel } from 'nest-knexjs';
+import { instanceToPlain } from 'class-transformer';
   
   /*  Todo:
   - teste unitarios
@@ -60,8 +61,10 @@ import {
       }
     }
   
-    getProfile(email: string): Promise<AuthResponseDto> {
-      return this.knex('entregador').where({ email }).first();
+    async getProfile(email: string): Promise<AuthResponseDto> {
+      const fullProfile = await this.knex.from('entregador').where({ email: email });
+      console.log(instanceToPlain(fullProfile) as AuthResponseDto)
+      return instanceToPlain(fullProfile) as AuthResponseDto;
     }
   
     private async validate(email: string, senha: string): Promise<LoginDto> {
