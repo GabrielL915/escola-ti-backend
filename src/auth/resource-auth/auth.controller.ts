@@ -1,4 +1,4 @@
-import { Body, Controller, Post, HttpCode, HttpStatus, Get, Param } from '@nestjs/common';
+import { Body, Controller, Post, HttpCode, HttpStatus, Get, Param, InternalServerErrorException, BadRequestException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SingUpDto } from '../dto/singup.dto';
 import {
@@ -18,26 +18,29 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @HttpCode(HttpStatus.OK)
-  @Post('login')
+  @Post('singin')
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Login realizado com sucesso',
+
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
     description: 'Credenciais inválidas',
+    type: BadRequestException,
   })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Erro interno do servidor',
+    type: InternalServerErrorException,
   })
   @ApiBody({
     description: 'Login payload',
     type: LoginDto,
     required: true,
   })
-  singIn(@Body() loginDto: LoginDto) {
-    return this.authService.singIn(
+  login(@Body() loginDto: LoginDto) {
+    return this.authService.signIn(
       loginDto
     );
   }
@@ -46,14 +49,17 @@ export class AuthController {
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'Usuário criado com sucesso',
+    type: SingUpDto,
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
     description: 'Credenciais inválidas',
+    type: BadRequestException,
   })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Erro interno do servidor',
+    type: InternalServerErrorException,
   })
   @ApiBody({
     description: 'SingUp payload',
@@ -61,21 +67,24 @@ export class AuthController {
     required: true,
   })
   create(@Body() createCadastroDto: SingUpDto) {
-    return this.authService.singUp(createCadastroDto);
+    return this.authService.signUp(createCadastroDto);
   }
 
   @Get('profile:email')
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Retorna o perfil do entregador',
+    type: AuthResponseDto,
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
     description: 'Credenciais inválidas',
+    type: BadRequestException,
   })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Erro interno do servidor',
+    type: InternalServerErrorException,
   })
   @ApiParam({
     name: 'email',

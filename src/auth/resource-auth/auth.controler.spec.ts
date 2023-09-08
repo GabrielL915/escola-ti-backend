@@ -14,8 +14,8 @@ describe('AuthController', () => {
         {
           provide: AuthService,
           useValue: {
-            singIn: jest.fn() as jest.MockedFunction<AuthService['singIn']>,
-            singUp: jest.fn() as jest.MockedFunction<AuthService['singUp']>,
+            singIn: jest.fn() as jest.MockedFunction<AuthService['signIn']>,
+            singUp: jest.fn() as jest.MockedFunction<AuthService['signUp']>,
             getProfile: jest.fn() as jest.MockedFunction<AuthService['getProfile']>,
           },
         },
@@ -35,25 +35,25 @@ describe('AuthController', () => {
       const loginDto = { email: 'test@test.com', senha: '12345678' };
       const responseData = { access_token: 'token123', refresh_token: 'refreshToken123' };
 
-      service.singIn.mockResolvedValue(responseData);
+      service.signIn.mockResolvedValue(responseData);
 
-      expect(await controller.singIn(loginDto)).toEqual(responseData);
+      expect(await controller.login(loginDto)).toEqual(responseData);
     });
 
     it('should throw UnauthorizedException when email format is invalid', async () => {
       const loginDto = { email: 'testtest.com', senha: '12345678' };
 
-      service.singIn.mockRejectedValue(new UnauthorizedException());
+      service.signIn.mockRejectedValue(new UnauthorizedException());
 
-      await expect(controller.singIn(loginDto)).rejects.toThrow(UnauthorizedException);
+      await expect(controller.login(loginDto)).rejects.toThrow(UnauthorizedException);
     });
 
     it('should throw UnauthorizedException when password is too short', async () => {
       const loginDto = { email: 'test@test.com', senha: '12345' };
 
-      service.singIn.mockRejectedValue(new UnauthorizedException());
+      service.signIn.mockRejectedValue(new UnauthorizedException());
 
-      await expect(controller.singIn(loginDto)).rejects.toThrow(UnauthorizedException);
+      await expect(controller.login(loginDto)).rejects.toThrow(UnauthorizedException);
     });
   });
 
@@ -89,7 +89,7 @@ describe('AuthController', () => {
         data_de_cadastro: '2021-01-01'
       };
 
-      service.singUp.mockRejectedValue(new UnauthorizedException());
+      service.signUp.mockRejectedValue(new UnauthorizedException());
 
       await expect(controller.create(singUpDto)).rejects.toThrow(UnauthorizedException);
     });
