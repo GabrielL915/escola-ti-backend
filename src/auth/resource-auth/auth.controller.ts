@@ -18,7 +18,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @HttpCode(HttpStatus.OK)
-  @Post('singin')
+  @Post('login')
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Login realizado com sucesso',
@@ -45,7 +45,7 @@ export class AuthController {
     );
   }
 
-  @Post('singup')
+  @Post('register')
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'Usuário criado com sucesso',

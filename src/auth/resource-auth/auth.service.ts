@@ -13,9 +13,6 @@ import { Knex } from 'knex';
 import { InjectModel } from 'nest-knexjs';
 import { instanceToPlain } from 'class-transformer';
 
-/*  Todo:
-  - teste unitarios
-  - alterar dados */
 @Injectable()
 export class AuthService {
   private jwtKeyPair: { privateKey: string; publicKey: string };
