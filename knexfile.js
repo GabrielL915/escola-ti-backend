@@ -16,6 +16,7 @@ module.exports = {
       database: '',
       password:
         '',
+
     },
     migrations: {
       tableName: 'knex_migrations',

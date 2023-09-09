@@ -10,14 +10,14 @@ import { AuthModule } from './auth/resource-auth/auth.module';
         useNullAsDefault: true,
         connection: {
           connectionString:
-            '',
-          ssl: { rejectUnauthorized: false },
-          host: '',
-          port: 5432,
-          user: '',
-          database: '',
-          password:
-            '',
+          '',
+        ssl: { rejectUnauthorized: false },
+        host: '',
+        port: 5432,
+        user: '',
+        database: '',
+        password:
+          '',
         },
       },
     }),

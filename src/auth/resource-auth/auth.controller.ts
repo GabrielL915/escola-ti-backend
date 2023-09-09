@@ -70,7 +70,7 @@ export class AuthController {
     return this.authService.signUp(createCadastroDto);
   }
 
-  @Get('profile:email')
+  @Get('profile/:email')
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Retorna o perfil do entregador',

@@ -110,13 +110,4 @@ export class SingUpDto {
     required: true,
   })
   mochila: boolean;
-
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'Data de cadastro do entregador',
-    example: '2021-01-01',
-    type: String,
-    required: true,
-  })
-  data_de_cadastro: string;
 }
