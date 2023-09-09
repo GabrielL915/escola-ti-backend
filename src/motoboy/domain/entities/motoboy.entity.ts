@@ -1,5 +1,5 @@
 export interface Motoboy {
-  id: number;
+  id: string;
   nome: string;
   sobrenome: string;
   CPF: string;
