@@ -44,7 +44,7 @@ export class AuthService {
     try {
       const hashedPassword = this.hashSenha(createCadastroDto.senha);
       console.log('hashedPassword: ', hashedPassword);
-      const newRegister = { ...createCadastroDto, senha: hashedPassword };
+      const newRegister = { ...createCadastroDto, senha: hashedPassword, token_dispositivo: 'token-do-dispositivo' };
       await this.knex('entregador').insert(newRegister);
       console.log('Entregador: ', newRegister);
     } catch (error) {
