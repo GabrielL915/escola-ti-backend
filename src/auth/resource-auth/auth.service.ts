@@ -44,7 +44,14 @@ export class AuthService {
     try {
       const hashedPassword = this.hashSenha(createCadastroDto.senha);
       console.log('hashedPassword: ', hashedPassword);
-      const newRegister = { ...createCadastroDto, senha: hashedPassword, token_dispositivo: 'token-do-dispositivo' };
+      const telefoneSemMascara = createCadastroDto.telefone.replace(/\D/g, '');
+      const newRegister = {
+        ...createCadastroDto,
+        telefone: telefoneSemMascara,
+        senha: hashedPassword,
+        entregas_realizadas: 0,
+        token_dispositivo: 'token-do-dispositivo',
+      };
       await this.knex('entregador').insert(newRegister);
       console.log('Entregador: ', newRegister);
     } catch (error) {
@@ -60,7 +67,7 @@ export class AuthService {
     return instanceToPlain(fullProfile) as AuthResponseDto;
   }
 
-   async validateEntregador(email: string, senha: string): Promise<LoginDto> {
+  async validateEntregador(email: string, senha: string): Promise<LoginDto> {
     const entregador = await this.knex
       .first('senha', 'email', 'ativo')
       .from('entregador')
