@@ -70,8 +70,8 @@ export class SingUpDto {
 
   @IsNotEmpty()
   @IsString()
-  @MaxLength(13)
-  @MinLength(13)
+  @MaxLength(15)
+  @MinLength(15)
   @ApiProperty({
     description: 'Telefone do entregador',
     example: '(00) 00000-0000',
