@@ -36,30 +36,6 @@ export class UpdateMotoboyDto extends PartialType(CreateMotoboyDto) {
 
   @IsNotEmpty()
   @IsString()
-  @MaxLength(14)
-  @MinLength(14)
-  @ApiProperty({
-    description: 'CPF do entregador',
-    example: '000.000.000-00',
-    type: String,
-    required: true,
-  })
-  CPF: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @MaxLength(18)
-  @MinLength(18)
-  @ApiProperty({
-    description: 'CNPJ do entregador',
-    example: '00.000.000/0000-00',
-    type: String,
-    required: true,
-  })
-  CNPJ: string;
-
-  @IsNotEmpty()
-  @IsString()
   @IsEmail()
   @ApiProperty({
     description: 'Email do entregador',
@@ -111,13 +87,4 @@ export class UpdateMotoboyDto extends PartialType(CreateMotoboyDto) {
     required: true,
   })
   mochila: boolean;
-
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'Data de cadastro do entregador',
-    example: '2021-01-01',
-    type: String,
-    required: true,
-  })
-  data_de_cadastro: string;
 }

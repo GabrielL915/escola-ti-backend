@@ -4,6 +4,7 @@ import { UpdateMotoboyUseCase } from '../domain/use-cases/update-motoboy';
 import { MotoboyRepositoryImpl } from '../data-access/repostitory/motoboy.repository.impl';
 import { MotoboyRepository } from '../domain/repository/motoboy.repository';
 
+
 @Module({
   controllers: [MotoboyController],
   providers: [
