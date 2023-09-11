@@ -10,28 +10,31 @@ describe('MotoboyRepositoryImpl', () => {
 
   beforeEach(() => {
     knexFunctions = {
-        where: jest.fn().mockReturnValue({
-          select: jest.fn().mockReturnThis(),
-          update: jest.fn().mockReturnThis().mockReturnValue({
-            returning: jest.fn().mockReturnThis()
-          })
-        })
-      };
-      
-      mockKnex = jest.fn().mockReturnValue(knexFunctions);
+      where: jest.fn().mockReturnValue({
+        select: jest.fn().mockReturnThis(),
+        update: jest.fn().mockReturnThis().mockReturnValue({
+          returning: jest.fn().mockReturnThis(),
+        }),
+      }),
+    };
+
+    mockKnex = jest.fn().mockReturnValue(knexFunctions);
     repository = new MotoboyRepositoryImpl(mockKnex as any);
+  });
+
+  it('should be defined', () => {
+    expect(repository).toBeDefined();
   });
 
   it('should throw exception if entregador not found', async () => {
     knexFunctions.where().select.mockResolvedValueOnce([]);
-  
+
     await expect(repository.update('1', {} as Motoboy)).rejects.toThrow(
-      HttpException
+      HttpException,
     );
   });
 
   it('should return updated motoboy if entregador exists', async () => {
-    // Suponha que esse seja o entregador existente
     const originalMotoboy: Motoboy = {
       id: '1',
       nome: 'João',
@@ -45,36 +48,42 @@ describe('MotoboyRepositoryImpl', () => {
       data_de_cadastro: '01/01/2020',
       mochila: true,
       aiqcoins: 100,
-      ativo: true
+      ativo: true,
     };
     knexFunctions.where().select.mockResolvedValueOnce([originalMotoboy]);
-    
-    // Suponha que você esteja atualizando apenas os campos permitidos no DTO
+
     const updatedData: UpdateMotoboyDto = {
-      nome: 'Carlos',
-      sobrenome: 'Rodrigues',
-      email: 'carlos@example.com',
-      telefone: '(11) 12345-6789',
-      data_de_nascimento: '01/01/1992',
-      senha: 'newpassword',
-      mochila: false
+      nome: 'Kleber',
+      sobrenome: 'Silva',
+      email: 'emailtest@example.com',
+      telefone: '00000000000',
+      data_de_nascimento: '01/01/2000',
+      senha: '12345678',
+      mochila: true,
     };
-    
-    // Combine os dados originais do entregador com os dados atualizados
+
     const combinedData: Motoboy = { ...originalMotoboy, ...updatedData };
-    
-    // Após atualizar, esta é a versão atualizada do entregador
-    knexFunctions.where().update().returning.mockResolvedValueOnce([combinedData]);
-  
-    // Atualize o entregador no repositório
+
+    knexFunctions
+      .where()
+      .update()
+      .returning.mockResolvedValueOnce([combinedData]);
+
     const result = await repository.update('1', combinedData);
-    
-    // Verifique se os campos foram atualizados corretamente
-    expect(result.nome).toBe('Carlos');
-    expect(result.sobrenome).toBe('Rodrigues');
-    expect(result.email).toBe('carlos@example.com');
-    // ... você pode continuar verificando os outros campos também
+
+    expect(result.nome).toBe('Kleber');
+    expect(result.sobrenome).toBe('Silva');
+    expect(result.email).toBe('emailtest@example.com');
+    expect(result.telefone).toBe('00000000000');
+    expect(result.data_de_nascimento).toBe('01/01/2000');
+    expect(result.mochila).toBe(true);
   });
-  
-  
+
+  it('should throw an HttpException with a 404 status code when the motoboy with the given id does not exist', async () => {
+    knexFunctions.where().select.mockResolvedValueOnce([]);
+
+    await expect(repository.update('1', {} as Motoboy)).rejects.toThrow(
+      new HttpException('Entregador not found', 404),
+    );
+  });
 });

@@ -60,7 +60,7 @@ export class UpdateMotoboyDto extends PartialType(CreateMotoboyDto) {
   @IsNotEmpty()
   @ApiProperty({
     description: 'Data de nascimento do entregador',
-    example: '1999-01-01',
+    example: '1999/01/01',
     type: String,
     required: true,
   })
