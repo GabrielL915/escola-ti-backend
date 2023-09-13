@@ -1,8 +1,8 @@
 import { Exclude } from 'class-transformer';
-import { SingUpDto } from './singup.dto';
+import { RegisterDto } from './register.dto';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class AuthResponseDto implements SingUpDto {
+export class AuthResponseDto extends RegisterDto {
   @ApiProperty({
     description: 'Nome do entregador',
     example: 'João',

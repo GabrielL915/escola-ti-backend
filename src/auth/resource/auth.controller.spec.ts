@@ -64,25 +64,4 @@ describe('AuthController', () => {
       expect(result).toEqual({});
     });
   });
-
-  describe('getProfile', () => {
-    it('should call getProfile with correct params and return the result', async () => {
-      const email = 'test@email.com';
-      const responseDto = {
-        nome: 'Gabriel',
-        sobrenome: 'Roman',
-        email: 'emailtest@example.com',
-        telefone: '123456789',
-        data_de_nascimento: '1999-01-01',
-        mochila: true,
-        data_de_cadastro: '2021-01-01',
-      };
-      mockAuthService.getProfile.mockResolvedValueOnce(responseDto);
-
-      const result = await controller.getProfile(email);
-
-      expect(mockAuthService.getProfile).toHaveBeenCalledWith(email);
-      expect(result).toEqual(responseDto);
-    });
-  });
 });

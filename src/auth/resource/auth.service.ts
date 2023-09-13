@@ -4,10 +4,10 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { LoginDto } from '../dto/login.dto';
+import { LoginDto } from '../domain/dto/login.dto';
 import { generateJWTFactory } from '../factories/jwt.factory';
-import { SingUpDto } from '../dto/singup.dto';
-import { AuthResponseDto } from '../dto/auth-response.dto';
+import { RegisterDto } from '../domain/dto/register.dto';
+import { AuthResponseDto } from '../domain/dto/auth-response.dto';
 import { randomBytes, scryptSync, timingSafeEqual } from 'crypto';
 import { Knex } from 'knex';
 import { InjectModel } from 'nest-knexjs';
@@ -29,7 +29,7 @@ export class AuthService {
     });
   }
 
-  async signIn({ email, senha }: LoginDto) {
+   async signIn({ email, senha }: LoginDto) {
     try {
       const entregador = await this.validateEntregador(email, senha);
       const payload = { email: entregador.email, sub: entregador.senha };
@@ -40,7 +40,7 @@ export class AuthService {
     }
   }
 
-  async signUp(createCadastroDto: SingUpDto): Promise<void> {
+  async signUp(createCadastroDto: RegisterDto): Promise<void> {
     try {
       const hashedPassword = this.hashSenha(createCadastroDto.senha);
       console.log('hashedPassword: ', hashedPassword);

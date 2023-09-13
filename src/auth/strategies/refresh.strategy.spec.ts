@@ -1,5 +1,5 @@
 import { UnauthorizedException } from '@nestjs/common';
-import { RefreshTokenStrategy } from './refresh.strategy';
+import { RefreshTokenStrategy } from './jwt-refresh.strategy';
 
 describe('RefreshTokenStrategy', () => {
   let strategy: RefreshTokenStrategy;

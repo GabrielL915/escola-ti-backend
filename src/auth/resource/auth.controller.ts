@@ -1,6 +1,15 @@
-import { Body, Controller, Post, HttpCode, HttpStatus, Get, Param, InternalServerErrorException, BadRequestException } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { SingUpDto } from '../dto/singup.dto';
+import {
+  Body,
+  Controller,
+  Post,
+  HttpCode,
+  HttpStatus,
+  Get,
+  Param,
+  InternalServerErrorException,
+  BadRequestException,
+} from '@nestjs/common';
+import { RegisterDto } from '../domain/dto/register.dto';
 import {
   ApiResponse,
   ApiTags,
@@ -8,21 +17,25 @@ import {
   ApiParam,
   ApiBearerAuth,
 } from '@nestjs/swagger';
-import { LoginDto } from '../dto/login.dto';
-import { AuthResponseDto } from '../dto/auth-response.dto';
+import { LoginDto } from '../domain/dto/login.dto';
+import { AuthResponseDto } from '../domain/dto/auth-response.dto';
+import { RegisterUseCase } from '../domain/use-cases/register.use-case';
+import { LoginUseCase } from '../domain/use-cases/login.use-case';
 
 @ApiTags('auth')
 @ApiBearerAuth()
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly registerUseCase: RegisterUseCase,
+    private readonly loginUseCase: LoginUseCase,
+  ) {}
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Login realizado com sucesso',
-
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
@@ -40,16 +53,14 @@ export class AuthController {
     required: true,
   })
   login(@Body() loginDto: LoginDto) {
-    return this.authService.signIn(
-      loginDto
-    );
+    return this.loginUseCase.execute(loginDto);
   }
 
   @Post('register')
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'Usuário criado com sucesso',
-    type: SingUpDto,
+    type: RegisterDto,
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
@@ -62,14 +73,14 @@ export class AuthController {
     type: InternalServerErrorException,
   })
   @ApiBody({
-    description: 'SingUp payload',
-    type: SingUpDto,
+    description: 'Register payload',
+    type: RegisterDto,
     required: true,
   })
-  create(@Body() createCadastroDto: SingUpDto) {
-    return this.authService.signUp(createCadastroDto);
+  create(@Body() createCadastroDto: RegisterDto): Promise<AuthResponseDto> {
+    return this.registerUseCase.execute(createCadastroDto);
   }
-
+/* 
   @Get('profile/:email')
   @ApiResponse({
     status: HttpStatus.OK,
@@ -95,5 +106,5 @@ export class AuthController {
   })
   getProfile(@Param('email') email: string): Promise<AuthResponseDto> {
     return this.authService.getProfile(email);
-  }
+  } */
 }

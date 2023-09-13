@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class SingUpDto {
+export class RegisterDto {
   @IsNotEmpty()
   @IsString()
   @MinLength(2)

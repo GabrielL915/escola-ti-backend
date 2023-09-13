@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AuthService } from '../resource-auth/auth.service';
+import { AuthService } from '../resource/auth.service';
 import { LocalStrategy } from './local.strategy';
 import { UnauthorizedException } from '@nestjs/common';
 

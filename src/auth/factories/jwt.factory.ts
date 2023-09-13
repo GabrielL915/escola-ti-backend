@@ -1,4 +1,4 @@
-import { generateRSAKeyPair } from '../../shared/util/keypair';
+import { generateRSAKeyPair } from '../util/keypair';
 import { Algorithm } from 'jsonwebtoken';
 
 export function generateJWTFactory() {
