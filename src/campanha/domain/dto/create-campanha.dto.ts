@@ -1,7 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 export class CreateCampanhaDto {
-  id: number;
-
   @ApiProperty({
     description: 'Nome da campanha',
     example: 'Semana das Massas',
@@ -42,7 +40,7 @@ export class CreateCampanhaDto {
     example: 10,
     type: Number,
   })
-  tempo_de_tolerancia: number;
+  tempo_de_tolerancia: string;
 
   @ApiProperty({
     description: 'Periodo da campanha',
