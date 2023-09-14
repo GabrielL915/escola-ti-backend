@@ -8,16 +8,24 @@ import { JwtStrategy } from '../strategies/jwt-access.strategy';
 import { RefreshTokenStrategy } from '../strategies/jwt-refresh.strategy';
 import { RegisterUseCase } from '../domain/use-cases/register.use-case';
 import { LoginUseCase } from '../domain/use-cases/login.use-case';
+import { ProfileUseCase } from '../domain/use-cases/profile.use-case';
 
 @Module({
   imports: [
     JwtModule.registerAsync({
       useFactory: generateJWTFactory,
     }),
-    PassportModule.register({ defaultStrategy: 'jwt' }),
+    PassportModule.register({}),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, RefreshTokenStrategy, RegisterUseCase, LoginUseCase],
+  providers: [
+    JwtStrategy,
+    RefreshTokenStrategy,
+    AuthService,
+    RegisterUseCase,
+    LoginUseCase,
+    ProfileUseCase,
+  ],
   exports: [AuthService],
 })
 export class AuthModule {}

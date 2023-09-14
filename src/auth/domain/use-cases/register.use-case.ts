@@ -34,7 +34,7 @@ export class RegisterUseCase {
       };
       const [motoboy] = await this.knex('entregador')
         .insert(newRegister)
-        .returning(['nome', 'sobrenome', 'email', 'telefone']);
+        .returning(['nome', 'sobrenome', 'email', 'telefone', 'data_de_nascimento', 'mochila']);
       return motoboy;
     } catch (error) {
       throw new UnauthorizedException(error);

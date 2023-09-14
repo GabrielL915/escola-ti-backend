@@ -8,6 +8,7 @@ import {
   Param,
   InternalServerErrorException,
   BadRequestException,
+  UseGuards,
 } from '@nestjs/common';
 import { RegisterDto } from '../domain/dto/register.dto';
 import {
@@ -21,14 +22,21 @@ import { LoginDto } from '../domain/dto/login.dto';
 import { AuthResponseDto } from '../domain/dto/auth-response.dto';
 import { RegisterUseCase } from '../domain/use-cases/register.use-case';
 import { LoginUseCase } from '../domain/use-cases/login.use-case';
+import { ProfileUseCase } from '../domain/use-cases/profile.use-case';
+import { AccessTokenGuard } from '../guards/access-token.guard';
+import { AuthGuard } from '@nestjs/passport';
+import { AuthService } from './auth.service';
+import { RefreshTokenGuard } from '../guards/refresh-token.guard';
 
 @ApiTags('auth')
 @ApiBearerAuth()
 @Controller('auth')
 export class AuthController {
   constructor(
+    private readonly authService: AuthService,
     private readonly registerUseCase: RegisterUseCase,
     private readonly loginUseCase: LoginUseCase,
+    private readonly profileUseCase: ProfileUseCase,
   ) {}
 
   @HttpCode(HttpStatus.OK)
@@ -80,7 +88,8 @@ export class AuthController {
   create(@Body() createCadastroDto: RegisterDto): Promise<AuthResponseDto> {
     return this.registerUseCase.execute(createCadastroDto);
   }
-/* 
+
+  @UseGuards(AccessTokenGuard)
   @Get('profile/:email')
   @ApiResponse({
     status: HttpStatus.OK,
@@ -104,7 +113,13 @@ export class AuthController {
     required: true,
     example: 'teste@gmail.com',
   })
-  getProfile(@Param('email') email: string): Promise<AuthResponseDto> {
-    return this.authService.getProfile(email);
-  } */
+  getProfile(@Param('email') email: string) {
+    return this.profileUseCase.execute(email);
+  }
+
+  @UseGuards(RefreshTokenGuard)
+  @Get('refresh-token')
+  getRefreshToken() {
+    return 'refresh token';
+  }
 }

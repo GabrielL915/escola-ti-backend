@@ -38,16 +38,3 @@ describe('generate RSA keypair', () => {
     expect(decrypted.toString()).toEqual(text);
   });
 });
-
-
-// 2.1. Método singIn
-// Objetivo: Testar a capacidade de um usuário fazer login no sistema.
-// Cenários:
-//  1 - Login bem-sucedido:
-//         Descrição: O usuário fornece credenciais válidas e deve receber os tokens de acesso e atualização.
-//         Entrada: LoginDto com e-mail e senha válidos.
-//         Saída esperada: Tokens de acesso e atualização.
-//  2 - Credenciais inválidas:
-//         Descrição: O usuário fornece credenciais inválidas e deve receber uma exceção de não autorizado.
-//         Entrada: LoginDto com e-mail ou senha inválidos.
-//         Saída esperada: UnauthorizedException.

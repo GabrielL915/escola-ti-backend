@@ -3,16 +3,21 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { generateJWTFactory } from '../factories/jwt.factory';
+import { readFileSync } from 'fs';
 
 @Injectable()
-export class RefreshTokenStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
+export class RefreshTokenStrategy extends PassportStrategy(Strategy, 'refresh') {
   constructor() {
-    const { publicKey } = generateJWTFactory();
+    console.log('RefreshTokenStrategy');
+    
+    const { publicKey: PUBLIC_KEY } = JSON.parse(
+      readFileSync('keys.json', 'utf8'),
+    );
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       passReqToCallback: true,
       ignoreExpiration: false,
-      secretOrKey: publicKey,
+      secretOrKey: PUBLIC_KEY,
       algorithms: ['RS256'],
     });
   }
