@@ -2,7 +2,7 @@ import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/c
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
-import { generateJWTFactory } from '../factories/jwt.factory';
+import { rsaKeyFactory } from '../factories/rsa-key.factory';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from '../strategies/jwt-access.strategy';
 import { RefreshTokenStrategy } from '../strategies/jwt-refresh.strategy';
@@ -10,12 +10,11 @@ import { RegisterUseCase } from '../domain/use-cases/register.use-case';
 import { LoginUseCase } from '../domain/use-cases/login.use-case';
 import { ProfileUseCase } from '../domain/use-cases/profile.use-case';
 import { SmsUseCase } from '../domain/use-cases/sms.use-case';
-import { SmsPhoneMiddleware } from './../../common/middleware/sms-phone.middleware';
-
+import { RefreshTokenUseCase } from '../domain/use-cases/refresh-token.use-case';
 @Module({
   imports: [
     JwtModule.registerAsync({
-      useFactory: generateJWTFactory,
+      useFactory: rsaKeyFactory,
     }),
     PassportModule.register({}),
   ],
@@ -28,6 +27,7 @@ import { SmsPhoneMiddleware } from './../../common/middleware/sms-phone.middlewa
     LoginUseCase,
     ProfileUseCase,
     SmsUseCase,
+    RefreshTokenUseCase
   ],
   exports: [AuthService, SmsUseCase],
 })

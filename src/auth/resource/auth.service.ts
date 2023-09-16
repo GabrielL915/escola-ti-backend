@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from '../domain/dto/login.dto';
-import { generateJWTFactory } from '../factories/jwt.factory';
+import { rsaKeyFactory } from '../factories/rsa-key.factory';
 import { RegisterDto } from '../domain/dto/register.dto';
 import { AuthResponseDto } from '../domain/dto/auth-response.dto';
 import { randomBytes, scryptSync, timingSafeEqual } from 'crypto';
@@ -22,7 +22,7 @@ export class AuthService {
     private jwtService: JwtService,
     @InjectModel() private knex: Knex,
   ) {
-    this.jwtKeyPair = generateJWTFactory();
+    this.jwtKeyPair = rsaKeyFactory();
     this.jwtService = new JwtService({
       privateKey: this.jwtKeyPair.privateKey,
       signOptions: { algorithm: 'RS256' },

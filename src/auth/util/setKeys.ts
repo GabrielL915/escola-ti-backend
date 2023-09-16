@@ -1,10 +1,10 @@
 import { writeFileSync } from 'fs';
-import { generateJWTFactory } from '../factories/jwt.factory';
+import { rsaKeyFactory } from '../factories/rsa-key.factory';
 import { InternalServerErrorException } from '@nestjs/common';
 
 export function setKeys() {
   try {
-    const { publicKey, privateKey } = generateJWTFactory();
+    const { publicKey, privateKey } = rsaKeyFactory();
     const keys = {
       publicKey: publicKey,
       privateKey: privateKey,

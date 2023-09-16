@@ -1,10 +1,10 @@
 import { InternalServerErrorException } from '@nestjs/common';
-import { generateRSAKeyPair } from '../util/keypair';
+import { rsaKeyPair } from '../util/keypair';
 import { Algorithm } from 'jsonwebtoken';
 
-export function generateJWTFactory() {
+export function rsaKeyFactory() {
   try {
-  const keyPair = generateRSAKeyPair();
+  const keyPair = rsaKeyPair();
   return {
     privateKey: keyPair.privateKey,
     publicKey: keyPair.publicKey,

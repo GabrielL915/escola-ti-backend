@@ -24,6 +24,11 @@ export class LoginUseCase {
       const entregador = await this.validateEntregador(email, senha);
       const payload = { email: entregador.email, sub: entregador.id };
       const tokens = await this.generateToken(payload.sub, payload.email);
+      await this.saveTokens(
+        payload.sub,
+        tokens.access_token,
+        tokens.refresh_token,
+      );
       return tokens;
     } catch (error) {
       if (
@@ -32,7 +37,7 @@ export class LoginUseCase {
       ) {
         throw error;
       }
-      throw new InternalServerErrorException('Erro interno do servidor.', error);
+      throw new InternalServerErrorException(error);
     }
   }
 
@@ -49,7 +54,7 @@ export class LoginUseCase {
           },
           {
             secret: PRIVATE_KEY,
-            expiresIn: '15m',
+            expiresIn: '20s',
             algorithm: 'RS256',
           },
         ),
@@ -71,6 +76,20 @@ export class LoginUseCase {
     }
   }
 
+  async saveTokens(id: string, accessToken: string, refreshToken: string) {
+    try {
+      await this.knex('account')
+        .insert({
+          id_entregador: id,
+          access_token: accessToken,
+          refresh_token: refreshToken,
+        })
+        .returning('id');
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
   async validateEntregador(email: string, senha: string): Promise<LoginDto> {
     try {
       const entregador = await this.knex
@@ -84,14 +103,17 @@ export class LoginUseCase {
       const validPassword = this.comparePassword(entregador.senha, senha);
 
       if (!validPassword) {
-        throw new NotFoundException('entregador não encontrado ou inativo',);
+        throw new NotFoundException('entregador não encontrado ou inativo');
       }
       return entregador;
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
       }
-      throw new InternalServerErrorException('Erro ao validar entregador.', error);
+      throw new InternalServerErrorException(
+        'Erro ao validar entregador.',
+        error,
+      );
     }
   }
 

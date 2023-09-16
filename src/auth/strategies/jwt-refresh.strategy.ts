@@ -2,7 +2,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { generateJWTFactory } from '../factories/jwt.factory';
+import { rsaKeyFactory } from '../factories/rsa-key.factory';
 import { readFileSync } from 'fs';
 
 @Injectable()

@@ -1,4 +1,4 @@
-import { generateRSAKeyPair } from './keypair';
+import { rsaKeyPair } from './keypair';
 import { privateDecrypt, publicEncrypt} from 'crypto';
 
 describe('generate RSA keypair', () => {
@@ -6,7 +6,7 @@ describe('generate RSA keypair', () => {
   let result: { publicKey: string, privateKey: string };
   
   beforeAll(() => {
-    result = generateRSAKeyPair();
+    result = rsaKeyPair();
   });
 
   describe('Public Key', () => {

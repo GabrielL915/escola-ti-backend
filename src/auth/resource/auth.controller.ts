@@ -9,7 +9,9 @@ import {
   InternalServerErrorException,
   BadRequestException,
   UseGuards,
+  Req,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { RegisterDto } from '../domain/dto/register.dto';
 import {
   ApiResponse,
@@ -28,7 +30,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { RefreshTokenGuard } from '../guards/refresh-token.guard';
 import { SmsUseCase } from '../domain/use-cases/sms.use-case';
-
+import { RefreshTokenUseCase } from '../domain/use-cases/refresh-token.use-case';
 @ApiTags('auth')
 @ApiBearerAuth()
 @Controller('auth')
@@ -39,6 +41,7 @@ export class AuthController {
     private readonly loginUseCase: LoginUseCase,
     private readonly profileUseCase: ProfileUseCase,
     private readonly smsUseCase: SmsUseCase,
+    private readonly refreshTokenUseCase: RefreshTokenUseCase,
   ) {}
 
   @Post('sendNumber')
@@ -130,8 +133,10 @@ export class AuthController {
   }
 
   @UseGuards(RefreshTokenGuard)
-  @Get('refresh-token')
-  getRefreshToken() {
-    return 'refresh token';
+  @Get('refresh')
+  getRefreshToken(@Req() req: Request) {
+    const motoboyId = req.user['sub'];
+    const refreshToken = req.user['refreshToken'];
+    return this.refreshTokenUseCase.refreshToken(motoboyId, refreshToken);
   }
 }

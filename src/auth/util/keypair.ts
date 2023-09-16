@@ -1,5 +1,5 @@
 import { generateKeyPairSync } from 'crypto';
-export function generateRSAKeyPair() {
+export function rsaKeyPair() {
   const { privateKey, publicKey } = generateKeyPairSync('rsa', {
     modulusLength: 2048,
     publicKeyEncoding: {
