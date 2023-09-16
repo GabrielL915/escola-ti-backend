@@ -27,6 +27,7 @@ import { AccessTokenGuard } from '../guards/access-token.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { RefreshTokenGuard } from '../guards/refresh-token.guard';
+import { SmsUseCase } from '../domain/use-cases/sms.use-case';
 
 @ApiTags('auth')
 @ApiBearerAuth()
@@ -37,7 +38,18 @@ export class AuthController {
     private readonly registerUseCase: RegisterUseCase,
     private readonly loginUseCase: LoginUseCase,
     private readonly profileUseCase: ProfileUseCase,
+    private readonly smsUseCase: SmsUseCase,
   ) {}
+
+  @Post('sendNumber')
+  generateCode(@Body() body: { phone: string }) {
+    return this.smsUseCase.generateCode(body.phone);
+  }
+
+  @Post('validateCode')
+  validateCode(@Body() body: { phone: string; code: number }) {
+    return this.smsUseCase.validateCode(body.phone, body.code);
+  }
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
@@ -61,7 +73,7 @@ export class AuthController {
     required: true,
   })
   login(@Body() loginDto: LoginDto) {
-    return this.loginUseCase.execute(loginDto);
+    return this.loginUseCase.login(loginDto);
   }
 
   @Post('register')
@@ -86,7 +98,7 @@ export class AuthController {
     required: true,
   })
   create(@Body() createCadastroDto: RegisterDto): Promise<AuthResponseDto> {
-    return this.registerUseCase.execute(createCadastroDto);
+    return this.registerUseCase.register(createCadastroDto);
   }
 
   @UseGuards(AccessTokenGuard)
@@ -114,7 +126,7 @@ export class AuthController {
     example: 'teste@gmail.com',
   })
   getProfile(@Param('email') email: string) {
-    return this.profileUseCase.execute(email);
+    return this.profileUseCase.profile(email);
   }
 
   @UseGuards(RefreshTokenGuard)

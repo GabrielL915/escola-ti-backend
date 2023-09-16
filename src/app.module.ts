@@ -1,7 +1,7 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { KnexModule } from 'nest-knexjs';
 import { AuthModule } from './auth/resource/auth.module';
-
+import { SmsPhoneMiddleware } from './common/middleware/sms-phone.middleware';
 @Module({
   imports: [
     KnexModule.forRoot({
@@ -26,4 +26,10 @@ import { AuthModule } from './auth/resource/auth.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule{
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(SmsPhoneMiddleware)
+      .forRoutes({ path: 'auth/register', method: RequestMethod.POST });
+  }
+}

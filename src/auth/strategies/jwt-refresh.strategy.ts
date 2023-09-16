@@ -8,8 +8,6 @@ import { readFileSync } from 'fs';
 @Injectable()
 export class RefreshTokenStrategy extends PassportStrategy(Strategy, 'refresh') {
   constructor() {
-    console.log('RefreshTokenStrategy');
-    
     const { publicKey: PUBLIC_KEY } = JSON.parse(
       readFileSync('keys.json', 'utf8'),
     );

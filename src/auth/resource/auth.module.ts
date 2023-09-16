@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
@@ -9,6 +9,8 @@ import { RefreshTokenStrategy } from '../strategies/jwt-refresh.strategy';
 import { RegisterUseCase } from '../domain/use-cases/register.use-case';
 import { LoginUseCase } from '../domain/use-cases/login.use-case';
 import { ProfileUseCase } from '../domain/use-cases/profile.use-case';
+import { SmsUseCase } from '../domain/use-cases/sms.use-case';
+import { SmsPhoneMiddleware } from './../../common/middleware/sms-phone.middleware';
 
 @Module({
   imports: [
@@ -25,7 +27,8 @@ import { ProfileUseCase } from '../domain/use-cases/profile.use-case';
     RegisterUseCase,
     LoginUseCase,
     ProfileUseCase,
+    SmsUseCase,
   ],
-  exports: [AuthService],
+  exports: [AuthService, SmsUseCase],
 })
 export class AuthModule {}

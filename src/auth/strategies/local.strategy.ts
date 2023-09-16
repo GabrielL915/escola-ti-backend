@@ -11,11 +11,10 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
             passwordField: 'senha',
         });
     }
-
     async validate(email: string, senha: string) {
         const user = await this.loginUseCase.validateEntregador(email, senha);
         if (!user) {
-            throw new UnauthorizedException();
+            throw new UnauthorizedException('Credenciais inválidas');
         }
         return user;
     }

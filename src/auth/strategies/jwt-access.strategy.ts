@@ -7,7 +7,6 @@ import { readFileSync } from 'fs';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor() {
-    console.log('JwtStrategy');
     setKeys();
     const { publicKey: PUBLIC_KEY } = JSON.parse(
       readFileSync('keys.json', 'utf8'),
@@ -21,8 +20,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   async validate(payload: string) {
-    console.log('Strategy esta passando') //nao chega aqui
-    console.log('payload', payload);
     if (!payload) {
       throw new UnauthorizedException('Token Invalido');
     }
