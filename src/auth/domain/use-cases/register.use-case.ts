@@ -52,7 +52,6 @@ export class RegisterUseCase {
         token_dispositivo: 'token-do-dispositivo',
        id_endereco_de_servico: cidade.id,
       };
-      console.log(newRegister);
       const [motoboy] = await this.knex('entregador')
         .insert(newRegister)
         .returning([

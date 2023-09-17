@@ -45,13 +45,13 @@ export class AuthController {
   ) {}
 
   @Post('sendNumber')
-  generateCode(@Body() body: { phone: string }) {
-    return this.smsUseCase.generateCode(body.phone);
+  generateCode(@Body() body: { telefone: string }) {
+    return this.smsUseCase.generateCode(body.telefone);
   }
 
   @Post('validateCode')
-  validateCode(@Body() body: { phone: string; code: number }) {
-    return this.smsUseCase.validateCode(body.phone, body.code);
+  validateCode(@Body() body: { telefone: string; code: number }) {
+    return this.smsUseCase.validateCode(body.telefone, body.code);
   }
 
   @HttpCode(HttpStatus.OK)
