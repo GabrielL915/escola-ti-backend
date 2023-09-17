@@ -1,6 +1,7 @@
 import { Exclude } from 'class-transformer';
 import { RegisterDto } from './register.dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { UUID } from 'crypto';
 
 export class AuthResponseDto extends RegisterDto {
   @ApiProperty({
@@ -58,4 +59,6 @@ export class AuthResponseDto extends RegisterDto {
     required: true,
   })
   data_de_cadastro: string;
+
+  Id_endereco_de_servico : UUID
 }

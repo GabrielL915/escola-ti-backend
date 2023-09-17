@@ -110,4 +110,8 @@ export class RegisterDto {
     required: true,
   })
   mochila: boolean;
+
+  @IsNotEmpty()
+  @IsString()
+  cidade: string;
 }
