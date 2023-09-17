@@ -17,28 +17,52 @@ export class RefreshTokenUseCase {
   ) {}
 
   async refreshToken(motoboyId: string, refreshToken: string) {
-    const storedTokens = await this.getStoredTokens(motoboyId);
+    try {
+      const storedTokens = await this.getStoredTokens(motoboyId);
 
-    if (!storedTokens) {
-      throw new NotFoundException('Token não encontrado');
+      if (!storedTokens) {
+        throw new NotFoundException('Token não encontrado');
+      }
+      const [email] = await this.getMotoboy(motoboyId);
+      const { access_token, refresh_token } =
+        await this.loginUseCase.generateToken(motoboyId, email);
+
+      await this.updateAccount(motoboyId, access_token, refresh_token);
+      return { access_token, refresh_token };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Erro ao atualizar token.', error);
     }
-    const [email] = await this.getMotoboy(motoboyId);
-    const { access_token, refresh_token } =
-      await this.loginUseCase.generateToken(motoboyId, email);
-
-    await this.updateAccount(motoboyId, access_token, refresh_token);
-    return { access_token, refresh_token };
   }
 
   private async getMotoboy(id: string) {
-    return await this.knex.from('entregador').select('email').where({ id: id });
+    try {
+      return await this.knex
+        .from('entregador')
+        .select('email')
+        .where({ id: id });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Erro ao recuperar motoboy.',
+        error,
+      );
+    }
   }
 
   private async getStoredTokens(id: string) {
-    return await this.knex
-      .from('account')
-      .select('refresh_token')
-      .where({ id_entregador: id });
+    try {
+      return await this.knex
+        .from('account')
+        .select('refresh_token')
+        .where({ id_entregador: id });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Erro ao recuperar tokens.',
+        error,
+      );
+    }
   }
 
   private async updateAccount(
@@ -46,8 +70,12 @@ export class RefreshTokenUseCase {
     accessToken: string,
     refreshToken: string,
   ) {
-    return await this.knex('account')
-      .where({ id_entregador: id })
-      .update({ refresh_token: refreshToken, access_token: accessToken });
+    try {
+      return await this.knex('account')
+        .where({ id_entregador: id })
+        .update({ refresh_token: refreshToken, access_token: accessToken });
+    } catch (error) {
+      throw new InternalServerErrorException('Erro ao atualizar conta.', error);
+    }
   }
 }

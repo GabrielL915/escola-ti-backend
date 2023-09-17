@@ -27,7 +27,6 @@ import { LoginUseCase } from '../domain/use-cases/login.use-case';
 import { ProfileUseCase } from '../domain/use-cases/profile.use-case';
 import { AccessTokenGuard } from '../guards/access-token.guard';
 import { AuthGuard } from '@nestjs/passport';
-import { AuthService } from './auth.service';
 import { RefreshTokenGuard } from '../guards/refresh-token.guard';
 import { SmsUseCase } from '../domain/use-cases/sms.use-case';
 import { RefreshTokenUseCase } from '../domain/use-cases/refresh-token.use-case';
@@ -36,7 +35,6 @@ import { RefreshTokenUseCase } from '../domain/use-cases/refresh-token.use-case'
 @Controller('auth')
 export class AuthController {
   constructor(
-    private readonly authService: AuthService,
     private readonly registerUseCase: RegisterUseCase,
     private readonly loginUseCase: LoginUseCase,
     private readonly profileUseCase: ProfileUseCase,

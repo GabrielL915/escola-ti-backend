@@ -1,16 +1,24 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
 import { rsaKeyFactory } from '../factories/rsa-key.factory';
 import { readFileSync } from 'fs';
 
 @Injectable()
-export class RefreshTokenStrategy extends PassportStrategy(Strategy, 'refresh') {
+export class RefreshTokenStrategy extends PassportStrategy(
+  Strategy,
+  'refresh',
+) {
   constructor() {
-    const { publicKey: PUBLIC_KEY } = JSON.parse(
-      readFileSync('keys.json', 'utf8'),
-    );
+    let PUBLIC_KEY;
+    try {
+      const keyData = JSON.parse(readFileSync('keys.json', 'utf8'));
+      PUBLIC_KEY = keyData.publicKey;
+    } catch (error) {
+      throw new InternalServerErrorException('Erro ao ler chave publica.');
+    }
+
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       passReqToCallback: true,
@@ -22,9 +30,9 @@ export class RefreshTokenStrategy extends PassportStrategy(Strategy, 'refresh') 
 
   async validate(req: Request, payload: { email: string; sub: string }) {
     const refreshToken = req.get('Authorization')?.replace('Bearer ', '').trim();
-    if (!refreshToken) {
-        throw new UnauthorizedException('Refresh Token Invalido');
-        }
-    return {...payload, refreshToken};
+    if (!refreshToken || !payload) {
+      throw new UnauthorizedException('Refresh Token Invalido');
+    }
+    return { ...payload, refreshToken };
   }
 }

@@ -1,6 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { rsaKeyFactory } from '../factories/rsa-key.factory';
 import { PassportModule } from '@nestjs/passport';
@@ -22,13 +21,12 @@ import { RefreshTokenUseCase } from '../domain/use-cases/refresh-token.use-case'
   providers: [
     JwtStrategy,
     RefreshTokenStrategy,
-    AuthService,
     RegisterUseCase,
     LoginUseCase,
     ProfileUseCase,
     SmsUseCase,
     RefreshTokenUseCase
   ],
-  exports: [AuthService, SmsUseCase],
+  exports: [SmsUseCase],
 })
 export class AuthModule {}
