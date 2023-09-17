@@ -50,8 +50,8 @@ export class AuthController {
   }
 
   @Post('validateCode')
-  validateCode(@Body() body: { telefone: string; code: number }) {
-    return this.smsUseCase.validateCode(body.telefone, body.code);
+  validateCode(@Body() body: { telefone: string; codigo: number }) {
+    return this.smsUseCase.validateCode(body.telefone, body.codigo);
   }
 
   @HttpCode(HttpStatus.OK)
