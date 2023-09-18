@@ -20,10 +20,39 @@ export class CampanhaRepositoryImpl implements CampanhaRepository {
     }
   }
 
+  async update(id: number, campanha: Campanha): Promise<Campanha> {
+    try {
+      const [updatedCampanha] = await this.knex('campanha')
+        .where({ id })
+        .update(campanha)
+        .returning('*');
+      return updatedCampanha;
+    } catch (error) {
+      throw new UnauthorizedException(error);
+    }
+  }
+
+  async delete(id: number): Promise<void> {
+    try {
+      await this.knex('campanha').where({ id }).del();
+    } catch (error) {
+      throw new UnauthorizedException(error);
+    }
+  }
+
   async findAll(): Promise<Campanha[]> {
     try {
       const campanhas = await this.knex('campanha').select('*');
       return campanhas;
+    } catch (error) {
+      throw new UnauthorizedException(error);
+    }
+  }
+
+  async findOne(id: number): Promise<Campanha> {
+    try {
+      const [campanha] = await this.knex('campanha').where({ id }).select('*');
+      return campanha;
     } catch (error) {
       throw new UnauthorizedException(error);
     }
