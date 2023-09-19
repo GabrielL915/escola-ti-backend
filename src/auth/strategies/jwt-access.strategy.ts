@@ -1,19 +1,17 @@
 import { Injectable, UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { setKeys } from '../util/set-keys';
-import { readFileSync } from 'fs';
+import { setKeys, getPublicKey } from '../util/set-keys';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor() {
     setKeys();
-    let PUBLIC_KEY;
+    let PUBLIC_KEY
     try {
-      const keyData = JSON.parse(readFileSync('keys.json', 'utf8'));
-      PUBLIC_KEY = keyData.publicKey;
+      PUBLIC_KEY = getPublicKey();
     } catch (error) {
-      throw new InternalServerErrorException('Erro ao ler chave publica..');
+      throw new InternalServerErrorException('Erro ao ler chave publica.');
     }
 
     super({

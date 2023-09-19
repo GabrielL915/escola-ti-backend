@@ -3,18 +3,18 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { RefreshTokenStrategy } from './jwt-refresh.strategy';
-import { readFileSync } from 'fs';
+import { getPublicKey } from '../util/set-keys';
 
-jest.mock('fs');
+jest.mock('../util/set-keys');
 
 describe('RefreshTokenStrategy', () => {
   let strategy: RefreshTokenStrategy;
   let payload: { email: string; sub: string };
 
   beforeEach(() => {
-    (readFileSync as jest.Mock).mockReturnValue(
-      JSON.stringify({ publicKey: 'fake_key' }),
-    );
+    (getPublicKey as jest.Mock).mockReturnValue({
+      publicKey: 'fake_key',
+    });
     strategy = new RefreshTokenStrategy();
   });
 
@@ -24,7 +24,7 @@ describe('RefreshTokenStrategy', () => {
 
   describe('Constructor', () => {
     it('should throw InternalServerErrorException when reading the public key fails', () => {
-      (readFileSync as jest.Mock).mockImplementation(() => {
+      (getPublicKey as jest.Mock).mockImplementation(() => {
         throw new Error();
       });
       expect(() => new RefreshTokenStrategy()).toThrow(

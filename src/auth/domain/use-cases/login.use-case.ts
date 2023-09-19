@@ -11,13 +11,15 @@ import { Knex } from 'knex';
 import { timingSafeEqual } from 'crypto';
 import { hashPassword } from '../../util/hash-password';
 import { JwtService } from '@nestjs/jwt';
-import { readFileSync } from 'fs';
+import { getPrivateKey } from '../../util/set-keys';
+import { RefreshTokenRepository } from '../repository/refresh-token.repository';
 
 @Injectable()
 export class LoginUseCase {
   private readonly logger = new Logger(LoginUseCase.name);
   constructor(
     private readonly jwtService: JwtService,
+    private readonly refreshTokenRepository: RefreshTokenRepository,
     @InjectModel() private knex: Knex,
   ) {}
 
@@ -26,7 +28,7 @@ export class LoginUseCase {
       const entregador = await this.validateEntregador(email, senha);
       const payload = { email: entregador.email, sub: entregador.id };
       const tokens = await this.generateToken(payload.sub, payload.email);
-      await this.saveTokens(
+      await this.refreshTokenRepository.createAccount(
         payload.sub,
         tokens.access_token,
         tokens.refresh_token,
@@ -47,13 +49,10 @@ export class LoginUseCase {
     }
   }
 
-
-  //util
   async generateToken(id: string, email: string) {
     try {
-      const { privateKey: PRIVATE_KEY } = JSON.parse(
-        readFileSync('keys.json', 'utf8'),
-      );
+      const { privateKey: PRIVATE_KEY } = getPrivateKey();
+
       const [access_token, refresh_token] = await Promise.all([
         this.jwtService.signAsync(
           {
@@ -87,23 +86,6 @@ export class LoginUseCase {
       );
     }
   }
-
-  //data-access
-  async saveTokens(id: string, accessToken: string, refreshToken: string) {
-    try {
-      await this.knex('conta')
-        .insert({
-          id_entregador: id,
-          access_token: accessToken,
-          refresh_token: refreshToken,
-        })
-        .returning('id');
-    } catch (error) {
-      this.logger.error('Erro ao salvar tokens');
-      throw new InternalServerErrorException('Erro ao salvar tokens', error);
-    }
-  }
-
   async validateEntregador(email: string, senha: string): Promise<LoginDto> {
     try {
       const entregador = await this.knex
@@ -119,7 +101,9 @@ export class LoginUseCase {
 
       if (!validPassword) {
         this.logger.error(`Senha incorreta para o email: ${email}`);
-        throw new UnauthorizedException('Senha incorreta ou entregador inativo.');
+        throw new UnauthorizedException(
+          'Senha incorreta ou entregador inativo.',
+        );
       }
       return entregador;
     } catch (error) {

@@ -18,7 +18,9 @@ export class RefreshTokenUseCase {
 
   async refreshToken(motoboyId: string, refreshToken: string) {
     try {
-      const storedTokens = await this.refreshTokenRepository.getStoredTokens(motoboyId);
+      const storedTokens = await this.refreshTokenRepository.getStoredTokens(
+        motoboyId,
+      );
 
       if (!storedTokens) {
         throw new NotFoundException('Token não encontrado');
@@ -27,7 +29,11 @@ export class RefreshTokenUseCase {
       const { access_token, refresh_token } =
         await this.loginUseCase.generateToken(motoboyId, email);
 
-      await this.refreshTokenRepository.updateAccount(motoboyId, access_token, refresh_token);
+      await this.refreshTokenRepository.updateAccount(
+        motoboyId,
+        access_token,
+        refresh_token,
+      );
       return { access_token, refresh_token };
     } catch (error) {
       if (error instanceof NotFoundException) {
@@ -37,7 +43,6 @@ export class RefreshTokenUseCase {
     }
   }
 
-  //getId
   private async getMotoboy(id: string) {
     try {
       return await this.knex

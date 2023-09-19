@@ -7,8 +7,9 @@ import {
   MinLength,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { SmsDto } from './sms.dto';
 
-export class RegisterDto {
+export class RegisterDto extends SmsDto {
   @IsNotEmpty()
   @IsString()
   @MinLength(2)
@@ -27,7 +28,7 @@ export class RegisterDto {
   @IsString()
   @ApiProperty({
     description: 'Sobrenome do entregador',
-    example: 'Silva',
+    example: 'Almeida',
     type: String,
     required: true,
   })
@@ -62,7 +63,7 @@ export class RegisterDto {
   @IsEmail()
   @ApiProperty({
     description: 'Email do entregador',
-    example: 'email@gmail.com',
+    example: 'joao.almeida@example.com',
     type: String,
     required: true,
   })
@@ -74,16 +75,16 @@ export class RegisterDto {
   @MinLength(15)
   @ApiProperty({
     description: 'Telefone do entregador',
-    example: '(00) 00000-0000',
+    example: '(44) 99999-9999',
     type: String,
     required: true,
   })
-  telefone: string;
+  telefone: SmsDto['telefone'];
 
   @IsNotEmpty()
   @ApiProperty({
     description: 'Data de nascimento do entregador',
-    example: '1999-01-01',
+    example: '01/01/1990',
     type: String,
     required: true,
   })
@@ -95,7 +96,7 @@ export class RegisterDto {
   @ApiProperty({
     description: 'Senha do entregador',
     minLength: 8,
-    example: '12345678',
+    example: 'senhaSegura123',
     type: String,
     required: true,
   })
@@ -113,5 +114,11 @@ export class RegisterDto {
 
   @IsNotEmpty()
   @IsString()
+  @ApiProperty({
+    description: 'Cidade do entregador',
+    example: 'Maringa',
+    type: String,
+    required: true,
+  })
   cidade: string;
 }

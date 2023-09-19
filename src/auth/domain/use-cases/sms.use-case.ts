@@ -1,6 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import { error } from 'console';
-
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 @Injectable()
 export class SmsUseCase {
   private codes = new Map<string, number>();
@@ -13,27 +11,31 @@ export class SmsUseCase {
       this.tempPhones.add(phone);
       return code;
     } catch (error) {
-      throw error;
+      throw new InternalServerErrorException(
+        'Erro ao gerar código de verificação.',
+        error,
+      );
     }
   }
 
   async validateCode(phone: string, code: number) {
-    try {
-      const validCode = this.codes.get(phone);
-      if (validCode === code) {
-        return true;
-      }
-      return false;
-    } catch (error) {
-      throw error;
+    const validCode = this.codes.get(phone);
+    if (validCode === code) {
+      return true;
     }
+    throw new BadRequestException(
+      'Erro ao validar código de verificação.',
+    );
   }
 
   getTempPhones() {
     try {
       return this.tempPhones;
     } catch (error) {
-      throw error;
+      throw new InternalServerErrorException(
+        'Erro ao recuperar telefones temporários.',
+        error,
+      );
     }
   }
 }

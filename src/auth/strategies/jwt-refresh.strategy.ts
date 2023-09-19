@@ -2,8 +2,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
 import { Injectable, UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
-import { rsaKeyFactory } from '../factories/rsa-key.factory';
-import { readFileSync } from 'fs';
+import { getPublicKey } from '../util/set-keys';
 
 @Injectable()
 export class RefreshTokenStrategy extends PassportStrategy(
@@ -11,10 +10,9 @@ export class RefreshTokenStrategy extends PassportStrategy(
   'refresh',
 ) {
   constructor() {
-    let PUBLIC_KEY;
+    let PUBLIC_KEY
     try {
-      const keyData = JSON.parse(readFileSync('keys.json', 'utf8'));
-      PUBLIC_KEY = keyData.publicKey;
+      PUBLIC_KEY = getPublicKey();
     } catch (error) {
       throw new InternalServerErrorException('Erro ao ler chave publica.');
     }

@@ -6,6 +6,24 @@ import { RefreshTokenRepository } from '../../../domain/repository/refresh-token
 export class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
   constructor(@InjectModel() private readonly knex: Knex) {}
 
+  async createAccount(
+    id: string,
+    accessToken: string,
+    refreshToken: string,
+  ): Promise<void> {
+    try {
+      await this.knex('conta')
+        .insert({
+          id_entregador: id,
+          access_token: accessToken,
+          refresh_token: refreshToken,
+        })
+        .returning('id');
+    } catch (error) {
+      throw new InternalServerErrorException('Erro ao salvar tokens', error);
+    }
+  }
+
   async getStoredTokens(id: string): Promise<any> {
     try {
       return await this.knex

@@ -12,7 +12,7 @@ import {
   removePhoneMask,
   removeCpfMask,
   removeCnpjMask,
-} from '../../util/remove-mask';
+} from '../../../shared/utils/remove-mask';
 
 @Injectable()
 export class RegisterUseCase {
@@ -28,7 +28,8 @@ export class RegisterUseCase {
     } catch (error) {
       this.logger.error(`Failed to register city: ${error.message}`);
       throw new InternalServerErrorException(
-        'Erro interno ao tentar registrar a cidade.', error,
+        'Erro interno ao tentar registrar a cidade.',
+        error,
       );
     }
   }

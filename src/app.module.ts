@@ -2,22 +2,23 @@ import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/c
 import { KnexModule } from 'nest-knexjs';
 import { AuthModule } from './auth/resource/auth.module';
 import { SmsPhoneMiddleware } from './common/middleware/sms-phone.middleware';
+import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
+    ConfigModule.forRoot({
+    }),
     KnexModule.forRoot({
       config: {
         client: 'postgresql',
         useNullAsDefault: true,
         connection: {
-          connectionString:
-            'postgres://xkmgiqmeqhkwwe:f152290282748d2a00f99cd00291250c6fd4f4c4c51b76c3de99e253e669bd0c@ec2-34-235-108-214.compute-1.amazonaws.com:5432/deldtuvig09lb1',
+          connectionString: process.env.CONNECTION_STRING,
           ssl: { rejectUnauthorized: false },
-          host: 'ec2-34-235-108-214.compute-1.amazonaws.com',
+          host: process.env.HOST,
           port: 5432,
-          user: 'xkmgiqmeqhkwwe',
-          database: 'deldtuvig09lb1',
-          password:
-            'f152290282748d2a00f99cd00291250c6fd4f4c4c51b76c3de99e253e669bd0c',
+          user:  process.env.USER,
+          database: process.env.DATABASE,
+          password: process.env.PASSWORD,
         },
       },
     }),

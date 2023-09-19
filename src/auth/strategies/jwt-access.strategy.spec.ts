@@ -1,14 +1,14 @@
 import { JwtStrategy } from './jwt-access.strategy';
 import { UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
-import { readFileSync } from 'fs';
+import { getPublicKey } from '../util/set-keys';
 
-jest.mock('fs');
+jest.mock('../util/set-keys');
 
 describe('JwtStrategy', () => {
   let strategy: JwtStrategy;
 
   beforeEach(() => {
-    (readFileSync as jest.Mock).mockReturnValue(JSON.stringify({ publicKey: 'fake_key' }));
+    (getPublicKey as jest.Mock).mockReturnValue({ publicKey: 'fake_key' });
     strategy = new JwtStrategy();
   });
 
@@ -18,7 +18,7 @@ describe('JwtStrategy', () => {
 
   describe('Constructor', () => {
     it('should throw InternalServerErrorException when reading the public key fails', () => {
-      (readFileSync as jest.Mock).mockImplementation(() => {
+      (getPublicKey as jest.Mock).mockImplementation(() => {
         throw new Error();
       });
       expect(() => new JwtStrategy()).toThrow(InternalServerErrorException);
