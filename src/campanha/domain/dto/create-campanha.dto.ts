@@ -97,5 +97,5 @@ export class CreateCampanhaDto {
   })
   @IsString()
   @IsNotEmpty()
-  ativa: string;
+  ativa: boolean;
 }

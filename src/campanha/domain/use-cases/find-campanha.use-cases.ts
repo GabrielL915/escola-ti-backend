@@ -14,7 +14,7 @@ export class FindCampanhaUseCase {
     }
   }
 
-  async findOne(id: number): Promise<Campanha> {
+  async findOne(id: string): Promise<Campanha> {
     try {
       return this.campanhaRepository.findOne(id);
     } catch (error) {

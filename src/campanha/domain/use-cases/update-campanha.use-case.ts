@@ -7,7 +7,7 @@ import { UpdateCampanhaDto } from '../dto/update-campanha.dto';
 export class UpdateCampanhaUseCase {
   constructor(private readonly campanhaRepository: CampanhaRepository) {}
 
-  async update(id: number, campanha: UpdateCampanhaDto): Promise<Campanha> {
+  async update(id: string, campanha: UpdateCampanhaDto): Promise<Campanha> {
     try {
       return this.campanhaRepository.update(id, campanha);
     } catch (error) {

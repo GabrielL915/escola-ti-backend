@@ -1,4 +1,5 @@
 export interface Campanha {
+  id: string;
   tipo: string;
   dias: Array<string>;
   horario_inicial: string;

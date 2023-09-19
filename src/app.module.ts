@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { CampanhaModule } from './campanha/resource/campanha.module';
 import { KnexModule } from 'nest-knexjs';
+import { ObjetivoModule } from './objetivo/resource/objetivo.module';
 
 @Module({
   imports: [
     CampanhaModule,
+    ObjetivoModule,
     KnexModule.forRoot({
       config: {
         client: 'postgresql',

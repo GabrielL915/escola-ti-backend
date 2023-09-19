@@ -5,7 +5,7 @@ import { CampanhaRepository } from '../repository/campanha.repository';
 export class DeleteCampanhaUseCase {
   constructor(private readonly campanhaRepository: CampanhaRepository) {}
 
-  async delete(id: number): Promise<void> {
+  async delete(id: string): Promise<void> {
     try {
       return this.campanhaRepository.delete(id);
     } catch (error) {

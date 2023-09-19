@@ -31,14 +31,14 @@ export class CampanhaController {
 
   @Put(':id')
   async update(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Body() updateCampanhaDto: UpdateCampanhaDto,
   ) {
     return this.updateCampanhaUseCase.update(id, updateCampanhaDto);
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: number) {
+  async delete(@Param('id') id: string) {
     return this.deleteCampanhaUseCase.delete(id);
   }
 
@@ -48,7 +48,7 @@ export class CampanhaController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number) {
+  async findOne(@Param('id') id: string) {
     return this.findCampanhaUseCase.findOne(id);
   }
 }
