@@ -21,12 +21,11 @@ import {
   ApiBearerAuth,
 } from '@nestjs/swagger';
 import { LoginDto } from '../domain/dto/login.dto';
-import { AuthResponseDto } from '../domain/dto/auth-response.dto';
+import { ProfileDto } from '../domain/dto/profile.dto';
 import { RegisterUseCase } from '../domain/use-cases/register.use-case';
 import { LoginUseCase } from '../domain/use-cases/login.use-case';
 import { ProfileUseCase } from '../domain/use-cases/profile.use-case';
 import { AccessTokenGuard } from '../guards/access-token.guard';
-import { AuthGuard } from '@nestjs/passport';
 import { RefreshTokenGuard } from '../guards/refresh-token.guard';
 import { SmsUseCase } from '../domain/use-cases/sms.use-case';
 import { RefreshTokenUseCase } from '../domain/use-cases/refresh-token.use-case';
@@ -98,16 +97,16 @@ export class AuthController {
     type: RegisterDto,
     required: true,
   })
-  create(@Body() createCadastroDto: RegisterDto): Promise<AuthResponseDto> {
+  create(@Body() createCadastroDto: RegisterDto): Promise<RegisterDto> {
     return this.registerUseCase.register(createCadastroDto);
   }
 
   @UseGuards(AccessTokenGuard)
-  @Get('profile/:email')
+  @Get('profile')
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Retorna o perfil do entregador',
-    type: AuthResponseDto,
+    type: ProfileDto,
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
@@ -126,7 +125,8 @@ export class AuthController {
     required: true,
     example: 'teste@gmail.com',
   })
-  getProfile(@Param('email') email: string) {
+  getProfile(@Req() req: Request) {
+    const email: string = req.user['email'];
     return this.profileUseCase.profile(email);
   }
 

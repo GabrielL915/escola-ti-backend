@@ -43,7 +43,7 @@ export class RegisterDto {
     type: String,
     required: true,
   })
-  CPF: string;
+  cpf: string;
 
   @IsNotEmpty()
   @IsString()
@@ -55,7 +55,7 @@ export class RegisterDto {
     type: String,
     required: true,
   })
-  CNPJ: string;
+  cnpj: string;
 
   @IsNotEmpty()
   @IsString()

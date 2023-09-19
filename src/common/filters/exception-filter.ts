@@ -1,6 +1,6 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException, BadRequestException } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { getErrorCodeForException } from '../../auth/util/generateErrorCode';
+import { getErrorCodeForException } from '../../auth/util/generate-error-code';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {

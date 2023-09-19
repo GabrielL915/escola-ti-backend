@@ -88,9 +88,10 @@ export class LoginUseCase {
     }
   }
 
+  //data-access
   async saveTokens(id: string, accessToken: string, refreshToken: string) {
     try {
-      await this.knex('account')
+      await this.knex('conta')
         .insert({
           id_entregador: id,
           access_token: accessToken,

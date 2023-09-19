@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { setKeys } from '../util/setKeys';
+import { setKeys } from '../util/set-keys';
 import { readFileSync } from 'fs';
 
 @Injectable()

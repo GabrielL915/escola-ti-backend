@@ -13,17 +13,16 @@ import {
   removeCpfMask,
   removeCnpjMask,
 } from '../../util/remove-mask';
-import { AuthResponseDto } from '../dto/auth-response.dto';
 
 @Injectable()
 export class RegisterUseCase {
   private readonly logger = new Logger(RegisterUseCase.name);
   constructor(@InjectModel() private knex: Knex) {}
 
-  async registerCity(city: string, UF: string) {
+  async registerCity(city: string, uf: string) {
     try {
       const [id] = await this.knex('cidade')
-        .insert({ cidade: city, UF })
+        .insert({ cidade: city, uf: uf })
         .returning('id');
       return id;
     } catch (error) {
@@ -34,22 +33,22 @@ export class RegisterUseCase {
     }
   }
 
-  async register(createCadastroDto: RegisterDto): Promise<AuthResponseDto> {
+  async register(createCadastroDto: RegisterDto): Promise<RegisterDto> {
     try {
       const hashedPassword = hashPassword(createCadastroDto.senha);
       const phoneWithoutMask = removePhoneMask(createCadastroDto.telefone);
-      const cpfWithoutMask = removeCpfMask(createCadastroDto.CPF);
-      const cnpjWithoutMask = removeCnpjMask(createCadastroDto.CNPJ);
-      const UF = 'PR';
-      const cidade = await this.registerCity(createCadastroDto.cidade, UF);
+      const cpfWithoutMask = removeCpfMask(createCadastroDto.cpf);
+      const cnpjWithoutMask = removeCnpjMask(createCadastroDto.cnpj);
+      const uf = 'PR';
+      const cidade = await this.registerCity(createCadastroDto.cidade, uf);
       const newRegister = {
         nome: createCadastroDto.nome,
         sobrenome: createCadastroDto.sobrenome,
         email: createCadastroDto.email,
         data_de_nascimento: createCadastroDto.data_de_nascimento,
         mochila: createCadastroDto.mochila,
-        CPF: cpfWithoutMask,
-        CNPJ: cnpjWithoutMask,
+        cpf: cpfWithoutMask,
+        cnpj: cnpjWithoutMask,
         telefone: phoneWithoutMask,
         senha: hashedPassword,
         token_dispositivo: 'token-do-dispositivo',

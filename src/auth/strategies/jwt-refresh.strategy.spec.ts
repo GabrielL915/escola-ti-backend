@@ -1,40 +1,65 @@
-import { UnauthorizedException } from '@nestjs/common';
+import {
+  UnauthorizedException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { RefreshTokenStrategy } from './jwt-refresh.strategy';
+import { readFileSync } from 'fs';
+
+jest.mock('fs');
 
 describe('RefreshTokenStrategy', () => {
   let strategy: RefreshTokenStrategy;
   let payload: { email: string; sub: string };
 
   beforeEach(() => {
+    (readFileSync as jest.Mock).mockReturnValue(
+      JSON.stringify({ publicKey: 'fake_key' }),
+    );
     strategy = new RefreshTokenStrategy();
   });
 
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('Constructor', () => {
+    it('should throw InternalServerErrorException when reading the public key fails', () => {
+      (readFileSync as jest.Mock).mockImplementation(() => {
+        throw new Error();
+      });
+      expect(() => new RefreshTokenStrategy()).toThrow(
+        InternalServerErrorException,
+      );
+    });
+  });
+
   describe('validate', () => {
-    it('should throw an UnauthorizedException if Authorization header is missing', async () => {
+    beforeEach(() => {
       payload = { email: 'emailtest@example.com', sub: 'senha123' };
-      const mockReq: any = {
-        get: (headerName: string) => {
-          return undefined;
-        },
-      };
+    });
+
+    it('should throw an UnauthorizedException if Authorization header is missing', async () => {
+      const mockReq: any = { get: jest.fn().mockReturnValue(undefined) };
       await expect(strategy.validate(mockReq, payload)).rejects.toThrow(
         UnauthorizedException,
       );
     });
+
+    it('should throw an UnauthorizedException if payload is undefined', async () => {
+      const mockReq: any = { get: jest.fn().mockReturnValue('Bearer token') };
+      await expect(strategy.validate(mockReq, undefined)).rejects.toThrow(
+        UnauthorizedException,
+      );
+    });
+
     it('should return the payload with the refresh token', async () => {
-      payload = { email: 'emailtest@example.com', sub: 'senha123' };
       const mockReq: any = {
-        get: (headerName: string) => {
-          if (headerName === 'Authorization') {
-            return 'Bearer token';
-          }
-        },
+        get: jest.fn((headerName: string) =>
+          headerName === 'Authorization' ? 'Bearer token' : undefined,
+        ),
       };
       const result = await strategy.validate(mockReq, payload);
-
-      expect(result).toEqual({ ...payload, refreshToken: expect.any(String) });
-      expect(result.refreshToken).toBeDefined();
-      expect(result.refreshToken).toBe('token');
+      expect(result).toEqual({ ...payload, refreshToken: 'token' });
     });
   });
 });

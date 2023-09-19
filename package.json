@@ -77,7 +77,8 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s",
       "!<rootDir>/app.module.ts",
-      "!<rootDir>/main.ts"
+      "!<rootDir>/main.ts",
+      "!<rootDir>/auth/resource/auth.module.ts"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"

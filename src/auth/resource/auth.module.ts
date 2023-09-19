@@ -10,6 +10,8 @@ import { LoginUseCase } from '../domain/use-cases/login.use-case';
 import { ProfileUseCase } from '../domain/use-cases/profile.use-case';
 import { SmsUseCase } from '../domain/use-cases/sms.use-case';
 import { RefreshTokenUseCase } from '../domain/use-cases/refresh-token.use-case';
+import { RefreshTokenRepository } from '../domain/repository/refresh-token.repository';
+import { RefreshTokenRepositoryImpl } from '../data-access/infraestructure/repository/refresh-token.repository.impl';
 @Module({
   imports: [
     JwtModule.registerAsync({
@@ -25,7 +27,11 @@ import { RefreshTokenUseCase } from '../domain/use-cases/refresh-token.use-case'
     LoginUseCase,
     ProfileUseCase,
     SmsUseCase,
-    RefreshTokenUseCase
+    RefreshTokenUseCase,
+    {
+      provide: RefreshTokenRepository,
+      useClass: RefreshTokenRepositoryImpl,
+    }
   ],
   exports: [SmsUseCase],
 })

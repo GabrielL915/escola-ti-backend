@@ -1,18 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AuthService } from '../resource/auth.service';
 import { LocalStrategy } from './local.strategy';
 import { UnauthorizedException } from '@nestjs/common';
+import { LoginUseCase } from '../domain/use-cases/login.use-case';
 
 describe('LocalStrategy', () => {
   let localStrategy: LocalStrategy;
-  let mockAuthService: jest.Mocked<AuthService>;
+  let mockLoginUseCase: jest.Mocked<LoginUseCase>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         LocalStrategy,
         {
-          provide: AuthService,
+          provide: LoginUseCase,
           useValue: {
             validateEntregador: jest.fn(),
           },
@@ -21,7 +21,7 @@ describe('LocalStrategy', () => {
     }).compile();
 
     localStrategy = module.get<LocalStrategy>(LocalStrategy);
-    mockAuthService = module.get(AuthService);
+    mockLoginUseCase = module.get(LoginUseCase);
   });
 
   it('should be defined', () => {
@@ -29,12 +29,13 @@ describe('LocalStrategy', () => {
   });
 
   describe('validate', () => {
-    it('should return user if  validation is succeful', async () => {
+    it('should return user if validation is successful', async () => {
       const mockUser = {
+        id: 'id',
         email: 'emailtest@example.com',
         senha: 'senha123',
       };
-      mockAuthService.validateEntregador.mockResolvedValue(mockUser);
+      mockLoginUseCase.validateEntregador.mockResolvedValue(mockUser);
 
       const result = await localStrategy.validate(
         'emailtest@example.com',
@@ -45,13 +46,13 @@ describe('LocalStrategy', () => {
     });
 
     it('should throw an unauthorized exception if validation fails', async () => {
-      mockAuthService.validateEntregador.mockResolvedValue(null);
+      mockLoginUseCase.validateEntregador.mockResolvedValue(null);
 
-      await expect(localStrategy.validate('', '')).rejects.toThrow(
-        UnauthorizedException,
-      );
+      await expect(
+        localStrategy.validate('emailtest@example.com', 'senha123'),
+      ).rejects.toThrow(UnauthorizedException);
 
-      expect(mockAuthService.validateEntregador).toHaveBeenCalled();
+      expect(mockLoginUseCase.validateEntregador).toHaveBeenCalled();
     });
   });
 });

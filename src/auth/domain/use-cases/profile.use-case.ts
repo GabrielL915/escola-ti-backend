@@ -1,16 +1,18 @@
 import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { Knex } from 'knex';
 import { InjectModel } from 'nest-knexjs';
+import { ProfileDto } from '../dto/profile.dto';
 
 export class ProfileUseCase {
   private readonly logger = new Logger(ProfileUseCase.name);
 
   constructor(@InjectModel() private readonly knex: Knex) {}
 
-  async profile(email: string) {
+  async profile(email: string): Promise<ProfileDto[]> {
     try {
       const fullProfile = await this.knex
         .from('entregador')
+        .select('nome', 'aiqcoins')
         .where({ email: email });
 
       if (!fullProfile || fullProfile.length === 0) {
@@ -25,7 +27,10 @@ export class ProfileUseCase {
         `Erro ao recuperar perfil para o email: ${email}`,
         error.stack,
       );
-      throw new InternalServerErrorException('Erro ao recuperar perfil.', error);
+      throw new InternalServerErrorException(
+        'Erro ao recuperar perfil.',
+        error,
+      );
     }
   }
 }
