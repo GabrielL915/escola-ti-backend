@@ -6,7 +6,6 @@ import { HttpException } from '@nestjs/common';
 
 export class MotoboyRepositoryImpl implements MotoboyRepository {
   constructor(@InjectModel() private knex: Knex) {}
-
   async update(id: string, input: Motoboy): Promise<Motoboy> {
     const existingMotoboy = await this.knex('entregador')
       .where({ id: id })

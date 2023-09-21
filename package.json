@@ -74,9 +74,17 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "**/*.(t|j)s",
+      "!<rootDir>/app.module.ts",         
+      "!<rootDir>/main.ts",               
+      "!<rootDir>/motoboy/resource/motoboy.module.ts"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "<rootDir>/app.module.ts",
+      "<rootDir>/main.ts",
+      "<rootDir>/motoboy/resource/motoboy.module.ts"
+    ]
   }
 }

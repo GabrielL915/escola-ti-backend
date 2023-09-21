@@ -1,5 +1,3 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateMotoboyDto } from './create-motoboy.dto';
 import {
   IsBoolean,
   IsEmail,
@@ -9,7 +7,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-export class UpdateMotoboyDto extends PartialType(CreateMotoboyDto) {
+export class UpdateMotoboyDto  {
   @IsNotEmpty()
   @IsString()
   @MinLength(2)
