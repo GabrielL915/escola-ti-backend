@@ -7,15 +7,13 @@ module.exports = {
   development: {
     client: 'postgresql',
     connection: {
-      connectionString:
-        '',
+      connectionString: process.env.CONNECTION_STRING,
       ssl: { rejectUnauthorized: false },
-      host: '',
+      host: process.env.HOST,
       port: 5432,
-      user: '',
-      database: '',
-      password:
-        '',
+      user: process.env.USER,
+      database: process.env.DATABASE,
+      password: process.env.PASSWORD,
     },
     migrations: {
       tableName: 'knex_migrations',

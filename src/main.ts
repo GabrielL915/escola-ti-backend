@@ -1,13 +1,13 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { HttpExceptionFilter } from './shared/util/filters/exception.filter';
 import { AppModule } from './app.module';
+import { HttpExceptionFilter } from './common/filters/exception-filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalPipes(new ValidationPipe());
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
   const config = new DocumentBuilder()
