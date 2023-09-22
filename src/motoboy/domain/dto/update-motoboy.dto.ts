@@ -6,8 +6,11 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateMotoboyDto } from './create-motoboy.dto';
 import { ApiProperty } from '@nestjs/swagger';
-export class UpdateMotoboyDto  {
+import { SmsDto } from 'src/auth/domain/dto/sms.dto';
+export class UpdateMotoboyDto extends PartialType(CreateMotoboyDto) {
   @IsNotEmpty()
   @IsString()
   @MinLength(2)
@@ -26,7 +29,7 @@ export class UpdateMotoboyDto  {
   @IsString()
   @ApiProperty({
     description: 'Sobrenome do entregador',
-    example: 'Silva',
+    example: 'Almeida',
     type: String,
     required: true,
   })
@@ -34,10 +37,34 @@ export class UpdateMotoboyDto  {
 
   @IsNotEmpty()
   @IsString()
+  @MaxLength(14)
+  @MinLength(14)
+  @ApiProperty({
+    description: 'CPF do entregador',
+    example: '000.000.000-00',
+    type: String,
+    required: true,
+  })
+  cpf: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(18)
+  @MinLength(18)
+  @ApiProperty({
+    description: 'CNPJ do entregador',
+    example: '00.000.000/0000-00',
+    type: String,
+    required: true,
+  })
+  cnpj: string;
+
+  @IsNotEmpty()
+  @IsString()
   @IsEmail()
   @ApiProperty({
     description: 'Email do entregador',
-    example: 'email@gmail.com',
+    example: 'joao.almeida@example.com',
     type: String,
     required: true,
   })
@@ -45,20 +72,20 @@ export class UpdateMotoboyDto  {
 
   @IsNotEmpty()
   @IsString()
-  @MaxLength(13)
-  @MinLength(13)
+  @MaxLength(15)
+  @MinLength(15)
   @ApiProperty({
     description: 'Telefone do entregador',
-    example: '(00) 00000-0000',
+    example: '(44) 99999-9999',
     type: String,
     required: true,
   })
-  telefone: string;
+  telefone: SmsDto['telefone'];
 
   @IsNotEmpty()
   @ApiProperty({
     description: 'Data de nascimento do entregador',
-    example: '1999/01/01',
+    example: '01/01/1990',
     type: String,
     required: true,
   })
@@ -70,7 +97,7 @@ export class UpdateMotoboyDto  {
   @ApiProperty({
     description: 'Senha do entregador',
     minLength: 8,
-    example: '12345678',
+    example: 'senhaSegura123',
     type: String,
     required: true,
   })
@@ -85,4 +112,14 @@ export class UpdateMotoboyDto  {
     required: true,
   })
   mochila: boolean;
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({
+    description: 'Id da cidade do entregador',
+    example: '00000000-0000-0000-0000-000000000000',
+    type: String,
+    required: true,
+  })
+  id_endereco_de_servico: string;
 }

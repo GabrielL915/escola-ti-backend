@@ -2,8 +2,8 @@ export interface Motoboy {
   id: string;
   nome: string;
   sobrenome: string;
-  CPF: string;
-  CNPJ: string;
+  cpf: string;
+  cnpj: string;
   email: string;
   telefone: string;
   data_de_nascimento: string;
@@ -11,5 +11,8 @@ export interface Motoboy {
   data_de_cadastro: string;
   mochila: boolean;
   aiqcoins: number;
-  ativo: boolean; 
+  ativo: boolean;
+  token_dispositivo: string;
+  entregas_realizadas: number;
+  id_endereco_de_servico: string;
 }
