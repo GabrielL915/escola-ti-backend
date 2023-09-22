@@ -8,6 +8,7 @@ import { Knex } from 'knex';
 import { RefreshTokenRepository } from '../repository/refresh-token.repository';
 import { LoginUseCase } from './login.use-case';
 
+
 @Injectable()
 export class RefreshTokenUseCase {
   constructor(

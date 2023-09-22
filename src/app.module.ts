@@ -1,11 +1,15 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { KnexModule } from 'nest-knexjs';
 import { AuthModule } from './auth/resource/auth.module';
+import { MotoboyModule } from './motoboy/resource/motoboy.module';
 import { SmsPhoneMiddleware } from './common/middleware/sms-phone.middleware';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 @Module({
   imports: [
+    AuthModule,
     ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env'
     }),
     KnexModule.forRoot({
       config: {
@@ -22,10 +26,12 @@ import { ConfigModule } from '@nestjs/config';
         },
       },
     }),
-    AuthModule,
+ 
+    MotoboyModule,
   ],
   controllers: [],
   providers: [],
+  exports: [],
 })
 export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {

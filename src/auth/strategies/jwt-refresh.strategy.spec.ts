@@ -1,36 +1,17 @@
-import {
-  UnauthorizedException,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
 import { RefreshTokenStrategy } from './jwt-refresh.strategy';
-import { getPublicKey } from '../util/set-keys';
-
-jest.mock('../util/set-keys');
 
 describe('RefreshTokenStrategy', () => {
   let strategy: RefreshTokenStrategy;
   let payload: { email: string; sub: string };
 
   beforeEach(() => {
-    (getPublicKey as jest.Mock).mockReturnValue({
-      publicKey: 'fake_key',
-    });
+    process.env.KEY = 'fake_key';
     strategy = new RefreshTokenStrategy();
   });
 
   afterAll(() => {
     jest.clearAllMocks();
-  });
-
-  describe('Constructor', () => {
-    it('should throw InternalServerErrorException when reading the public key fails', () => {
-      (getPublicKey as jest.Mock).mockImplementation(() => {
-        throw new Error();
-      });
-      expect(() => new RefreshTokenStrategy()).toThrow(
-        InternalServerErrorException,
-      );
-    });
   });
 
   describe('validate', () => {

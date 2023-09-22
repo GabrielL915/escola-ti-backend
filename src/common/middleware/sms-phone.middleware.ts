@@ -1,4 +1,4 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Injectable, NestMiddleware, NotFoundException } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { SmsUseCase } from '../../auth/domain/use-cases/sms.use-case';
 
@@ -12,6 +12,8 @@ export class SmsPhoneMiddleware implements NestMiddleware {
     if (tempPhone) {
       req.body.telefone = tempPhone;
       next();
+    } else {
+      throw new NotFoundException('Telefone não encontrado');
     }
   }
 }

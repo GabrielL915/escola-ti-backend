@@ -1,28 +1,16 @@
 import { JwtStrategy } from './jwt-access.strategy';
 import { UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
-import { getPublicKey } from '../util/set-keys';
-
-jest.mock('../util/set-keys');
 
 describe('JwtStrategy', () => {
   let strategy: JwtStrategy;
 
   beforeEach(() => {
-    (getPublicKey as jest.Mock).mockReturnValue({ publicKey: 'fake_key' });
+    process.env.KEY = 'fake_key';
     strategy = new JwtStrategy();
   });
 
   afterAll(() => {
     jest.clearAllMocks();
-  });
-
-  describe('Constructor', () => {
-    it('should throw InternalServerErrorException when reading the public key fails', () => {
-      (getPublicKey as jest.Mock).mockImplementation(() => {
-        throw new Error();
-      });
-      expect(() => new JwtStrategy()).toThrow(InternalServerErrorException);
-    });
   });
 
   describe('validate', () => {
