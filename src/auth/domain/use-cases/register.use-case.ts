@@ -2,10 +2,8 @@ import {
   Injectable,
   ConflictException,
   InternalServerErrorException,
-  Logger,
 } from '@nestjs/common';
 import { RegisterDto } from '../dto/register.dto';
-import { InjectModel } from 'nest-knexjs';
 import { Knex } from 'knex';
 import { hashPassword } from '../../utils/hash-password';
 import {
@@ -14,46 +12,39 @@ import {
   removeCnpjMask,
 } from '../../../shared/utils/remove-mask';
 import { MotoboyRepository } from '../../../motoboy/domain/repository/motoboy.repository';
-
+import { CityRepository } from '../../../city/domain/repository/city.repository';
 @Injectable()
 export class RegisterUseCase {
-  constructor(@InjectModel() private knex: Knex,
-  private readonly motoboyRepository: MotoboyRepository) {}
+  constructor(
+    private readonly motoboyRepository: MotoboyRepository,
+    private readonly cityRepository: CityRepository,
+  ) {}
 
- private async registerCity(city: string, uf: string) {
+  async register(input: RegisterDto): Promise<any> {
     try {
-      const [id] = await this.knex('cidade')
-        .insert({ cidade: city, uf: uf })
-        .returning('id');
-      return id;
-    } catch (error) {
-      throw new InternalServerErrorException(
-        'Erro interno ao tentar registrar a cidade.',
-        error,
-      );
-    }
-  }
-
-  async register(createCadastroDto: RegisterDto): Promise<any> {
-    try {
-      const hashedPassword = hashPassword(createCadastroDto.senha);
-      const phoneWithoutMask = removePhoneMask(createCadastroDto.telefone);
-      const cpfWithoutMask = removeCpfMask(createCadastroDto.cpf);
-      const cnpjWithoutMask = removeCnpjMask(createCadastroDto.cnpj);
+      const hashedPassword = hashPassword(input.senha);
+      const phoneWithoutMask = removePhoneMask(input.telefone);
+      const cpfWithoutMask = removeCpfMask(input.cpf);
+      const cnpjWithoutMask = removeCnpjMask(input.cnpj);
       const uf = 'PR';
-      const cidade = await this.registerCity(createCadastroDto.cidade, uf);
+      const inputCity = {
+        city: input.cidade,
+        uf: uf,
+      };
+      const city = await this.cityRepository.create(inputCity);
+      console.log(city);
       const newRegister = {
-        nome: createCadastroDto.nome,
-        sobrenome: createCadastroDto.sobrenome,
-        email: createCadastroDto.email,
-        data_de_nascimento: createCadastroDto.data_de_nascimento,
-        mochila: createCadastroDto.mochila,
+        nome: input.nome,
+        sobrenome: input.sobrenome,
+        email: input.email,
+        data_de_nascimento: input.data_de_nascimento,
+        mochila: input.mochila,
         cpf: cpfWithoutMask,
         cnpj: cnpjWithoutMask,
         telefone: phoneWithoutMask,
         senha: hashedPassword,
         token_dispositivo: 'token-do-dispositivo',
-        id_endereco_de_servico: cidade.id,
+        id_endereco_de_servico: city.id,
       };
       const motoboy = await this.motoboyRepository.create(newRegister);
       return motoboy;

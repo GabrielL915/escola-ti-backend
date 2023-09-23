@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 @Injectable()
 export class SmsUseCase {
   private codes = new Map<string, number>();
@@ -23,9 +27,7 @@ export class SmsUseCase {
     if (validCode === code) {
       return true;
     }
-    throw new BadRequestException(
-      'Erro ao validar código de verificação.',
-    );
+    throw new BadRequestException('Erro ao validar código de verificação.');
   }
 
   getTempPhones() {

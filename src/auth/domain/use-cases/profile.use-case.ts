@@ -8,9 +8,6 @@ export class ProfileUseCase {
   async profile(email: string): Promise<ProfileDto> {
     try {
       const fullProfile = await this.motoboyRepository.profile(email);
-      if (!fullProfile) {
-        throw new InternalServerErrorException('Erro ao recuperar perfil.');
-      }
       return fullProfile;
     } catch (error) {
       throw new InternalServerErrorException(
