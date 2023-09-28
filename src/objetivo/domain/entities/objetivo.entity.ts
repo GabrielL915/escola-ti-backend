@@ -1,4 +1,4 @@
-export interface Objetivo {
+export interface Objective {
   id: string;
   id_campanha: string;
   titulo: string;

@@ -1,14 +1,14 @@
-import { CreateObjetivoDto } from '../dto/create-objetivo.dto';
-import { Objetivo } from '../entities/objetivo.entity';
+import { CreateObjectiveDto } from '../dto/create-objective.dto';
+import { Objective } from '../entities/objetivo.entity';
 
-export abstract class ObjetivoRepository {
-  abstract create(createObjetivoDto: CreateObjetivoDto): Promise<Objetivo>;
+export abstract class ObjectiveRepository {
+  abstract create(createObjectiveDto: CreateObjectiveDto): Promise<Objective>;
 
-  abstract update(id: string, objetivo: Objetivo): Promise<Objetivo>;
+  abstract update(id: string, Objective: Objective): Promise<Objective>;
 
   abstract delete(id: string): Promise<void>;
 
-  abstract findAll(): Promise<Objetivo[]>;
+  abstract findAll(): Promise<Objective[]>;
 
-  abstract findOne(id: string): Promise<Objetivo>;
+  abstract findOne(id: string): Promise<Objective>;
 }

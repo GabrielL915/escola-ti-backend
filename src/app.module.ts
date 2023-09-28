@@ -1,10 +1,12 @@
-import { CampanhaModule } from './campanha/resource/campanha.module';
+import { CampaignModule } from './campanha/resource/campaign.module';
 import { KnexModule } from 'nest-knexjs';
-import { ObjetivoModule } from './objetivo/resource/objetivo.module';
+import { ObjectiveModule } from './objetivo/resource/objective.module';
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { AuthModule } from './auth/resource/auth.module';
 import { SmsPhoneMiddleware } from './common/middleware/sms-phone.middleware';
 import { ConfigModule } from '@nestjs/config';
+import { MetaModule } from './meta/resource/meta.module';
+import { RegisteredModule } from './inscrito/resource/registered.module';
 
 @Module({
   imports: [
@@ -26,8 +28,11 @@ import { ConfigModule } from '@nestjs/config';
       },
     }),
     AuthModule,
-    CampanhaModule,
-    ObjetivoModule,
+    CampaignModule,
+    ObjectiveModule,
+    MetaModule,
+    RegisteredModule,
+    
   ],
   controllers: [],
   providers: [],
