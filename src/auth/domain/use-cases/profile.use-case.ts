@@ -1,7 +1,8 @@
-import { InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ProfileDto } from '../dto/profile.dto';
 import { MotoboyRepository } from '../../../motoboy/domain/repository/motoboy.repository';
 
+@Injectable()
 export class ProfileUseCase {
   constructor(private readonly motoboyRepository: MotoboyRepository) {}
 

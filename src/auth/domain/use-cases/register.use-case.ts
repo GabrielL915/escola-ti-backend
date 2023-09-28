@@ -4,7 +4,6 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { RegisterDto } from '../dto/register.dto';
-import { Knex } from 'knex';
 import { hashPassword } from '../../utils/hash-password';
 import {
   removePhoneMask,

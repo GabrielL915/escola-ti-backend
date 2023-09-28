@@ -31,13 +31,6 @@ export class SmsUseCase {
   }
 
   getTempPhones() {
-    try {
-      return this.tempPhones;
-    } catch (error) {
-      throw new InternalServerErrorException(
-        'Erro ao recuperar telefones temporários.',
-        error,
-      );
-    }
+    return this.tempPhones;
   }
 }

@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MotoboyRepositoryImpl } from './motoboy.repository.impl';
 import {
-  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 
@@ -11,6 +10,7 @@ describe('MotoboyRepositoryImpl', () => {
 
   beforeEach(async () => {
     mockKnex = {
+      knex: jest.fn(),
       insert: jest.fn().mockReturnThis(),
       returning: jest.fn(),
       from: jest.fn().mockReturnThis(),
@@ -35,20 +35,126 @@ describe('MotoboyRepositoryImpl', () => {
   it('should be defined', () => {
     expect(repository).toBeDefined();
   });
-  it('should throw an NotFoundException if the motoboy id is not found', async () => {
-    mockKnex.where.mockReturnThis(); // Adicione esta linha
-    mockKnex.select.mockResolvedValueOnce([]); // Simula que nenhum motoboy foi encontrado
-    await expect(
-      repository.findById('00000000-0000-0000-0000-000000000000'),
-    ).rejects.toThrow(new NotFoundException('Entregador não encontrado'));
+
+  describe('profile', () => {
+    it('should find profile by email', async () => {
+      mockKnex.select.mockReturnThis([
+        {
+          nome: 'João',
+          aiqcoins: 0,
+        },
+      ]);
+      mockKnex.where.mockResolvedValueOnce([
+        {
+          id: '00000000-0000-0000-0000-000000000000',
+        },
+      ]);
+      const motoboy = await repository.profile('joao.almeida@example.com');
+      expect(motoboy).toBeDefined();
+    });
+
+    it('should throw an NotFoundException if the motoboy profile is not found', async () => {
+      mockKnex.select.mockReturnThis();
+      mockKnex.where.mockResolvedValueOnce([]);
+      await expect(
+        repository.profile('joao.almeida@example.com'),
+      ).rejects.toThrow(new NotFoundException('Entregador não encontrado'));
+    });
   });
 
-  it('should throw an NotFoundException if the motoboy email is not found', async () => {
-    mockKnex.select.mockReturnThis(); // Adicione esta linha
-    mockKnex.where.mockResolvedValueOnce([]); // Simula que nenhum motoboy foi encontrado
-    await expect(
-      repository.findByEmail('joao.almeida@example.com'),
-    ).rejects.toThrow(new NotFoundException('Entregador não encontrado'));
+  describe('findAll', () => {
+    it('should find all motoboys', async () => {
+      const motoboys = await repository.findAll();
+      expect(motoboys).toBeDefined();
+    });
   });
-  
+
+  describe('findById', () => {
+    it('should find motoboy by id', async () => {
+      mockKnex.select.mockReturnThis([
+        {
+          email: 'joao.almeida@example.com',
+        },
+      ]);
+      mockKnex.where.mockResolvedValueOnce([
+        {
+          id: '00000000-0000-0000-0000-000000000000',
+        },
+      ]);
+
+      const motoboy = await repository.findById(
+        '00000000-0000-0000-0000-000000000000',
+      );
+      expect(motoboy).toBeDefined();
+    });
+
+    it('should throw an NotFoundException if the motoboy id is not found', async () => {
+      mockKnex.select.mockReturnThis();
+      mockKnex.where.mockResolvedValueOnce([]);
+      await expect(
+        repository.findById('00000000-0000-0000-0000-000000000000'),
+      ).rejects.toThrow(new NotFoundException('Entregador não encontrado'));
+    });
+  });
+
+  describe('findByEmail', () => {
+    it('should find motoboy by email', async () => {
+      mockKnex.select.mockReturnThis([
+        {
+          id: '00000000-0000-0000-0000-000000000000',
+          email: 'joao.almeida@example.com',
+          senha: 'senhaSegura123',
+          ativo: true,
+        },
+      ]);
+      mockKnex.where.mockResolvedValueOnce([
+        {
+          email: 'joao.almeida@example.com',
+        },
+      ]);
+      const motoboy = await repository.findByEmail('joao.almeida@example.com');
+      expect(motoboy).toBeDefined();
+    });
+
+    it('should throw an NotFoundException if the motoboy email is not found', async () => {
+      mockKnex.select.mockReturnThis();
+      mockKnex.where.mockResolvedValueOnce([]);
+      await expect(
+        repository.findByEmail('joao.almeida@example.com'),
+      ).rejects.toThrow(new NotFoundException('Entregador não encontrado'));
+    });
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
+  /* TODO: Fix this test 
+  it('should create a new motoboy', async () => {
+    mockKnex.insert.mockReturnThis();
+    mockKnex.returning.mockResolvedValueOnce([
+      {
+        nome: 'João',
+        sobrenome: 'Almeida',
+        email: 'joao.almeida@example.com',
+        data_de_nascimento: '01/01/1990',
+        mochila: true,
+        telefone: 'teste',
+    
+      },
+    ]);
+    const motoboy = await repository.create({
+      nome: 'João',
+      sobrenome: 'Almeida',
+      email: 'joao.almeida@example.com',
+      data_de_nascimento: '01/01/1990',
+      mochila: true,
+      cpf: '123.456.789-00',
+      cnpj: '12.345.678/0001-99',
+      telefone: 'teste',
+      senha: 'senhaSegura123',
+      id_endereco_de_servico: '00000000-0000-0000-0000-000000000000',
+  });
+    expect(motoboy).toBeDefined();
+  }); */
 });

@@ -312,7 +312,7 @@ export class AuthController {
   })
   @Get('profile')
   getProfile(@Req() req: Request) {
-    const email: string = req.user['email'];
+    const email = req.user['email'];
     return this.profileUseCase.profile(email);
   }
 
