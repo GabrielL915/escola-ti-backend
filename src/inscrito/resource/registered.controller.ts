@@ -23,6 +23,7 @@ import { UpdateRegisteredUseCase } from '../domain/use-cases/update-registered.u
 import { DeleteRegisteredUseCase } from '../domain/use-cases/delete-registered.use-cases';
 import { FindRegisteredUseCase } from '../domain/use-cases/find-registered.use-cases';
 
+//INSCRITO
 @ApiTags('registered')
 @ApiBearerAuth()
 @Controller('registered')

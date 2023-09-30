@@ -3,10 +3,10 @@ import {
 } from '@nestjs/common';
 import { Knex } from 'knex';
 import { InjectModel } from 'nest-knexjs';
-import { Campaign } from '../../domain/entities/campaign.entity';
-import { CampaignRepository } from '../../domain/repository/campaign.repository';
-import { CreateCampaignDto } from '../../domain/dto/create-campaign.dto';
-import { UpdateCampaignDto } from '../../domain/dto/update-campaign.dto';
+import { Campaign } from '../../../domain/entities/campaign.entity';
+import { CampaignRepository } from '../../../domain/repository/campaign.repository';
+import { CreateCampaignDto } from '../../../domain/dto/create-campaign.dto';
+import { UpdateCampaignDto } from '../../../domain/dto/update-campaign.dto';
 
 export class CampaignRepositoryImpl implements CampaignRepository {
   constructor(@InjectModel() private readonly knex: Knex) {}

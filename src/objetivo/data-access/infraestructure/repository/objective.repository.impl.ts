@@ -1,10 +1,10 @@
 import { NotFoundException } from '@nestjs/common';
 import { Knex } from 'knex';
 import { InjectModel } from 'nest-knexjs';
-import { CreateObjectiveDto } from '../../domain/dto/create-objective.dto';
-import { UpdateObjectiveDto } from '../../domain/dto/update-objective.dto';
-import { Objective } from '../../domain/entities/objetivo.entity';
-import { ObjectiveRepository } from '../../domain/repository/objetivo.repository';
+import { CreateObjectiveDto } from '../../../domain/dto/create-objective.dto';
+import { UpdateObjectiveDto } from '../../../domain/dto/update-objective.dto';
+import { Objective } from '../../../domain/entities/objetivo.entity';
+import { ObjectiveRepository } from '../../../domain/repository/objetivo.repository';
 
 export class ObjectiveRepositoryImpl implements ObjectiveRepository {
   constructor(@InjectModel() private readonly knex: Knex) {}

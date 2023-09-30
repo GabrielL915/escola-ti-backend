@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MetaController } from './meta.controller';
 import { MetaRepository } from '../domain/repository/meta.repository';
-import { MetaRepositoryImpl } from '../data-access/repository/meta.repository.impl';
+import { MetaRepositoryImpl } from '../data-access/infraestructure/repository/meta.repository.impl';
 
 import { CreateMetaUseCase } from '../domain/use-cases/create-meta.use-cases';
 import { UpdateMetaUseCase } from '../domain/use-cases/update-meta.use-case';

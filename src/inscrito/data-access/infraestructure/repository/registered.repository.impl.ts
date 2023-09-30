@@ -1,10 +1,10 @@
 import { NotFoundException } from '@nestjs/common';
 import { Knex } from 'knex';
 import { InjectModel } from 'nest-knexjs';
-import { CreateRegisteredDto } from '../../domain/dto/create-registered.dto';
-import { UpdateRegisteredDto } from '../../domain/dto/update-registered.dto';
-import { Registered } from '../../domain/entities/registered.entity';
-import { RegisteredRepository } from '../../domain/repository/registered.repository';
+import { CreateRegisteredDto } from '../../../domain/dto/create-registered.dto';
+import { UpdateRegisteredDto } from '../../../domain/dto/update-registered.dto';
+import { Registered } from '../../../domain/entities/registered.entity';
+import { RegisteredRepository } from '../../../domain/repository/registered.repository';
 
 export class RegisteredRepositoryImpl implements RegisteredRepository {
   constructor(@InjectModel() private readonly knex: Knex) {}

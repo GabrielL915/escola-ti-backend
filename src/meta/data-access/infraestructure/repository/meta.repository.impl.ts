@@ -1,4 +1,3 @@
-import { UnauthorizedException } from '@nestjs/common';
 import { Knex } from 'knex';
 import { InjectModel } from 'nest-knexjs';
 import { CreateMetaDto } from 'src/meta/domain/dto/create-meta.dto';

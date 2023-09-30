@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { RegisteredRepository } from '../domain/repository/registered.repository';
-import { RegisteredRepositoryImpl } from '../data-access/repository/registered.repository.impl';
+import { RegisteredRepositoryImpl } from '../data-access/infraestructure/repository/registered.repository.impl';
 import { CreateRegisteredUseCase } from '../domain/use-cases/create-Registered.use-cases';
 import { UpdateRegisteredUseCase } from '../domain/use-cases/update-registered.use-case';
 import { DeleteRegisteredUseCase } from '../domain/use-cases/delete-registered.use-cases';

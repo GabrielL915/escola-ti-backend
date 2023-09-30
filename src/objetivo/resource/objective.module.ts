@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ObjectiveRepositoryImpl } from '../data-access/repository/objective.repository.impl';
+import { ObjectiveRepositoryImpl } from '../data-access/infraestructure/repository/objective.repository.impl';
 
 import { CreateObjectiveUseCase } from '../domain/use-cases/create-objective.use-cases';
 import { UpdateObjectiveUseCase } from '../domain/use-cases/update-objective.use-case';
