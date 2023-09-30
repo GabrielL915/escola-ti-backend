@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Objective } from '../entities/objetivo.entity';
 import { ObjectiveRepository } from '../repository/objetivo.repository';
 
@@ -10,7 +10,7 @@ export class FindObjectiveUseCase {
     try {
       return this.objectiveRepository.findAll();
     } catch (error) {
-      throw new Error(error);
+      throw new InternalServerErrorException('Erro ao buscar Objetivos', error);
     }
   }
 
@@ -18,7 +18,7 @@ export class FindObjectiveUseCase {
     try {
       return this.objectiveRepository.findOne(id);
     } catch (error) {
-      throw new Error(error);
+      throw new InternalServerErrorException('Erro ao buscar Objetivo por id', error);
     }
   }
 }

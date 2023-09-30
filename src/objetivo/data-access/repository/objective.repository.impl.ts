@@ -1,64 +1,44 @@
-import { UnauthorizedException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { Knex } from 'knex';
 import { InjectModel } from 'nest-knexjs';
-import { CreateObjectiveDto } from 'src/objetivo/domain/dto/create-objective.dto';
-import { UpdateObjectiveDto } from 'src/objetivo/domain/dto/update-objective.dto';
-import { Objective } from 'src/objetivo/domain/entities/objetivo.entity';
-import { ObjectiveRepository } from 'src/objetivo/domain/repository/objetivo.repository';
-
+import { CreateObjectiveDto } from '../../domain/dto/create-objective.dto';
+import { UpdateObjectiveDto } from '../../domain/dto/update-objective.dto';
+import { Objective } from '../../domain/entities/objetivo.entity';
+import { ObjectiveRepository } from '../../domain/repository/objetivo.repository';
 
 export class ObjectiveRepositoryImpl implements ObjectiveRepository {
   constructor(@InjectModel() private readonly knex: Knex) {}
 
   async create(createObjectiveDto: CreateObjectiveDto): Promise<Objective> {
-    try {
-      const [objective] = await this.knex('objective')
-        .insert(createObjectiveDto)
-        .returning('*');
-      return objective;
-    } catch (error) {
-      throw new UnauthorizedException(error);
-    }
+    const [objective] = await this.knex('objetivo')
+      .insert(createObjectiveDto)
+      .returning('*');
+    return objective;
   }
 
   async update(
     id: string,
-    updateObjectiveDto: UpdateObjectiveDto,
+    input: UpdateObjectiveDto,
   ): Promise<Objective> {
-    try {
-      const [updatedObjective] = await this.knex('objective')
-        .where({ id })
-        .update(updateObjectiveDto)
-        .returning('*');
-      return updatedObjective;
-    } catch (error) {
-      throw new UnauthorizedException(error);
-    }
+    const [updatedObjective] = await this.knex('objetivo')
+      .where({ id })
+      .update(input)
+      .returning('*');
+    return updatedObjective;
   }
 
   async delete(id: string): Promise<void> {
-    try {
-      await this.knex('objective').where({ id }).del();
-    } catch (error) {
-      throw new UnauthorizedException(error);
-    }
+    await this.knex('objetivo').where({ id }).del();
   }
 
   async findAll(): Promise<Objective[]> {
-    try {
-      const objectives = await this.knex('objective').select('*');
+      const objectives = await this.knex('objetivo').select('*');
       return objectives;
-    } catch (error) {
-      throw new UnauthorizedException(error);
-    }
   }
 
   async findOne(id: string): Promise<Objective> {
-    try {
-      const [objective] = await this.knex('objective').where({ id }).select('*');
+      const [objective] = await this.knex('objetivo').where({ id }).select('*');
+      if (!objective) throw new NotFoundException('Objetivo não encontrado');
       return objective;
-    } catch (error) {
-      throw new UnauthorizedException(error);
-    }
   }
 }

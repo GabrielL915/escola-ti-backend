@@ -1,17 +1,17 @@
-import { Injectable } from '@nestjs/common';
-import { Registered } from '../entities/Registered.entity';
-import { RegisteredRepository } from '../repository/Registered.repository';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Registered } from '../entities/registered.entity';
+import { RegisteredRepository } from '../repository/registered.repository';
 import { CreateRegisteredDto } from '../dto/create-registered.dto';
 
 @Injectable()
 export class CreateRegisteredUseCase {
   constructor(private readonly registeredRepository: RegisteredRepository) {}
 
-  async create(createRegisteredDto: CreateRegisteredDto): Promise<Registered> {
+  async create(input: CreateRegisteredDto): Promise<Registered> {
     try {
-      return this.registeredRepository.create(createRegisteredDto);
+      return await this.registeredRepository.create(input);
     } catch (error) {
-      throw new Error(error);
+      throw new InternalServerErrorException('Erro ao criar Inscrito', error);
     }
   }
 }

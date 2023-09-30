@@ -39,8 +39,8 @@ export class ObjectiveController {
   @ApiBody({ type: CreateObjectiveDto, description: 'Dados do Objetivo a ser criado' })
   @ApiResponse({ status: 201, description: 'Objetivo criado com sucesso.' })
   @ApiResponse({ status: 400, description: 'Entrada inválida.' })
-  async create(@Body() createObjectiveDto: CreateObjectiveDto) {
-    return this.createObjectiveUseCase.create(createObjectiveDto);
+  async create(@Body() input: CreateObjectiveDto) {
+    return this.createObjectiveUseCase.create(input);
   }
 
   @Put(':id')
@@ -52,9 +52,9 @@ export class ObjectiveController {
   @ApiResponse({ status: 400, description: 'Entrada inválida.' })
   async update(
     @Param('id') id: string,
-    @Body() updateObjectiveDto: UpdateObjectiveDto,
+    @Body() input: UpdateObjectiveDto,
   ) {
-    return this.updateObjectiveUseCase.update(id, updateObjectiveDto);
+    return this.updateObjectiveUseCase.update(id, input);
   }
 
   @Delete(':id')

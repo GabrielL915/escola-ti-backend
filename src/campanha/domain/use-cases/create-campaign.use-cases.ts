@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Campaign } from '../entities/campaign.entity';
 import { CampaignRepository } from '../repository/campaign.repository';
 import { CreateCampaignDto } from '../dto/create-campaign.dto';
@@ -7,11 +7,11 @@ import { CreateCampaignDto } from '../dto/create-campaign.dto';
 export class CreateCampaignUseCase {
   constructor(private readonly campaignRepository: CampaignRepository) {}
 
-  async create(campaign: CreateCampaignDto): Promise<Campaign> {
+  async create(input: CreateCampaignDto): Promise<Campaign> {
     try {
-      return this.campaignRepository.create(campaign);
+      return await this.campaignRepository.create(input);
     } catch (error) {
-      throw new Error(error);
+      throw new InternalServerErrorException('Erro ao criar campanha', error);
     }
   }
 }

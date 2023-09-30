@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ObjectiveRepository } from '../repository/objetivo.repository';
 import { UpdateObjectiveDto } from '../dto/update-objective.dto';
 import { Objective } from '../entities/objetivo.entity';
@@ -9,12 +9,12 @@ export class UpdateObjectiveUseCase {
 
   async update(
     id: string,
-    updateObjectiveDto: UpdateObjectiveDto,
+    input: UpdateObjectiveDto,
   ): Promise<Objective> {
     try {
-      return this.objectiveRepository.update(id, updateObjectiveDto);
+      return this.objectiveRepository.update(id, input);
     } catch (error) {
-      throw new Error(error);
+      throw new InternalServerErrorException('Erro ao atualizar Objetivo', error);
     }
   }
 }

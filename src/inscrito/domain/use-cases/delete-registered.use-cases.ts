@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { RegisteredRepository } from '../repository/registered.repository';
 
 @Injectable()
@@ -7,9 +7,9 @@ export class DeleteRegisteredUseCase {
 
   async delete(id: string): Promise<void> {
     try {
-      return this.registeredRepository.delete(id);
+      return await this.registeredRepository.delete(id);
     } catch (error) {
-      throw new Error(error);
+      throw new InternalServerErrorException('Erro ao deletar Inscrito', error);
     }
   }
 }

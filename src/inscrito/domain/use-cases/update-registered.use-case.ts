@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Registered } from '../entities/registered.entity';
 import { RegisteredRepository } from '../repository/registered.repository';
 import { UpdateRegisteredDto } from '../dto/update-registered.dto';
@@ -9,12 +9,12 @@ export class UpdateRegisteredUseCase {
 
   async update(
     id: string,
-    updateRegisteredDto: UpdateRegisteredDto,
+    input: UpdateRegisteredDto,
   ): Promise<Registered> {
     try {
-      return this.registeredRepository.update(id, updateRegisteredDto);
+      return await this.registeredRepository.update(id, input);
     } catch (error) {
-      throw new Error(error);
+      throw new InternalServerErrorException('Erro ao atualizar Inscrito', error);
     }
   }
 }

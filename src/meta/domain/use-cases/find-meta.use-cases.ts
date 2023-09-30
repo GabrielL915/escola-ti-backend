@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Meta } from '../entities/meta.entity';
 import { MetaRepository } from '../repository/meta.repository';
 
@@ -10,7 +10,7 @@ export class FindMetaUseCase {
     try {
       return this.metaRepository.findAll();
     } catch (error) {
-      throw new Error(error);
+      throw new InternalServerErrorException('Erro ao buscar Metas', error);
     }
   }
 
@@ -18,7 +18,7 @@ export class FindMetaUseCase {
     try {
       return this.metaRepository.findOne(id);
     } catch (error) {
-      throw new Error(error);
+      throw new InternalServerErrorException('Erro ao buscar Meta por id', error);
     }
   }
 }

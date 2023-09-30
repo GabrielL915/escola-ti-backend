@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CampaignRepository } from '../repository/campaign.repository';
 
 @Injectable()
@@ -7,9 +7,9 @@ export class DeleteCampaignUseCase {
 
   async delete(id: string): Promise<void> {
     try {
-      return this.campaignRepository.delete(id);
+      return await this.campaignRepository.delete(id);
     } catch (error) {
-      throw new Error(error);
+      throw new InternalServerErrorException('Erro ao deletar campanha', error);
     }
   }
 }

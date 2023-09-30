@@ -7,6 +7,7 @@ import {
   IsInt,
   Length,
   Max,
+  IsBoolean,
 } from 'class-validator';
 
 export class CreateCampaignDto {
@@ -89,13 +90,4 @@ export class CreateCampaignDto {
   @IsNotEmpty()
   @Length(0, 500)
   descricao: string;
-
-  @ApiProperty({
-    description: 'Indica se a campanha está atualmente ativa ou inativa',
-    example: 'Ativa',
-    type: String,
-  })
-  @IsString()
-  @IsNotEmpty()
-  ativa: boolean;
 }

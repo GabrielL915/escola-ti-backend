@@ -5,7 +5,7 @@ import { Meta } from '../entities/meta.entity';
 export abstract class MetaRepository {
   abstract create(createMetaDto: CreateMetaDto): Promise<Meta>;
 
-  abstract update(id: string, updateMetaDto: UpdateMetaDto): Promise<Meta>;
+  abstract update(id: string, input: UpdateMetaDto): Promise<Meta>;
 
   abstract delete(id: string): Promise<void>;
 

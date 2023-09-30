@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Campaign } from '../entities/campaign.entity';
 import { CampaignRepository } from '../repository/campaign.repository';
 
@@ -10,7 +10,7 @@ export class FindCampaignUseCase {
     try {
       return this.campaignRepository.findAll();
     } catch (error) {
-      throw new Error(error);
+      throw new InternalServerErrorException('Erro ao buscar campanhas', error);
     }
   }
 
@@ -18,7 +18,10 @@ export class FindCampaignUseCase {
     try {
       return this.campaignRepository.findOne(id);
     } catch (error) {
-      throw new Error(error);
+      throw new InternalServerErrorException(
+        'Erro ao buscar campanha pro id',
+        error,
+      );
     }
   }
 }

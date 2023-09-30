@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Campaign } from '../entities/campaign.entity';
 import { CampaignRepository } from '../repository/campaign.repository';
 import { UpdateCampaignDto } from '../dto/update-campaign.dto';
@@ -7,11 +7,14 @@ import { UpdateCampaignDto } from '../dto/update-campaign.dto';
 export class UpdateCampaignUseCase {
   constructor(private readonly campaignRepository: CampaignRepository) {}
 
-  async update(id: string, campaign: UpdateCampaignDto): Promise<Campaign> {
+  async update(id: string, input: UpdateCampaignDto): Promise<Campaign> {
     try {
-      return this.campaignRepository.update(id, campaign);
+      return this.campaignRepository.update(id, input);
     } catch (error) {
-      throw new Error(error);
+      throw new InternalServerErrorException(
+        'Erro ao atualizar campanha',
+        error,
+      );
     }
   }
 }

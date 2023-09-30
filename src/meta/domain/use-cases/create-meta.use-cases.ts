@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Meta } from '../entities/meta.entity';
 import { MetaRepository } from '../repository/meta.repository';
 import { CreateMetaDto } from '../dto/create-meta.dto';
@@ -7,11 +7,11 @@ import { CreateMetaDto } from '../dto/create-meta.dto';
 export class CreateMetaUseCase {
   constructor(private readonly metaRepository: MetaRepository) {}
 
-  async create(createMetaDto: CreateMetaDto): Promise<Meta> {
+  async create(input: CreateMetaDto): Promise<Meta> {
     try {
-      return this.metaRepository.create(createMetaDto);
+      return this.metaRepository.create(input);
     } catch (error) {
-      throw new Error(error);
+      throw new InternalServerErrorException('Erro ao criar Meta', error);
     }
   }
 }

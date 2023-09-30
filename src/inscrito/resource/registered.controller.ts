@@ -39,8 +39,8 @@ export class RegisteredController {
   @ApiBody({ type: CreateRegisteredDto, description: 'Dados para registro' })
   @ApiResponse({ status: 201, description: 'Entidade registrada com sucesso.' })
   @ApiResponse({ status: 400, description: 'Requisição inválida.' })
-  async create(@Body() createRegisteredDto: CreateRegisteredDto) {
-    return this.createRegisteredUseCase.create(createRegisteredDto);
+  async create(@Body() input: CreateRegisteredDto) {
+    return this.createRegisteredUseCase.create(input);
   }
 
   @Put(':id')
@@ -52,9 +52,9 @@ export class RegisteredController {
   @ApiResponse({ status: 400, description: 'Requisição inválida.' })
   async update(
     @Param('id') id: string,
-    @Body() updateRegisteredDto: UpdateRegisteredDto,
+    @Body() input: UpdateRegisteredDto,
   ) {
-    return this.updateRegisteredUseCase.update(id, updateRegisteredDto);
+    return this.updateRegisteredUseCase.update(id, input);
   }
 
   @Delete(':id')

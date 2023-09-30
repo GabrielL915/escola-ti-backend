@@ -10,14 +10,14 @@ import { RegisteredController } from './registered.controller';
 @Module({
   controllers: [RegisteredController],
   providers: [
-    {
-      provide: RegisteredRepository,
-      useClass: RegisteredRepositoryImpl,
-    },
     CreateRegisteredUseCase,
     UpdateRegisteredUseCase,
     DeleteRegisteredUseCase,
     FindRegisteredUseCase,
+    {
+      provide: RegisteredRepository,
+      useClass: RegisteredRepositoryImpl,
+    },
   ],
 })
 export class RegisteredModule {}

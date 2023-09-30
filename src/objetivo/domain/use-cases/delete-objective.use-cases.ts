@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ObjectiveRepository } from '../repository/objetivo.repository';
 
 @Injectable()
@@ -9,7 +9,7 @@ export class DeleteObjectiveUseCase {
     try {
       return this.objectiveRepository.delete(id);
     } catch (error) {
-      throw new Error(error);
+      throw new InternalServerErrorException('Erro ao deletar Objetivo', error);
     }
   }
 }

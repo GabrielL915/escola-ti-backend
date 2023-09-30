@@ -24,7 +24,6 @@ import { DeleteCampaignUseCase } from '../domain/use-cases/delete-campaign.use-c
 import { FindCampaignUseCase } from '../domain/use-cases/find-campaign.use-cases';
 
 @ApiTags('campaign')
-@ApiBearerAuth()
 @Controller('campaign')
 export class CampaignController {
   constructor(
@@ -39,8 +38,8 @@ export class CampaignController {
   @ApiBody({ type: CreateCampaignDto, description: 'Dados para criação da campanha' })
   @ApiResponse({ status: 201, description: 'Campanha criada com sucesso.' })
   @ApiResponse({ status: 400, description: 'Requisição inválida.' })
-  async create(@Body() createCampaignDto: CreateCampaignDto) {
-    return this.createCampaignUseCase.create(createCampaignDto);
+  async create(@Body() input: CreateCampaignDto) {
+    return this.createCampaignUseCase.create(input);
   }
 
   @Put(':id')
@@ -52,9 +51,9 @@ export class CampaignController {
   @ApiResponse({ status: 400, description: 'Requisição inválida.' })
   async update(
     @Param('id') id: string,
-    @Body() updateCampaignDto: UpdateCampaignDto,
+    @Body() input: UpdateCampaignDto,
   ) {
-    return this.updateCampaignUseCase.update(id, updateCampaignDto);
+    return this.updateCampaignUseCase.update(id, input);
   }
 
   @Delete(':id')

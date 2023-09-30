@@ -1,63 +1,46 @@
-import { UnauthorizedException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { Knex } from 'knex';
 import { InjectModel } from 'nest-knexjs';
-import { CreateRegisteredDto } from 'src/inscrito/domain/dto/create-registered.dto';
-import { UpdateRegisteredDto } from 'src/inscrito/domain/dto/update-registered.dto';
-import { Registered } from 'src/inscrito/domain/entities/Registered.entity';
-import { RegisteredRepository } from 'src/inscrito/domain/repository/Registered.repository';
+import { CreateRegisteredDto } from '../../domain/dto/create-registered.dto';
+import { UpdateRegisteredDto } from '../../domain/dto/update-registered.dto';
+import { Registered } from '../../domain/entities/registered.entity';
+import { RegisteredRepository } from '../../domain/repository/registered.repository';
 
 export class RegisteredRepositoryImpl implements RegisteredRepository {
   constructor(@InjectModel() private readonly knex: Knex) {}
 
-  async create(createRegisteredDto: CreateRegisteredDto): Promise<Registered> {
-    try {
-      const [registered] = await this.knex('registered')
-        .insert(createRegisteredDto)
-        .returning('*');
-      return registered;
-    } catch (error) {
-      throw new UnauthorizedException(error);
-    }
+  async create(input: CreateRegisteredDto): Promise<Registered> {
+    const [registered] = await this.knex('registered')
+      .insert(input)
+      .returning('*');
+    return registered;
   }
 
   async update(
     id: string,
-    updateRegisteredDto: UpdateRegisteredDto,
+    input: UpdateRegisteredDto,
   ): Promise<Registered> {
-    try {
-      const [updatedRegistered] = await this.knex('registered')
-        .where({ id })
-        .update(updateRegisteredDto)
-        .returning('*');
-      return updatedRegistered;
-    } catch (error) {
-      throw new UnauthorizedException(error);
-    }
+    const [updatedRegistered] = await this.knex('registered')
+      .where({ id })
+      .update(input)
+      .returning('*');
+    return updatedRegistered;
   }
 
   async delete(id: string): Promise<void> {
-    try {
-      await this.knex('registered').where({ id }).del();
-    } catch (error) {
-      throw new UnauthorizedException(error);
-    }
+    await this.knex('registered').where({ id }).del();
   }
 
   async findAll(): Promise<Registered[]> {
-    try {
-      const registereds = await this.knex('registered').select('*');
-      return registereds;
-    } catch (error) {
-      throw new UnauthorizedException(error);
-    }
+    const registereds = await this.knex('registered').select('*');
+    return registereds;
   }
 
   async findOne(id: string): Promise<Registered> {
-    try {
-      const [registered] = await this.knex('registered').where({ id }).select('*');
-      return registered;
-    } catch (error) {
-      throw new UnauthorizedException(error);
-    }
+    const [registered] = await this.knex('registered')
+      .where({ id })
+      .select('*');
+    if (!registered) throw new NotFoundException('Inscrito não encontrado');
+    return registered;
   }
 }

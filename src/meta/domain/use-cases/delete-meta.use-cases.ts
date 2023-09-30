@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { MetaRepository } from '../repository/meta.repository';
 
 @Injectable()
@@ -9,7 +9,7 @@ export class DeleteMetaUseCase {
     try {
       return this.metaRepository.delete(id);
     } catch (error) {
-      throw new Error(error);
+      throw new InternalServerErrorException('Erro ao deletar Meta', error);
     }
   }
 }

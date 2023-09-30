@@ -23,9 +23,9 @@ import { UpdateMetaUseCase } from '../domain/use-cases/update-meta.use-case';
 import { DeleteMetaUseCase } from '../domain/use-cases/delete-meta.use-cases';
 import { FindMetaUseCase } from '../domain/use-cases/find-meta.use-cases';
 
-@ApiTags('Meta')
+@ApiTags('meta')
 @ApiBearerAuth()
-@Controller('Meta')
+@Controller('meta')
 export class MetaController {
   constructor(
     private readonly createMetaUseCase: CreateMetaUseCase,
@@ -39,8 +39,8 @@ export class MetaController {
   @ApiBody({ type: CreateMetaDto, description: 'Dados da Meta a ser criada' })
   @ApiResponse({ status: 201, description: 'Meta criada com sucesso.' })
   @ApiResponse({ status: 400, description: 'Entrada inválida.' })
-  async create(@Body() createMetaDto: CreateMetaDto) {
-    return this.createMetaUseCase.create(createMetaDto);
+  async create(@Body() input: CreateMetaDto) {
+    return this.createMetaUseCase.create(input);
   }
 
   @Put(':id')
@@ -52,9 +52,9 @@ export class MetaController {
   @ApiResponse({ status: 400, description: 'Entrada inválida.' })
   async update(
     @Param('id') id: string,
-    @Body() updateMetaDto: UpdateMetaDto,
+    @Body() input: UpdateMetaDto,
   ) {
-    return this.updateMetaUseCase.update(id, updateMetaDto);
+    return this.updateMetaUseCase.update(id, input);
   }
 
   @Delete(':id')

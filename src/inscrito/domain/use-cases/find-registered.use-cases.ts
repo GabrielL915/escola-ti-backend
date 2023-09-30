@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Registered } from '../entities/registered.entity';
 import { RegisteredRepository } from '../repository/registered.repository';
 
@@ -8,17 +8,17 @@ export class FindRegisteredUseCase {
 
   async findAll(): Promise<Registered[]> {
     try {
-      return this.registeredRepository.findAll();
+      return await this.registeredRepository.findAll();
     } catch (error) {
-      throw new Error(error);
+      throw new InternalServerErrorException('Erro ao buscar Inscritos', error);
     }
   }
 
   async findOne(id: string): Promise<Registered> {
     try {
-      return this.registeredRepository.findOne(id);
+      return await this.registeredRepository.findOne(id);
     } catch (error) {
-      throw new Error(error);
+      throw new InternalServerErrorException('Erro ao buscar Inscrito por id', error);
     }
   }
 }

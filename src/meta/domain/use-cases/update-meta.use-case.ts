@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Meta } from '../entities/meta.entity';
 import { MetaRepository } from '../repository/meta.repository';
 import { UpdateMetaDto } from '../dto/update-meta.dto';
@@ -9,12 +9,12 @@ export class UpdateMetaUseCase {
 
   async update(
     id: string,
-    updateMetaDto: UpdateMetaDto,
+    input: UpdateMetaDto,
   ): Promise<Meta> {
     try {
-      return this.metaRepository.update(id, updateMetaDto);
+      return this.metaRepository.update(id, input);
     } catch (error) {
-      throw new Error(error);
+      throw new InternalServerErrorException('Erro ao atualizar Meta', error);
     }
   }
 }
