@@ -1,3 +1,5 @@
+import { Objective } from "../../../objetivo/domain/entities/objetivo.entity";
+
 export interface Campaign {
   id: string;
   tipo: string;
@@ -9,4 +11,5 @@ export interface Campaign {
   tempo_de_tolerancia: string;
   descricao: string;
   ativa: boolean;
+  objetivos?: Objective[];
 }

@@ -39,6 +39,8 @@ export class CampaignRepositoryImpl implements CampaignRepository {
   async findOne(id: string): Promise<Campaign> {
     const [campaign] = await this.knex('campanha').where({ id }).select('*');
     if (!campaign) throw new NotFoundException('Campanha não encontrada');
+    const objectives = await this.knex('objetivo').where({ id_campanha: id }).select('*');
+    campaign.objetivos = objectives;
     return campaign;
   }
 }

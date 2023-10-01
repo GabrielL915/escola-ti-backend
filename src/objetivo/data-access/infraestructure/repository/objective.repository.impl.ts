@@ -39,6 +39,8 @@ export class ObjectiveRepositoryImpl implements ObjectiveRepository {
   async findOne(id: string): Promise<Objective> {
       const [objective] = await this.knex('objetivo').where({ id }).select('*');
       if (!objective) throw new NotFoundException('Objetivo não encontrado');
+      const campaigns = await this.knex('campanha').where({ id: objective.id_campanha }).select('*');
+      objective.campanha = campaigns;
       return objective;
   }
 }
