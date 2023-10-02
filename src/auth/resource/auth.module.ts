@@ -1,7 +1,6 @@
-import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
-import { rsaKeyFactory } from '../factories/rsa-key.factory';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from '../strategies/jwt-access.strategy';
 import { RefreshTokenStrategy } from '../strategies/jwt-refresh.strategy';
@@ -12,12 +11,17 @@ import { SmsUseCase } from '../domain/use-cases/sms.use-case';
 import { RefreshTokenUseCase } from '../domain/use-cases/refresh-token.use-case';
 import { RefreshTokenRepository } from '../domain/repository/refresh-token.repository';
 import { RefreshTokenRepositoryImpl } from '../data-access/infraestructure/repository/refresh-token.repository.impl';
+import { MotoboyModule } from '../../motoboy/resource/motoboy.module';
+import { CityModule } from '../../city/resource/city.module';
 @Module({
   imports: [
-    JwtModule.registerAsync({
-      useFactory: rsaKeyFactory,
+    JwtModule.register({}),
+    PassportModule.register({
+      defaultStrategy: 'jwt',
+      session: false,
     }),
-    PassportModule.register({}),
+    MotoboyModule,
+    CityModule,
   ],
   controllers: [AuthController],
   providers: [
@@ -31,7 +35,7 @@ import { RefreshTokenRepositoryImpl } from '../data-access/infraestructure/repos
     {
       provide: RefreshTokenRepository,
       useClass: RefreshTokenRepositoryImpl,
-    }
+    },
   ],
   exports: [SmsUseCase],
 })

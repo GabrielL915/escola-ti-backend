@@ -3,17 +3,17 @@ import {
   NotFoundException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { InjectModel } from 'nest-knexjs';
-import { Knex } from 'knex';
 import { RefreshTokenRepository } from '../repository/refresh-token.repository';
+import { MotoboyRepository } from '../../../motoboy/domain/repository/motoboy.repository';
 import { LoginUseCase } from './login.use-case';
+
 
 @Injectable()
 export class RefreshTokenUseCase {
   constructor(
-    @InjectModel() private readonly knex: Knex,
     private readonly loginUseCase: LoginUseCase,
     private readonly refreshTokenRepository: RefreshTokenRepository,
+    private readonly motoboyRepository: MotoboyRepository,
   ) {}
 
   async refreshToken(motoboyId: string, refreshToken: string) {
@@ -21,13 +21,13 @@ export class RefreshTokenUseCase {
       const storedTokens = await this.refreshTokenRepository.getStoredTokens(
         motoboyId,
       );
-
       if (!storedTokens) {
         throw new NotFoundException('Token não encontrado');
       }
-      const [email] = await this.getMotoboy(motoboyId);
+      const motoboy = await this.motoboyRepository.findById(motoboyId);
+
       const { access_token, refresh_token } =
-        await this.loginUseCase.generateToken(motoboyId, email);
+        await this.loginUseCase.generateToken(motoboyId, motoboy.email);
 
       await this.refreshTokenRepository.updateAccount(
         motoboyId,
@@ -43,17 +43,5 @@ export class RefreshTokenUseCase {
     }
   }
 
-  private async getMotoboy(id: string) {
-    try {
-      return await this.knex
-        .from('entregador')
-        .select('email')
-        .where({ id: id });
-    } catch (error) {
-      throw new InternalServerErrorException(
-        'Erro ao recuperar motoboy.',
-        error,
-      );
-    }
-  }
+  
 }

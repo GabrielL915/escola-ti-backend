@@ -1,32 +1,16 @@
-import { InternalServerErrorException, Logger } from '@nestjs/common';
-import { Knex } from 'knex';
-import { InjectModel } from 'nest-knexjs';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ProfileDto } from '../dto/profile.dto';
+import { MotoboyRepository } from '../../../motoboy/domain/repository/motoboy.repository';
 
+@Injectable()
 export class ProfileUseCase {
-  private readonly logger = new Logger(ProfileUseCase.name);
+  constructor(private readonly motoboyRepository: MotoboyRepository) {}
 
-  constructor(@InjectModel() private readonly knex: Knex) {}
-
-  async profile(email: string): Promise<ProfileDto[]> {
+  async profile(email: string): Promise<ProfileDto> {
     try {
-      const fullProfile = await this.knex
-        .from('entregador')
-        .select('nome', 'aiqcoins')
-        .where({ email: email });
-
-      if (!fullProfile || fullProfile.length === 0) {
-        this.logger.warn(`Perfil não encontrado para o email: ${email}`);
-      } else {
-        this.logger.log(`Perfil recuperado para o email: ${email}`);
-      }
-
+      const fullProfile = await this.motoboyRepository.profile(email);
       return fullProfile;
     } catch (error) {
-      this.logger.error(
-        `Erro ao recuperar perfil para o email: ${email}`,
-        error.stack,
-      );
       throw new InternalServerErrorException(
         'Erro ao recuperar perfil.',
         error,

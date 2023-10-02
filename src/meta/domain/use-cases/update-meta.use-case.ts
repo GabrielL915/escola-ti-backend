@@ -13,9 +13,7 @@ export class UpdateMetaUseCase {
 
   async update(id: string, input: UpdateMetaDto): Promise<Meta> {
     try {
-      const objetivo = await this.objectiveRepository.findOne(
-        input.id_objetivo,
-      );
+      const objetivo = await this.objectiveRepository.findOne(id);
 
       // Calcula a porcentagem de progresso
       const porcentagemProgresso = (input.valor_atingido / objetivo.meta) * 100;

@@ -1,5 +1,5 @@
 import { CampaignModule } from './campanha/resource/campaign.module';
-import { KnexModule } from 'nest-knexjs';
+import { KnexModule } from 'nestjs-knex';
 import { ObjectiveModule } from './objetivo/resource/objective.module';
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { AuthModule } from './auth/resource/auth.module';
@@ -7,10 +7,15 @@ import { SmsPhoneMiddleware } from './common/middleware/sms-phone.middleware';
 import { ConfigModule } from '@nestjs/config';
 import { MetaModule } from './meta/resource/meta.module';
 import { RegisteredModule } from './inscrito/resource/registered.module';
+import { CityModule } from './city/resource/city.module'
+import { MotoboyModule } from './motoboy/resource/motoboy.module';
 
 @Module({
   imports: [
+    AuthModule,
     ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env'
     }),
     KnexModule.forRoot({
       config: {
@@ -27,11 +32,12 @@ import { RegisteredModule } from './inscrito/resource/registered.module';
         },
       },
     }),
-    AuthModule,
     CampaignModule,
     ObjectiveModule,
     MetaModule,
     RegisteredModule,
+    MotoboyModule,
+    CityModule,
     
   ],
   controllers: [],

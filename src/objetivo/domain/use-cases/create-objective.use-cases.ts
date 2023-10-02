@@ -11,6 +11,7 @@ export class CreateObjectiveUseCase {
     try {
       return await this.objectiveRepository.create(input);
     } catch (error) {
+      console.error(error);
       throw new InternalServerErrorException('Erro ao criar Objetivo', error);
     }
   }

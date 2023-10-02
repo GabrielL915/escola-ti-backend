@@ -276,7 +276,6 @@ export class AuthController {
   }
 
   @UseGuards(AccessTokenGuard)
-  @Get('profile')
   @ApiInternalServerErrorResponse({
     description: 'Internal server error',
     type: ErrorResponseDto,
@@ -310,8 +309,9 @@ export class AuthController {
     description: 'Profile do entregador',
     type: ProfileDto,
   })
+  @Get('profile')
   getProfile(@Req() req: Request) {
-    const email: string = req.user['email'];
+    const email = req.user['email'];
     return this.profileUseCase.profile(email);
   }
 

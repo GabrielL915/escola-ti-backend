@@ -3,24 +3,22 @@ import {
   NotFoundException,
   UnauthorizedException,
   InternalServerErrorException,
-  Logger,
 } from '@nestjs/common';
 import { LoginDto } from '../dto/login.dto';
-import { InjectModel } from 'nest-knexjs';
-import { Knex } from 'knex';
 import { timingSafeEqual } from 'crypto';
-import { hashPassword } from '../../util/hash-password';
+import { hashPassword } from '../../utils/hash-password';
 import { JwtService } from '@nestjs/jwt';
-import { getPrivateKey } from '../../util/set-keys';
 import { RefreshTokenRepository } from '../repository/refresh-token.repository';
+import { MotoboyRepository } from '../../../motoboy/domain/repository/motoboy.repository';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class LoginUseCase {
-  private readonly logger = new Logger(LoginUseCase.name);
   constructor(
     private readonly jwtService: JwtService,
+    private configService: ConfigService,
     private readonly refreshTokenRepository: RefreshTokenRepository,
-    @InjectModel() private knex: Knex,
+    private readonly motoboyRepository: MotoboyRepository,
   ) {}
 
   async login({ email, senha }: LoginDto) {
@@ -41,18 +39,12 @@ export class LoginUseCase {
       ) {
         throw error;
       }
-      this.logger.error(
-        `Erro ao realizar login para o email: ${email}`,
-        error.stack,
-      );
       throw new InternalServerErrorException('Erro ao realizar login.', error);
     }
   }
 
   async generateToken(id: string, email: string) {
     try {
-      const { privateKey: PRIVATE_KEY } = getPrivateKey();
-
       const [access_token, refresh_token] = await Promise.all([
         this.jwtService.signAsync(
           {
@@ -60,9 +52,8 @@ export class LoginUseCase {
             email,
           },
           {
-            secret: PRIVATE_KEY,
-            expiresIn: '20s',
-            algorithm: 'RS256',
+            secret: this.configService.get<string>('KEY'),
+            expiresIn: '10000s',
           },
         ),
         this.jwtService.signAsync(
@@ -71,15 +62,13 @@ export class LoginUseCase {
             email,
           },
           {
-            secret: PRIVATE_KEY,
+            secret: this.configService.get<string>('KEY'),
             expiresIn: '7d',
-            algorithm: 'RS256',
           },
         ),
       ]);
       return { access_token, refresh_token };
     } catch (error) {
-      this.logger.error(`Erro ao gerar token para o email: ${email}`, error);
       throw new InternalServerErrorException(
         `Erro ao gerar token para o email: ${email}`,
         error,
@@ -88,19 +77,12 @@ export class LoginUseCase {
   }
   async validateEntregador(email: string, senha: string): Promise<LoginDto> {
     try {
-      const entregador = await this.knex
-        .first('senha', 'email', 'status', 'id')
-        .from('entregador')
-        .where('email', email);
-
+      const entregador = await this.motoboyRepository.findByEmail(email);
       if (!entregador) {
-        this.logger.error(`Entregador não encontrado para o email: ${email}`);
         throw new NotFoundException('Entregador não encontrado.');
       }
       const validPassword = this.comparePassword(entregador.senha, senha);
-
       if (!validPassword) {
-        this.logger.error(`Senha incorreta para o email: ${email}`);
         throw new UnauthorizedException(
           'Senha incorreta ou entregador inativo.',
         );
@@ -110,7 +92,6 @@ export class LoginUseCase {
       if (error instanceof NotFoundException) {
         throw error;
       }
-      this.logger.error(`Erro ao validar entregador para o email: ${email}`);
       throw new InternalServerErrorException(
         'Erro ao validar entregador.',
         error,
@@ -121,7 +102,6 @@ export class LoginUseCase {
   private comparePassword(storedPassword: string, inputPassword: string) {
     try {
       if (!storedPassword.includes('.')) {
-        this.logger.error('Senha armazenada em formato inválido');
         throw new UnauthorizedException('Senha armazenada em formato inválido');
       }
       const [salt, hash] = storedPassword.split('.');
@@ -132,7 +112,6 @@ export class LoginUseCase {
       );
       return match;
     } catch (error) {
-      this.logger.error('Erro ao comparar senhas', error);
       throw new UnauthorizedException('Erro ao comparar senhas.', error);
     }
   }

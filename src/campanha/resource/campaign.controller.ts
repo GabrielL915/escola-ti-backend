@@ -247,7 +247,7 @@ export class CampaignController {
     return this.findCampaignUseCase.findAll();
   }
   
-  //@UseGuards(AccessTokenGuard)
+  @UseGuards(AccessTokenGuard)
   @Get(':id')
   @ApiOperation({ summary: 'Buscar campanha por ID' })
   @ApiNotFoundResponse({
