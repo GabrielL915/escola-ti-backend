@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { LoginUseCase } from './login.use-case';
-import { NotFoundException, UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { RefreshTokenRepository } from '../repository/refresh-token.repository';
 import { MotoboyRepository } from '../../../motoboy/domain/repository/motoboy.repository';

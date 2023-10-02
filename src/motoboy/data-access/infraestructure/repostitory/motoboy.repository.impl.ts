@@ -41,7 +41,7 @@ export class MotoboyRepositoryImpl implements MotoboyRepository {
   async findByEmail(email: string): Promise<Motoboy> {
     const [motoboy] = await this.knex
       .from('entregador')
-      .select('senha', 'email', 'ativo', 'id')
+      .select('senha', 'email', 'status', 'id')
       .where({ email: email });
     if (!motoboy) {
       throw new NotFoundException('Entregador não encontrado');
