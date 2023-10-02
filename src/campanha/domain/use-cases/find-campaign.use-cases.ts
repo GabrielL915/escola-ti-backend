@@ -14,9 +14,9 @@ export class FindCampaignUseCase {
     }
   }
 
-  async findOne(id: string): Promise<Campaign> {
+  async findOne(id: string, motoboyId: string): Promise<Campaign> {
     try {
-      return this.campaignRepository.findOne(id);
+      return this.campaignRepository.findOne(id, motoboyId);
     } catch (error) {
       throw new InternalServerErrorException(
         'Erro ao buscar campanha pro id',

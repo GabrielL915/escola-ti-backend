@@ -13,7 +13,7 @@ import { CreateCampaignDto } from './create-campaign.dto';
 export class UpdateCampaignDto extends CreateCampaignDto {
   @ApiProperty({
     description: 'Id identificador da campanha',
-    example: '1',
+    example: '60f3a9b9-9b0c-4e1a-8b0a-5c5c9b0c4e1a',
     type: String,
   })
   @IsString()
@@ -99,13 +99,4 @@ export class UpdateCampaignDto extends CreateCampaignDto {
   @IsNotEmpty()
   @Length(0, 500)
   descricao: string;
-
-  @ApiProperty({
-    description: 'Indica se a campanha está atualmente ativa ou inativa',
-    example: 'Ativa',
-    type: String,
-  })
-  @IsString()
-  @IsNotEmpty()
-  ativa: boolean;
 }

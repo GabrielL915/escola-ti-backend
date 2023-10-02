@@ -9,6 +9,7 @@ import { ObjectiveController } from './objective.controller';
 import { ObjectiveRepository } from '../domain/repository/objetivo.repository';
 
 @Module({
+  imports: [],
   controllers: [ObjectiveController],
   providers: [
     {
@@ -20,5 +21,6 @@ import { ObjectiveRepository } from '../domain/repository/objetivo.repository';
     DeleteObjectiveUseCase,
     FindObjectiveUseCase,
   ],
+  exports: [ObjectiveRepository],
 })
 export class ObjectiveModule {}

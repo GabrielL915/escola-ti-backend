@@ -35,7 +35,7 @@ export class UpdateRegisteredDto extends CreateRegisteredDto {
   })
   @IsDate()
   @IsNotEmpty()
-  data_inscricao: string;
+  data_de_inscricao: string;
 
   @ApiProperty({
     description: 'Número de corridas ignoradas pelo entregador',
@@ -44,7 +44,7 @@ export class UpdateRegisteredDto extends CreateRegisteredDto {
   })
   @IsNumber()
   @Min(0)
-  corridas_ignoradas: number;
+  entregas_ignoradas: number;
 
   @ApiProperty({
     description: 'Número de corridas recusadas pelo entregador',
@@ -53,5 +53,5 @@ export class UpdateRegisteredDto extends CreateRegisteredDto {
   })
   @IsNumber()
   @Min(0)
-  corridas_recusadas: number;
+  entregas_recusadas: number;
 }

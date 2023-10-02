@@ -89,7 +89,7 @@ export class LoginUseCase {
   async validateEntregador(email: string, senha: string): Promise<LoginDto> {
     try {
       const entregador = await this.knex
-        .first('senha', 'email', 'ativo', 'id')
+        .first('senha', 'email', 'status', 'id')
         .from('entregador')
         .where('email', email);
 

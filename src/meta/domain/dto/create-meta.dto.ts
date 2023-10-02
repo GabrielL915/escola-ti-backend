@@ -12,7 +12,7 @@ export class CreateMetaDto {
   })
   @IsString()
   @IsNotEmpty()
-  id_entregador: string;
+  id_inscrito: string;
 
   @ApiProperty({
     description: 'Id identificador da campanha',
@@ -37,7 +37,7 @@ export class CreateMetaDto {
     example: '25%',
     type: String,
   })
-  @IsString()
+
   @IsNotEmpty()
-  valor_atingido: string;
+  valor_atingido: number;
 }

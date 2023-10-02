@@ -9,12 +9,12 @@ export class MetaRepositoryImpl implements MetaRepository {
   constructor(@InjectModel() private readonly knex: Knex) {}
 
   async create(input: CreateMetaDto): Promise<Meta> {
-    const [meta] = await this.knex('meta').insert(input).returning('*');
+    const [meta] = await this.knex('meta_atingida').insert(input).returning('*');
     return meta;
   }
 
   async update(id: string, input: UpdateMetaDto): Promise<Meta> {
-    const [meta] = await this.knex('meta')
+    const [meta] = await this.knex('meta_atingida')
       .where({ id })
       .update(input)
       .returning('*');
@@ -22,16 +22,16 @@ export class MetaRepositoryImpl implements MetaRepository {
   }
 
   async delete(id: string): Promise<void> {
-    await this.knex('meta').where({ id }).del();
+    await this.knex('meta_atingida').where({ id }).del();
   }
 
   async findAll(): Promise<Meta[]> {
-    const metas = await this.knex('meta').select('*');
+    const metas = await this.knex('meta_atingida').select('*');
     return metas;
   }
 
   async findOne(id: string): Promise<Meta> {
-    const [meta] = await this.knex('meta').where({ id }).select('*');
+    const [meta] = await this.knex('meta_atingida').where({ id }).select('*');
     return meta;
   }
 }

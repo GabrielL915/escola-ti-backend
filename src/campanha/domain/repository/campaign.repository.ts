@@ -11,5 +11,5 @@ export abstract class CampaignRepository {
 
   abstract findAll(): Promise<Campaign[]>;
 
-  abstract findOne(id: string): Promise<Campaign>;
+  abstract findOne(id: string, motoboyId: string): Promise<Campaign>;
 }

@@ -6,6 +6,7 @@ import {
   Put,
   Delete,
   Param,
+  Patch,
 } from '@nestjs/common';
 import { CreateMetaDto } from '../domain/dto/create-meta.dto';
 import { UpdateMetaDto } from '../domain/dto/update-meta.dto';
@@ -43,17 +44,14 @@ export class MetaController {
     return this.createMetaUseCase.create(input);
   }
 
-  @Put(':id')
+  @Patch(':id')
   @ApiOperation({ summary: 'Atualizar uma Meta existente' })
   @ApiParam({ name: 'id', description: 'ID da Meta para atualizar' })
   @ApiBody({ type: UpdateMetaDto, description: 'Dados atualizados da Meta' })
   @ApiResponse({ status: 200, description: 'Meta atualizada com sucesso.' })
   @ApiResponse({ status: 404, description: 'Meta não encontrada.' })
   @ApiResponse({ status: 400, description: 'Entrada inválida.' })
-  async update(
-    @Param('id') id: string,
-    @Body() input: UpdateMetaDto,
-  ) {
+  async update(@Param('id') id: string, @Body() input: UpdateMetaDto) {
     return this.updateMetaUseCase.update(id, input);
   }
 
@@ -68,7 +66,11 @@ export class MetaController {
 
   @Get()
   @ApiOperation({ summary: 'Listar todas as Metas' })
-  @ApiResponse({ status: 200, description: 'Lista de Metas', type: [CreateMetaDto] })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de Metas',
+    type: [CreateMetaDto],
+  })
   async findAll() {
     return this.findMetaUseCase.findAll();
   }
@@ -76,7 +78,11 @@ export class MetaController {
   @Get(':id')
   @ApiOperation({ summary: 'Buscar uma Meta específica' })
   @ApiParam({ name: 'id', description: 'ID da Meta a ser recuperada' })
-  @ApiResponse({ status: 200, description: 'Detalhes da Meta', type: CreateMetaDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Detalhes da Meta',
+    type: CreateMetaDto,
+  })
   @ApiResponse({ status: 404, description: 'Meta não encontrada.' })
   async findOne(@Param('id') id: string) {
     return this.findMetaUseCase.findOne(id);

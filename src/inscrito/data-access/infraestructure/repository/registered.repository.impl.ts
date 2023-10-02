@@ -10,7 +10,7 @@ export class RegisteredRepositoryImpl implements RegisteredRepository {
   constructor(@InjectModel() private readonly knex: Knex) {}
 
   async create(input: CreateRegisteredDto): Promise<Registered> {
-    const [registered] = await this.knex('registered')
+    const [registered] = await this.knex('inscrito')
       .insert(input)
       .returning('*');
     return registered;
@@ -20,7 +20,7 @@ export class RegisteredRepositoryImpl implements RegisteredRepository {
     id: string,
     input: UpdateRegisteredDto,
   ): Promise<Registered> {
-    const [updatedRegistered] = await this.knex('registered')
+    const [updatedRegistered] = await this.knex('inscrito')
       .where({ id })
       .update(input)
       .returning('*');
@@ -32,12 +32,12 @@ export class RegisteredRepositoryImpl implements RegisteredRepository {
   }
 
   async findAll(): Promise<Registered[]> {
-    const registereds = await this.knex('registered').select('*');
+    const registereds = await this.knex('inscrito').select('*');
     return registereds;
   }
 
   async findOne(id: string): Promise<Registered> {
-    const [registered] = await this.knex('registered')
+    const [registered] = await this.knex('inscrito')
       .where({ id })
       .select('*');
     if (!registered) throw new NotFoundException('Inscrito não encontrado');

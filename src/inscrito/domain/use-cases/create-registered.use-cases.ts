@@ -11,6 +11,7 @@ export class CreateRegisteredUseCase {
     try {
       return await this.registeredRepository.create(input);
     } catch (error) {
+      console.error(error)
       throw new InternalServerErrorException('Erro ao criar Inscrito', error);
     }
   }
