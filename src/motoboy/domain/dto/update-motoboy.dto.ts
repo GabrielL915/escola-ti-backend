@@ -11,7 +11,7 @@ import { CreateMotoboyDto } from './create-motoboy.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { SmsDto } from 'src/auth/domain/dto/sms.dto';
 export class UpdateMotoboyDto extends PartialType(CreateMotoboyDto) {
-  @IsNotEmpty()
+
   @IsString()
   @MinLength(2)
   @MaxLength(100)
@@ -25,7 +25,7 @@ export class UpdateMotoboyDto extends PartialType(CreateMotoboyDto) {
   })
   nome: string;
 
-  @IsNotEmpty()
+
   @IsString()
   @ApiProperty({
     description: 'Sobrenome do entregador',
@@ -35,7 +35,7 @@ export class UpdateMotoboyDto extends PartialType(CreateMotoboyDto) {
   })
   sobrenome: string;
 
-  @IsNotEmpty()
+
   @IsString()
   @MaxLength(14)
   @MinLength(14)
@@ -47,7 +47,7 @@ export class UpdateMotoboyDto extends PartialType(CreateMotoboyDto) {
   })
   cpf: string;
 
-  @IsNotEmpty()
+
   @IsString()
   @MaxLength(18)
   @MinLength(18)
@@ -59,7 +59,7 @@ export class UpdateMotoboyDto extends PartialType(CreateMotoboyDto) {
   })
   cnpj: string;
 
-  @IsNotEmpty()
+ 
   @IsString()
   @IsEmail()
   @ApiProperty({
@@ -70,7 +70,7 @@ export class UpdateMotoboyDto extends PartialType(CreateMotoboyDto) {
   })
   email: string;
 
-  @IsNotEmpty()
+
   @IsString()
   @MaxLength(15)
   @MinLength(15)
@@ -82,7 +82,7 @@ export class UpdateMotoboyDto extends PartialType(CreateMotoboyDto) {
   })
   telefone: SmsDto['telefone'];
 
-  @IsNotEmpty()
+
   @ApiProperty({
     description: 'Data de nascimento do entregador',
     example: '01/01/1990',
@@ -91,7 +91,7 @@ export class UpdateMotoboyDto extends PartialType(CreateMotoboyDto) {
   })
   data_de_nascimento: string;
 
-  @IsNotEmpty()
+
   @IsString()
   @MinLength(8)
   @ApiProperty({

@@ -4,7 +4,10 @@ import { Motoboy } from '../../../domain/entities/motoboy.entity';
 import { CreateMotoboyDto } from '../../../domain/dto/create-motoboy.dto';
 import { UpdateMotoboyDto } from '../../../domain/dto/update-motoboy.dto';
 import { MotoboyRepository } from '../../../domain/repository/motoboy.repository';
-import { NotFoundException } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 
 export class MotoboyRepositoryImpl implements MotoboyRepository {
   constructor(@InjectKnex() private knex: Knex) {}
@@ -61,23 +64,38 @@ export class MotoboyRepositoryImpl implements MotoboyRepository {
   }
 
   async update(id: string, input: UpdateMotoboyDto): Promise<Motoboy> {
-    const existingMotoboy = await this.knex('entregador')
-      .where({ id: id })
-      .select('*');
-    if (existingMotoboy.length === 0) {
-      throw new NotFoundException('Entregador não encontrado para atualizar');
+    try {
+      const existingMotoboy = await this.knex('entregador')
+        .where({ id: id })
+        .select('*');
+      if (existingMotoboy.length === 0) {
+        throw new NotFoundException('Entregador não encontrado para atualizar');
+      }
+      const [motoboy] = await this.knex('entregador')
+        .where({ id: id })
+        .update({
+          nome: input.nome,
+          sobrenome: input.sobrenome,
+          email: input.email,
+          telefone: input.telefone,
+          data_de_nascimento: input.data_de_nascimento,
+          mochila: input.mochila,
+        })
+        .returning([
+          'nome',
+          'sobrenome',
+          'email',
+          'telefone',
+          'data_de_nascimento',
+          'mochila',
+        ]);
+      return motoboy;
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException(
+        'Erro ao atualizar Entregador',
+        error,
+      );
     }
-    const [motoboy] = await this.knex('entregador')
-      .where({ id: id })
-      .update(input)
-      .returning([
-        'nome',
-        'sobrenome',
-        'email',
-        'telefone',
-        'data_de_nascimento',
-        'mochila',
-      ]);
-    return motoboy;
   }
 }
