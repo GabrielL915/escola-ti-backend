@@ -11,7 +11,8 @@ import { SmsUseCase } from '../domain/use-cases/sms.use-case';
 import { RefreshTokenUseCase } from '../domain/use-cases/refresh-token.use-case';
 import { RefreshTokenRepository } from '../domain/repository/refresh-token.repository';
 import { RefreshTokenRepositoryImpl } from '../data-access/infraestructure/repository/refresh-token.repository.impl';
-import { MotoboyModule } from 'src/motoboy/resource/motoboy.module';
+import { MotoboyModule } from '../../motoboy/resource/motoboy.module';
+import { CityModule } from '../../city/resource/city.module';
 @Module({
   imports: [
     JwtModule.register({}),
@@ -20,6 +21,7 @@ import { MotoboyModule } from 'src/motoboy/resource/motoboy.module';
       session: false,
     }),
     MotoboyModule,
+    CityModule,
   ],
   controllers: [AuthController],
   providers: [

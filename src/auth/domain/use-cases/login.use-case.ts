@@ -78,13 +78,10 @@ export class LoginUseCase {
   async validateEntregador(email: string, senha: string): Promise<LoginDto> {
     try {
       const entregador = await this.motoboyRepository.findByEmail(email);
-
       if (!entregador) {
-
         throw new NotFoundException('Entregador não encontrado.');
       }
       const validPassword = this.comparePassword(entregador.senha, senha);
-
       if (!validPassword) {
         throw new UnauthorizedException(
           'Senha incorreta ou entregador inativo.',

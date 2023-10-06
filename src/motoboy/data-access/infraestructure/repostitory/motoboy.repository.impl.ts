@@ -1,37 +1,28 @@
 import { Knex } from 'knex';
-import { InjectModel } from 'nest-knexjs';
+import { InjectKnex } from 'nestjs-knex';
 import { Motoboy } from '../../../domain/entities/motoboy.entity';
 import { CreateMotoboyDto } from '../../../domain/dto/create-motoboy.dto';
 import { UpdateMotoboyDto } from '../../../domain/dto/update-motoboy.dto';
 import { MotoboyRepository } from '../../../domain/repository/motoboy.repository';
 import {
-  Injectable,
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 
-@Injectable()
 export class MotoboyRepositoryImpl implements MotoboyRepository {
-  constructor(@InjectModel() private knex: Knex) {}
+  constructor(@InjectKnex() private knex: Knex) {}
   async create(input: CreateMotoboyDto): Promise<Motoboy> {
-    try {
-      const [motoboy] = await this.knex('entregador')
-        .insert(input)
-        .returning([
-          'nome',
-          'sobrenome',
-          'email',
-          'telefone',
-          'data_de_nascimento',
-          'mochila',
-        ]);
-      return motoboy;
-    } catch (error) {
-      throw new InternalServerErrorException(
-        'Erro interno ao tentar registrar no banco.',
-        error,
-      );
-    }
+    const [motoboy] = await this.knex('entregador')
+      .insert(input)
+      .returning([
+        'nome',
+        'sobrenome',
+        'email',
+        'telefone',
+        'data_de_nascimento',
+        'mochila',
+      ]);
+    return motoboy;
   }
 
   async findAll(): Promise<Motoboy[]> {
@@ -42,8 +33,8 @@ export class MotoboyRepositoryImpl implements MotoboyRepository {
   async findById(id: string): Promise<Motoboy> {
     const [motoboy] = await this.knex
       .from('entregador')
-      .where({ id: id })
-      .select('email');
+      .select('email')
+      .where({ id: id });
     if (!motoboy) {
       throw new NotFoundException('Entregador não encontrado');
     }
@@ -51,33 +42,25 @@ export class MotoboyRepositoryImpl implements MotoboyRepository {
   }
 
   async findByEmail(email: string): Promise<Motoboy> {
-    try {
-      const [motoboy] = await this.knex
-        .from('entregador')
-        .where({ email: email })
-        .select('senha', 'email', 'ativo', 'id');
-      return motoboy;
-    } catch (error) {
-      throw new InternalServerErrorException(
-        'Erro interno ao tentar buscar Entregador no banco.',
-        error,
-      );
+    const [motoboy] = await this.knex
+      .from('entregador')
+      .select('senha', 'email', 'status', 'id')
+      .where({ email: email });
+    if (!motoboy) {
+      throw new NotFoundException('Entregador não encontrado');
     }
+    return motoboy;
   }
 
   async profile(email: string): Promise<Motoboy> {
-    try {
-      const [motoboy] = await this.knex
-        .from('entregador')
-        .select('nome', 'aiqcoins')
-        .where({ email: email });
-      return motoboy;
-    } catch (error) {
-      throw new InternalServerErrorException(
-        'Erro interno ao tentar buscar Entregador no banco.',
-        error,
-      );
+    const [motoboy] = await this.knex
+      .from('entregador')
+      .select('nome', 'aiqcoins')
+      .where({ email: email });
+    if (!motoboy) {
+      throw new NotFoundException('Entregador não encontrado');
     }
+    return motoboy;
   }
 
   async update(id: string, input: UpdateMotoboyDto): Promise<Motoboy> {
@@ -88,10 +71,16 @@ export class MotoboyRepositoryImpl implements MotoboyRepository {
       if (existingMotoboy.length === 0) {
         throw new NotFoundException('Entregador não encontrado para atualizar');
       }
-
       const [motoboy] = await this.knex('entregador')
         .where({ id: id })
-        .update(input)
+        .update({
+          nome: input.nome,
+          sobrenome: input.sobrenome,
+          email: input.email,
+          telefone: input.telefone,
+          data_de_nascimento: input.data_de_nascimento,
+          mochila: input.mochila,
+        })
         .returning([
           'nome',
           'sobrenome',
@@ -102,8 +91,9 @@ export class MotoboyRepositoryImpl implements MotoboyRepository {
         ]);
       return motoboy;
     } catch (error) {
+      console.error(error);
       throw new InternalServerErrorException(
-        'Erro interno ao tentar atualizar Entregador no banco.',
+        'Erro ao atualizar Entregador',
         error,
       );
     }

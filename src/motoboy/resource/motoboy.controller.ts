@@ -45,7 +45,7 @@ export class MotoboyController {
 
   @UseGuards(AccessTokenGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMotoboyDto: UpdateMotoboyDto) {
-    return this.updateMotoboyUseCase.update({ id, input: updateMotoboyDto });
+  update(@Param('id') id: string, @Body() input: UpdateMotoboyDto) {
+    return this.updateMotoboyUseCase.update( id, input );
   }
 }

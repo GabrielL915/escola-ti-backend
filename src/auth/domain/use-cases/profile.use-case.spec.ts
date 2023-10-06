@@ -26,17 +26,25 @@ describe('ProfileUseCase', () => {
     expect(profileUseCase).toBeDefined();
   });
 
-  it('should throw an InternalServerErrorException if there is no profile', async () => {
-    const mockEmail = 'joao.almeida@example.com';
-    (mockRepository.profile as jest.Mock).mockResolvedValueOnce(null);
-
-    await expect(profileUseCase.profile(mockEmail)).rejects.toThrow(InternalServerErrorException);
-  });
-
-  it('should throw an InternalServerErrorException on error', async () => {
+  it('should throw an InternalServerErrorException trying to get profile', async () => {
     const mockEmail = 'joao.almeida@example.com';
     (mockRepository.profile as jest.Mock).mockRejectedValueOnce(new Error());
 
-    await expect(profileUseCase.profile(mockEmail)).rejects.toThrow(InternalServerErrorException);
+    await expect(profileUseCase.profile(mockEmail)).rejects.toThrow(
+      InternalServerErrorException,
+    );
+  });
+
+  it('should return a ProfileDto', async () => {
+    const mockEmail = 'joao.almeida@example.com';
+    const mockProfile = {
+      nome: 'João',
+      aiqcoins: 0,
+    };
+    (mockRepository.profile as jest.Mock).mockResolvedValueOnce(mockProfile);
+
+    const profile = await profileUseCase.profile(mockEmail);
+
+    expect(profile).toEqual(mockProfile);
   });
 });
