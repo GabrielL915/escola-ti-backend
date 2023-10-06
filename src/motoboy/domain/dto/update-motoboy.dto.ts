@@ -103,6 +103,7 @@ export class UpdateMotoboyDto extends PartialType(CreateMotoboyDto) {
   })
   senha: string;
 
+  @IsNotEmpty()
   @IsBoolean()
   @ApiProperty({
     description: 'Se o entregador possui mochila',
@@ -111,4 +112,14 @@ export class UpdateMotoboyDto extends PartialType(CreateMotoboyDto) {
     required: true,
   })
   mochila: boolean;
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({
+    description: 'Id da cidade do entregador',
+    example: '00000000-0000-0000-0000-000000000000',
+    type: String,
+    required: true,
+  })
+  id_endereco_de_servico: string;
 }
