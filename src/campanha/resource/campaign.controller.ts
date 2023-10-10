@@ -12,7 +12,6 @@ import {
 import {
   ApiTags,
   ApiOperation,
-  ApiResponse,
   ApiBody,
   ApiParam,
   ApiBearerAuth,
@@ -246,7 +245,7 @@ export class CampaignController {
   async findAll() {
     return this.findCampaignUseCase.findAll();
   }
-  
+
   @UseGuards(AccessTokenGuard)
   @Get(':id')
   @ApiOperation({ summary: 'Buscar campanha por ID' })
@@ -279,8 +278,8 @@ export class CampaignController {
     },
   })
   @ApiParam({ name: 'id', description: 'ID da campanha' })
-  async findOne(@Req() req: Request ,@Param('id') id: string) {
-    const motoboyId =  req['user'].sub;
+  async findOne(@Req() req: Request, @Param('id') id: string) {
+    const motoboyId = req['user'].sub;
     console.log(motoboyId);
     return this.findCampaignUseCase.findOne(id, motoboyId);
   }
