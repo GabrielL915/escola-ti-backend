@@ -1,3 +1,3 @@
-export interface ICloudinaryProvider {
-    uploadImage(file: any): Promise<string>;
+export abstract class ICloudinaryProvider {
+    abstract uploadImage(file: Express.Multer.File): Promise<string>;
 }
