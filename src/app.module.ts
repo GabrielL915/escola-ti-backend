@@ -9,6 +9,10 @@ import { MetaModule } from './meta/resource/meta.module';
 import { RegisteredModule } from './inscrito/resource/registered.module';
 import { CityModule } from './city/resource/city.module'
 import { MotoboyModule } from './motoboy/resource/motoboy.module';
+import { ProductsModule } from './products/products.module';
+import { ImagesModule } from './images/images.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
+
 
 @Module({
   imports: [
@@ -38,6 +42,9 @@ import { MotoboyModule } from './motoboy/resource/motoboy.module';
     RegisteredModule,
     MotoboyModule,
     CityModule,
+    ProductsModule,
+    ImagesModule,
+    CloudinaryModule,
     
   ],
   controllers: [],
