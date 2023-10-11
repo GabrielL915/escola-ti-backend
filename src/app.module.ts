@@ -11,7 +11,7 @@ import { CityModule } from './city/resource/city.module'
 import { MotoboyModule } from './motoboy/resource/motoboy.module';
 import { ProductsModule } from './products/products.module';
 import { ImagesModule } from './images/images.module';
-import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { CloudinaryModule } from './cloudinary/resource/cloudinary.module';
 
 
 @Module({
