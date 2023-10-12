@@ -11,6 +11,7 @@ import { CityModule } from './city/resource/city.module'
 import { MotoboyModule } from './motoboy/resource/motoboy.module';
 import { ProductsModule } from './products/resource/products.module';
 import { CloudinaryModule } from './cloudinary/resource/cloudinary.module';
+import { ImagensModule } from './imagens/imagens.module';
 
 
 @Module({
@@ -43,6 +44,7 @@ import { CloudinaryModule } from './cloudinary/resource/cloudinary.module';
     CityModule,
     ProductsModule,
     CloudinaryModule,
+    ImagensModule,
     
   ],
   controllers: [],
