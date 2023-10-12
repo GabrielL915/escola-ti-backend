@@ -9,7 +9,7 @@ export class UpdateCampaignUseCase {
 
   async update(id: string, input: UpdateCampaignDto): Promise<Campaign> {
     try {
-      return this.campaignRepository.update(id, input);
+      return await this.campaignRepository.update(id, input);
     } catch (error) {
       throw new InternalServerErrorException(
         'Erro ao atualizar campanha',

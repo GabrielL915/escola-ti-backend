@@ -8,7 +8,7 @@ export class FindCampaignUseCase {
 
   async findAll(): Promise<Campaign[]> {
     try {
-      return this.campaignRepository.findAll();
+      return await this.campaignRepository.findAll();
     } catch (error) {
       throw new InternalServerErrorException('Erro ao buscar campanhas', error);
     }
@@ -16,10 +16,10 @@ export class FindCampaignUseCase {
 
   async findOne(id: string, motoboyId: string): Promise<Campaign> {
     try {
-      return this.campaignRepository.findOne(id, motoboyId);
+      return await this.campaignRepository.findOne(id, motoboyId);
     } catch (error) {
       throw new InternalServerErrorException(
-        'Erro ao buscar campanha pro id',
+        'Erro ao buscar campanha por id',
         error,
       );
     }

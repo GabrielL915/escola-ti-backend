@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UpdateCampaignUseCase } from './update-campaign.use-case';
 import { CampaignRepository } from '../repository/campaign.repository';
 import { InternalServerErrorException } from '@nestjs/common';
+import { UpdateCampaignDto } from '../dto/update-campaign.dto';
 
 describe('UpdateCampaignUseCase', () => {
   let updateCampaignUseCase: UpdateCampaignUseCase;
@@ -27,10 +28,13 @@ describe('UpdateCampaignUseCase', () => {
     );
   });
 
+  it('should be defined', () => {
+    expect(updateCampaignUseCase).toBeDefined();
+  });
+
   it('should throw InternalServerErrorException when campaignRepository.update fails', async () => {
     const mockCampaignId = 'mockId';
-    const mockUpdateDto = {
-      id: 'mockId',
+    const mockUpdateDto: UpdateCampaignDto = {
       tipo: 'Test Atualizado',
       dias: ['Segunda-feira'],
       horario_inicial: '2023-09-18T09:00:00Z',
@@ -42,7 +46,7 @@ describe('UpdateCampaignUseCase', () => {
     };
 
     mockCampaignRepository.update.mockRejectedValueOnce(
-      new Error('Failed to update campaign in the repository'),
+      new Error('Erro ao atualizar campanha'),
     );
 
     await expect(

@@ -18,7 +18,7 @@ export class UpdateObjectiveDto extends CreateObjectiveDto {
   })
   @IsString()
   @IsNotEmpty()
-  id: string;
+  id?: string;
 
   @ApiProperty({
     description: 'Id identificador da campanha',

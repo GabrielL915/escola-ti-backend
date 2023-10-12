@@ -7,7 +7,7 @@ import { InjectKnex } from 'nestjs-knex';
 import { CreateObjectiveDto } from '../../../domain/dto/create-objective.dto';
 import { UpdateObjectiveDto } from '../../../domain/dto/update-objective.dto';
 import { Objective } from '../../../domain/entities/objetivo.entity';
-import { ObjectiveRepository } from '../../../domain/repository/objetivo.repository';
+import { ObjectiveRepository } from '../../../domain/repository/objective.repository';
 
 export class ObjectiveRepositoryImpl implements ObjectiveRepository {
   constructor(@InjectKnex() private readonly knex: Knex) {}

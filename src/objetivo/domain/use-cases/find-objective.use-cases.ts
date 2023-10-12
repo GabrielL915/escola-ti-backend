@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Objective } from '../entities/objetivo.entity';
-import { ObjectiveRepository } from '../repository/objetivo.repository';
+import { ObjectiveRepository } from '../repository/objective.repository';
 
 @Injectable()
 export class FindObjectiveUseCase {

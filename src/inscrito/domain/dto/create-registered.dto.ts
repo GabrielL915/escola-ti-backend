@@ -1,12 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsString,
-  IsNotEmpty,
-  IsDate,
-  IsNumber,
-  Min,
-  IsISO8601,
-} from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, Min } from 'class-validator';
 
 export class CreateRegisteredDto {
   @ApiProperty({
@@ -35,8 +28,8 @@ export class CreateRegisteredDto {
   /* @IsDate() */
   @IsNotEmpty()
   @IsString()
-/*   @IsISO8601() */
-data_de_inscricao: string;
+  /*   @IsISO8601() */
+  data_de_inscricao: string;
 
   @ApiProperty({
     description: 'Número de corridas ignoradas pelo entregador',

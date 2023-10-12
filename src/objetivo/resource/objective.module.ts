@@ -6,7 +6,7 @@ import { UpdateObjectiveUseCase } from '../domain/use-cases/update-objective.use
 import { DeleteObjectiveUseCase } from '../domain/use-cases/delete-objective.use-cases';
 import { FindObjectiveUseCase } from '../domain/use-cases/find-objective.use-cases';
 import { ObjectiveController } from './objective.controller';
-import { ObjectiveRepository } from '../domain/repository/objetivo.repository';
+import { ObjectiveRepository } from '../domain/repository/objective.repository';
 
 @Module({
   imports: [],

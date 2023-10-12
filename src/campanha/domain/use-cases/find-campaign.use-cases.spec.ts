@@ -26,9 +26,13 @@ describe('FindCampaignUseCase', () => {
     findCampaignUseCase = module.get<FindCampaignUseCase>(FindCampaignUseCase);
   });
 
+  it('should be defined', () => {
+    expect(findCampaignUseCase).toBeDefined();
+  });
+
   it('should throw InternalServerErrorException when campaignRepository.findAll fails', async () => {
     mockCampaignRepository.findAll.mockRejectedValueOnce(
-      new Error('Failed to retrieve campaigns from the repository'),
+      new Error('Erro ao buscar campanhas'),
     );
 
     await expect(findCampaignUseCase.findAll()).rejects.toThrow(
@@ -41,7 +45,7 @@ describe('FindCampaignUseCase', () => {
     const mockMotoboyId = 'mockMotoboyId';
 
     mockCampaignRepository.findOne.mockRejectedValueOnce(
-      new Error('Failed to retrieve a campaign from the repository'),
+      new Error('Erro ao buscar campanha por id'),
     );
 
     await expect(

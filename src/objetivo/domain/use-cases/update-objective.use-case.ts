@@ -1,5 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { ObjectiveRepository } from '../repository/objetivo.repository';
+import { ObjectiveRepository } from '../repository/objective.repository';
 import { UpdateObjectiveDto } from '../dto/update-objective.dto';
 import { Objective } from '../entities/objetivo.entity';
 

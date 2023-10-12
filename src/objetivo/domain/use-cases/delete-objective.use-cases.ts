@@ -1,5 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { ObjectiveRepository } from '../repository/objetivo.repository';
+import { ObjectiveRepository } from '../repository/objective.repository';
 
 @Injectable()
 export class DeleteObjectiveUseCase {

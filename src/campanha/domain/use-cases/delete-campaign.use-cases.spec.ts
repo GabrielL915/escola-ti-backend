@@ -27,11 +27,15 @@ describe('DeleteCampaignUseCase', () => {
     );
   });
 
+  it('should be defined', () => {
+    expect(deleteCampaignUseCase).toBeDefined();
+  });
+
   it('should throw InternalServerErrorException when campaignRepository.delete fails', async () => {
     const mockCampaignId = 'mockId';
 
     mockCampaignRepository.delete.mockRejectedValueOnce(
-      new Error('Failed to delete a campaign from the repository'),
+      new Error('Erro ao deletar campanha'),
     );
 
     await expect(deleteCampaignUseCase.delete(mockCampaignId)).rejects.toThrow(
