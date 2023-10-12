@@ -9,8 +9,7 @@ import { MetaModule } from './meta/resource/meta.module';
 import { RegisteredModule } from './inscrito/resource/registered.module';
 import { CityModule } from './city/resource/city.module'
 import { MotoboyModule } from './motoboy/resource/motoboy.module';
-import { ProductsModule } from './products/products.module';
-import { ImagesModule } from './images/images.module';
+import { ProductsModule } from './products/resource/products.module';
 import { CloudinaryModule } from './cloudinary/resource/cloudinary.module';
 
 
@@ -43,7 +42,6 @@ import { CloudinaryModule } from './cloudinary/resource/cloudinary.module';
     MotoboyModule,
     CityModule,
     ProductsModule,
-    ImagesModule,
     CloudinaryModule,
     
   ],
