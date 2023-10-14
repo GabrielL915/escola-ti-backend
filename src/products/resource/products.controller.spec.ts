@@ -16,6 +16,7 @@ import { UpdateProductsUseCase } from '../domain/use-cases/update-products.use-c
 import { DeleteProductsUseCase } from '../domain/use-cases/delete-products.use-case';
 import { FindAllProductsUseCase } from '../domain/use-cases/find-all-products.use-case';
 import { FindByIdProductsUseCase } from '../domain/use-cases/find-by-id-products.use-case';
+import { ImagensModule } from '../../imagens/resource/imagens.module';
 
 describe('ProductsController (e2e)', () => {
   let app: INestApplication;
@@ -25,6 +26,7 @@ describe('ProductsController (e2e)', () => {
       imports: [
         ProductsModule,
         CloudinaryModule,
+        ImagensModule,
         ConfigModule.forRoot({
           isGlobal: true,
           envFilePath: '.env'

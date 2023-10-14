@@ -8,9 +8,10 @@ import { FindByIdProductsUseCase } from '../domain/use-cases/find-by-id-products
 import { ProductRepositoryImpl } from '../data-access/infraestructure/repository/products.repository.impl';
 import { ProductRepository } from '../domain/repository/products.repository';
 import { CloudinaryModule } from '../../cloudinary/resource/cloudinary.module';
+import { ImagensModule } from '../../imagens/resource/imagens.module';
 
 @Module({
-  imports: [CloudinaryModule],
+  imports: [CloudinaryModule, ImagensModule],
   controllers: [ProductsController],
   providers: [
     CreateProductsUseCase,

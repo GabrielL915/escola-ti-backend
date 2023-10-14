@@ -10,10 +10,7 @@ export class ProductRepositoryImpl implements ProductRepository {
 
   async create(input: CreateProductDto): Promise<Product> {
     const [product] = await this.knex('produto')
-      .insert({
-        ...input,
-        status: true,
-      })
+      .insert(input)
       .returning('*');
     return product;
   }
