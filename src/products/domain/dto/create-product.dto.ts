@@ -1,6 +1,5 @@
 export class CreateProductDto {
     nome: string;
+    descricao: string;
     valor: number;
-    escopo: number;
-    imagem: string; // Imagem
 }

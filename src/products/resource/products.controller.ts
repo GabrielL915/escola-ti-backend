@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { CreateProductDto } from '../domain/dto/create-product.dto';
 import { UpdateProductDto } from '../domain/dto/update-product.dto';
@@ -14,6 +16,7 @@ import { FindAllProductsUseCase } from '../domain/use-cases/find-all-products.us
 import { FindByIdProductsUseCase } from '../domain/use-cases/find-by-id-products.use-case';
 import { UpdateProductsUseCase } from '../domain/use-cases/update-products.use-case';
 import { DeleteProductsUseCase } from '../domain/use-cases/delete-products.use-case';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('products')
 export class ProductsController {
@@ -26,8 +29,10 @@ export class ProductsController {
   ) {}
 
   @Post()
-  create(@Body() input: CreateProductDto) {
-    return this.createProductsUseCase.create(input);
+  @UseInterceptors(FileInterceptor('image'))
+  create(@Body() input: CreateProductDto,
+  @UploadedFile() image: Express.Multer.File,) {
+    return this.createProductsUseCase.create(input, image);
   }
 
   @Get()

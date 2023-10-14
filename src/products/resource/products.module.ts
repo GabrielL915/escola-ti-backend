@@ -7,8 +7,10 @@ import { FindAllProductsUseCase } from '../domain/use-cases/find-all-products.us
 import { FindByIdProductsUseCase } from '../domain/use-cases/find-by-id-products.use-case';
 import { ProductRepositoryImpl } from '../data-access/infraestructure/repository/products.repository.impl';
 import { ProductRepository } from '../domain/repository/products.repository';
+import { CloudinaryModule } from '../../cloudinary/resource/cloudinary.module';
 
 @Module({
+  imports: [CloudinaryModule],
   controllers: [ProductsController],
   providers: [
     CreateProductsUseCase,

@@ -17,6 +17,7 @@ import { ImagensModule } from './imagens/imagens.module';
 @Module({
   imports: [
     AuthModule,
+    CloudinaryModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env'
@@ -43,7 +44,6 @@ import { ImagensModule } from './imagens/imagens.module';
     MotoboyModule,
     CityModule,
     ProductsModule,
-    CloudinaryModule,
     ImagensModule,
     
   ],

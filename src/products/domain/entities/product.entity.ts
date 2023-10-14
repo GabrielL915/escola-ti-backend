@@ -1,7 +1,7 @@
 export interface Product {
   id: string;
   nome: string;
+  descricao: string;
   valor: number;
-  escopo: number;
   status: boolean;
 }

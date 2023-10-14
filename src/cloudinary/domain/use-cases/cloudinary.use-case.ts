@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ICloudinaryProvider } from '../interfaces/icloudinary.provider';
 
-
 @Injectable()
 export class CloudinaryUseCase {
   constructor(private readonly cloudinaryProvider: ICloudinaryProvider) {}
