@@ -14,7 +14,7 @@ export class ImagemRepositoryImpl implements ImagemRepository {
   }
 
   async findAll(): Promise<Imagen[]> {
-    return Promise.resolve(undefined);
+    return this.knex('imagem').select('*');
   }
   async findById(id: string): Promise<Imagen> {
     return Promise.resolve(undefined);
@@ -23,6 +23,6 @@ export class ImagemRepositoryImpl implements ImagemRepository {
     return Promise.resolve(undefined);
   }
   async delete(id: string): Promise<void> {
-    return Promise.resolve(undefined);
+    await this.knex('imagem').where({ id_produto: id }).del();
   }
 }

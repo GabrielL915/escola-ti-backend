@@ -6,5 +6,5 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
   descricao?: string;
   valor?: number;
   status?: boolean;
- 
+  quantidade?: number;
 }

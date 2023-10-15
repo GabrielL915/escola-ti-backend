@@ -12,7 +12,7 @@ import { MotoboyModule } from './motoboy/resource/motoboy.module';
 import { ProductsModule } from './products/resource/products.module';
 import { CloudinaryModule } from './cloudinary/resource/cloudinary.module';
 import { ImagensModule } from './imagens/resource/imagens.module';
-import { StockModule } from './stock/stock.module';
+import { StockModule } from './stock/resource/stock.module';
 
 
 @Module({

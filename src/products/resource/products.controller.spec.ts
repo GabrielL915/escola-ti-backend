@@ -17,6 +17,7 @@ import { DeleteProductsUseCase } from '../domain/use-cases/delete-products.use-c
 import { FindAllProductsUseCase } from '../domain/use-cases/find-all-products.use-case';
 import { FindByIdProductsUseCase } from '../domain/use-cases/find-by-id-products.use-case';
 import { ImagensModule } from '../../imagens/resource/imagens.module';
+import { StockModule } from '../../stock/resource/stock.module';
 
 describe('ProductsController (e2e)', () => {
   let app: INestApplication;
@@ -27,9 +28,10 @@ describe('ProductsController (e2e)', () => {
         ProductsModule,
         CloudinaryModule,
         ImagensModule,
+        StockModule,
         ConfigModule.forRoot({
           isGlobal: true,
-          envFilePath: '.env'
+          envFilePath: '.env',
         }),
         KnexModule.forRoot({
           config: {
@@ -79,6 +81,7 @@ describe('ProductsController (e2e)', () => {
       nome: 'Produto 1',
       descricao: 'Descrição do produto',
       valor: 100,
+      quantidade: 10,
     };
 
     const response = await request(app.getHttpServer())
@@ -86,9 +89,26 @@ describe('ProductsController (e2e)', () => {
       .field('nome', createProductDto.nome)
       .field('valor', createProductDto.valor)
       .field('descricao', createProductDto.descricao)
+      .field('quantidade', createProductDto.quantidade)
       .attach('image', 'test/assets/moscando.jpg');
 
     expect(response.status).toBe(201);
+    console.log(response.body);
+  });
+
+  it('should find all products', async () => {
+    const response = await request(app.getHttpServer()).get('/products');
+
+    expect(response.status).toBe(200);
+    console.log(response.body);
+  });
+
+  it('should delete a product', async () => {
+    const response = await request(app.getHttpServer()).delete(
+      '/products/e82804b7-aa78-42fb-ab9d-05bb66be8653',
+    );
+
+    expect(response.status).toBe(200);
     console.log(response.body);
   });
 });

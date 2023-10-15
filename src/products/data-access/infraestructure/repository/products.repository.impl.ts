@@ -15,7 +15,7 @@ export class ProductRepositoryImpl implements ProductRepository {
     return product;
   }
   async findAll(): Promise<Product[]> {
-    return Promise.resolve(undefined);
+    return this.knex('produto').select('*');
   }
   async findById(id: string): Promise<Product> {
     return Promise.resolve(undefined);
@@ -24,6 +24,6 @@ export class ProductRepositoryImpl implements ProductRepository {
     return Promise.resolve(undefined);
   }
   async delete(id: string): Promise<void> {
-    return Promise.resolve(undefined);
+    await this.knex('produto').where({ id }).del();
   }
 }

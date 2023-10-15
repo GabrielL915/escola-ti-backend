@@ -9,9 +9,10 @@ import { ProductRepositoryImpl } from '../data-access/infraestructure/repository
 import { ProductRepository } from '../domain/repository/products.repository';
 import { CloudinaryModule } from '../../cloudinary/resource/cloudinary.module';
 import { ImagensModule } from '../../imagens/resource/imagens.module';
+import { StockModule } from '../../stock/resource/stock.module';
 
 @Module({
-  imports: [CloudinaryModule, ImagensModule],
+  imports: [CloudinaryModule, ImagensModule, StockModule],
   controllers: [ProductsController],
   providers: [
     CreateProductsUseCase,

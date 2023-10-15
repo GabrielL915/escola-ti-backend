@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { ProductRepository } from '../repository/products.repository';
 
 @Injectable()
 export class FindAllProductsUseCase {
-    findAll() {
-        return 'This action returns all products';
-    }
+  constructor(private readonly productRepository: ProductRepository) {}
+  async findAll() {
+    const products = await this.productRepository.findAll();
+    console.log(products);
+    return products;
+  }
 }
