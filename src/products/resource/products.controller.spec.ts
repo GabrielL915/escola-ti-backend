@@ -22,9 +22,11 @@ import {
   IMAGEN_CREATE_PROVIDER,
   IMAGEN_DELETE_PROVIDER,
   IMAGEN_FIND_BY_ID_PROVIDER,
+  IMAGEN_UPDATE_PROVIDER,
   STOCK_CREATE_PROVIDER,
   STOCK_DELETE_PROVIDER,
   STOCK_FIND_BY_ID_PROVIDER,
+  STOCK_UPDATE_PROVIDER,
 } from '../../shared/constants/injection-tokens';
 import { CreateImagenUseCase } from '../../imagens/domain/use-cases/create-imagem.use-case';
 import { CreateStockUseCase } from '../../stock/domain/use-cases/create-stock.use-case';
@@ -36,6 +38,8 @@ import { FindByIdStockUseCase } from '../../stock/domain/use-cases/find-by-id-st
 import { FindByIdImagemUseCase } from '../../imagens/domain/use-cases/find-by-id-imagem.use-case';
 import { DeleteImagensUseCase } from '../../imagens/domain/use-cases/delete-imagem.use-case';
 import { DeleteStockUseCase } from '../../stock/domain/use-cases/delete-stock.use-case';
+import { UpdateImagemUseCase } from '../../imagens/domain/use-cases/update-imagem.use-case';
+import { UpdateStockUseCase } from '../../stock/domain/use-cases/update-stock.use-case';
 
 describe('ProductsController (e2e)', () => {
   let app: INestApplication;
@@ -115,6 +119,14 @@ describe('ProductsController (e2e)', () => {
           provide: STOCK_DELETE_PROVIDER,
           useClass: DeleteStockUseCase,
         },
+        {
+          provide: IMAGEN_UPDATE_PROVIDER,
+          useClass: UpdateImagemUseCase,
+        },
+        {
+          provide: STOCK_UPDATE_PROVIDER,
+          useClass: UpdateStockUseCase,
+        },
       ],
     }).compile();
 
@@ -128,7 +140,7 @@ describe('ProductsController (e2e)', () => {
 
   it('should create a product', async () => {
     const createProductDto = {
-      nome: 'Produto aqui',
+      nome: 'Produto 009',
       descricao: 'Descrição do produto',
       valor: 1000,
       quantidade: 20,
@@ -155,15 +167,37 @@ describe('ProductsController (e2e)', () => {
 
   it('should find a product by id', async () => {
     const response = await request(app.getHttpServer()).get(
-      '/products/99a4b37c-593a-4c19-a15e-308551a628eb',
+      '/products/2f5ef218-063a-4b5e-b695-3fe97071c706',
     );
     console.log(response.body);
     expect(response.status).toBe(200);
   });
 
+  it('should update a product', async () => {
+    const updateProductDto = {
+      nome: 'atualizado',
+      descricao: 'descricao atualizada',
+      valor: 1000,
+      quantidade: 0,
+      status: false,
+    };
+
+    const response = await request(app.getHttpServer())
+      .patch('/products/396dc7c9-e599-49b0-a1b9-30dbad3e211c')
+      .field('nome', updateProductDto.nome)
+      .field('valor', updateProductDto.valor)
+      .field('descricao', updateProductDto.descricao)
+      .field('quantidade', updateProductDto.quantidade)
+      .field('status', updateProductDto.status)
+      .attach('image', 'test/assets/moscando.jpg');
+      console.log(response.body);
+    expect(response.status).toBe(200);
+
+  });
+
   it('should delete a product', async () => {
     const response = await request(app.getHttpServer()).delete(
-      '/products/99a4b37c-593a-4c19-a15e-308551a628eb',
+      '/products/c8fe1f8c-b50f-4374-80cc-369c5d5b5334',
     );
 
     expect(response.status).toBe(200);

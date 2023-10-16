@@ -23,13 +23,12 @@ export class FindAllProductsUseCase {
         const imagem = await this.image.findById(product.id);
         const stock = await this.stock.findById(product.id);
         return {
-          product,
+          ...product,
           imagem,
           stock,
         };
       }),
     );
-    console.log(productsWithImagens);
     return productsWithImagens;
   }
 }

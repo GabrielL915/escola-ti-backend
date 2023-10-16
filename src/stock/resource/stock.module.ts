@@ -10,6 +10,7 @@ import {
   STOCK_CREATE_PROVIDER,
   STOCK_FIND_BY_ID_PROVIDER,
   STOCK_DELETE_PROVIDER,
+  STOCK_UPDATE_PROVIDER,
 } from '../../shared/constants/injection-tokens';
 
 @Module({
@@ -35,6 +36,10 @@ import {
       provide: STOCK_DELETE_PROVIDER,
       useClass: DeleteStockUseCase,
     },
+    {
+      provide: STOCK_UPDATE_PROVIDER,
+      useClass: UpdateStockUseCase,
+    },
   ],
   exports: [
     CreateStockUseCase,
@@ -42,7 +47,8 @@ import {
     DeleteStockUseCase,
     STOCK_CREATE_PROVIDER,
     STOCK_FIND_BY_ID_PROVIDER,
-    STOCK_DELETE_PROVIDER
+    STOCK_DELETE_PROVIDER,
+    STOCK_UPDATE_PROVIDER,
   ],
 })
 export class StockModule {}

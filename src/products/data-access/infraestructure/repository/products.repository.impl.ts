@@ -20,7 +20,16 @@ export class ProductRepositoryImpl implements ProductRepository {
     return product;
   }
   async update(id: string, input: UpdateProductDto): Promise<Product> {
-    return Promise.resolve(undefined);
+    const [product] = await this.knex('produto')
+      .update({
+        nome: input.nome,
+        descricao: input.descricao,
+        valor: input.valor,
+        status: input.status,
+      })
+      .where({ id })
+      .returning('*');
+    return product;
   }
   async delete(id: string): Promise<void> {
     await this.knex('produto').where({ id }).del();

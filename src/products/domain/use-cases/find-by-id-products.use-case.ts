@@ -22,9 +22,8 @@ export class FindByIdProductsUseCase {
     const product = await this.productRepository.findById(id);
     const imagem = await this.image.findById(id);
     const stock = await this.stock.findById(id);
-    console.log(product, imagem, stock);
     return {
-      product,
+      ...product,
       imagem,
       stock,
     };

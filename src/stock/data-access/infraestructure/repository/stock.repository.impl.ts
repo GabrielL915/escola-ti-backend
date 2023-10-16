@@ -24,8 +24,10 @@ export class StockRepositoryImpl implements StockRepository {
 
   async update(id: string, input: UpdateStockDto): Promise<Stock> {
     const [stock] = await this.knex('estoque')
-      .update(input)
-      .where({ id })
+      .update({
+        quantidade: input.quantidade,
+      })
+      .where({ id_produto: id })
       .returning('*');
     return stock;
   }

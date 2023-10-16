@@ -16,13 +16,22 @@ export class ImagemRepositoryImpl implements ImagemRepository {
   async findAll(): Promise<Imagen[]> {
     return this.knex('imagem').select('*');
   }
+
   async findById(id: string): Promise<Imagen> {
-    const [imagen] = await this.knex('imagem').select('*').where({ id_produto: id });
+    const [imagen] = await this.knex('imagem')
+      .select('*')
+      .where({ id_produto: id });
     return imagen;
   }
+
   async update(id: string, input: UpdateImagenDto): Promise<Imagen> {
-    return Promise.resolve(undefined);
+    const [imagen] = await this.knex('imagem')
+      .where({ id_produto: id })
+      .update(input)
+      .returning('*');
+    return imagen;
   }
+
   async delete(id: string): Promise<void> {
     await this.knex('imagem').where({ id_produto: id }).del();
   }

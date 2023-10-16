@@ -30,8 +30,10 @@ export class ProductsController {
 
   @Post()
   @UseInterceptors(FileInterceptor('image'))
-  create(@Body() input: CreateProductDto,
-  @UploadedFile() image: Express.Multer.File,) {
+  create(
+    @Body() input: CreateProductDto,
+    @UploadedFile() image: Express.Multer.File,
+  ) {
     return this.createProductsUseCase.create(input, image);
   }
 
@@ -46,8 +48,13 @@ export class ProductsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() input: UpdateProductDto) {
-    return this.updateProductsUseCase.update(id, input);
+  @UseInterceptors(FileInterceptor('image'))
+  update(
+    @Param('id') id: string,
+    @Body() input: UpdateProductDto,
+    @UploadedFile() image: Express.Multer.File,
+  ) {
+    return this.updateProductsUseCase.update(id, input, image);
   }
 
   @Delete(':id')
