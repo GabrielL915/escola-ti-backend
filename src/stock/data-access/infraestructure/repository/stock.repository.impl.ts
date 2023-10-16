@@ -18,7 +18,7 @@ export class StockRepositoryImpl implements StockRepository {
   }
 
   async findById(id: string): Promise<Stock> {
-    const [stock] = await this.knex('estoque').select('*').where({ id });
+    const [stock] = await this.knex('estoque').select('*').where({ id_produto: id });
     return stock;
   }
 

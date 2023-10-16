@@ -11,6 +11,7 @@ import { CloudinaryModule } from '../../cloudinary/resource/cloudinary.module';
 import { ImagensModule } from '../../imagens/resource/imagens.module';
 import { StockModule } from '../../stock/resource/stock.module';
 
+
 @Module({
   imports: [CloudinaryModule, ImagensModule, StockModule],
   controllers: [ProductsController],

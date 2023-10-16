@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { CreateImagenDto } from '../dto/create-imagen.dto';
+import { Imagen } from '../entities/imagen.entity';
 import { ImagemRepository } from '../repository/imagem.repository';
+import { ICreate } from '../../../shared/interfaces/create.interface';
 
 @Injectable()
-export class CreateImagenUseCase {
+export class CreateImagenUseCase implements ICreate<CreateImagenDto, Imagen> {
   constructor(private readonly imagenRepository: ImagemRepository) {}
 
   async create(input: CreateImagenDto) {

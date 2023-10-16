@@ -9,16 +9,15 @@ export class ProductRepositoryImpl implements ProductRepository {
   constructor(@InjectKnex() private knex: Knex) {}
 
   async create(input: CreateProductDto): Promise<Product> {
-    const [product] = await this.knex('produto')
-      .insert(input)
-      .returning('*');
+    const [product] = await this.knex('produto').insert(input).returning('*');
     return product;
   }
   async findAll(): Promise<Product[]> {
     return this.knex('produto').select('*');
   }
   async findById(id: string): Promise<Product> {
-    return Promise.resolve(undefined);
+    const [product] = await this.knex('produto').select('*').where({ id });
+    return product;
   }
   async update(id: string, input: UpdateProductDto): Promise<Product> {
     return Promise.resolve(undefined);

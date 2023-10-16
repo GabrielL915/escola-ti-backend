@@ -17,7 +17,8 @@ export class ImagemRepositoryImpl implements ImagemRepository {
     return this.knex('imagem').select('*');
   }
   async findById(id: string): Promise<Imagen> {
-    return Promise.resolve(undefined);
+    const [imagen] = await this.knex('imagem').select('*').where({ id_produto: id });
+    return imagen;
   }
   async update(id: string, input: UpdateImagenDto): Promise<Imagen> {
     return Promise.resolve(undefined);

@@ -1,17 +1,24 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ProductRepository } from '../repository/products.repository';
-import { DeleteImagensUseCase } from '../../../imagens/domain/use-cases/delete-imagem.use-case';
-import { DeleteStockUseCase } from '../../../stock/domain/use-cases/delete-stock.use-case';
+import { IDelete } from '../../../shared/interfaces/delete.interface';
+import {
+  IMAGEN_DELETE_PROVIDER,
+  STOCK_DELETE_PROVIDER,
+} from '../../../shared/constants/injection-tokens';
 
 @Injectable()
 export class DeleteProductsUseCase {
-  constructor(private readonly productRepository: ProductRepository,
-    private readonly deleteImagemUsecase: DeleteImagensUseCase,
-    private readonly deleteStockUseCase: DeleteStockUseCase) {}
-  
+  constructor(
+    private readonly productRepository: ProductRepository,
+    @Inject(IMAGEN_DELETE_PROVIDER)
+    private readonly image: IDelete<void>,
+    @Inject(STOCK_DELETE_PROVIDER)
+    private readonly stock: IDelete<void>,
+  ) {}
+
   async delete(id: string) {
-    await this.deleteImagemUsecase.delete(id);
-    await this.deleteStockUseCase.delete(id);
+    await this.image.delete(id);
+    await this.stock.delete(id);
     return await this.productRepository.delete(id);
   }
 }

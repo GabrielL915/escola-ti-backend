@@ -1,8 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { ProductRepository } from '../repository/products.repository';
+import { IFindById } from '../../../shared/interfaces/find-by-id.interface';
+import {
+  IMAGEN_FIND_BY_ID_PROVIDER,
+  STOCK_FIND_BY_ID_PROVIDER,
+} from '../../../shared/constants/injection-tokens';
+import { Imagen } from '../../../imagens/domain/entities/imagen.entity';
+import { Stock } from '../../../stock/domain/entities/stock.entity';
 
 @Injectable()
 export class FindByIdProductsUseCase {
-    findById(id: string) {
-        return 'This action returns a product';
-    }
+  constructor(
+    private readonly productRepository: ProductRepository,
+    @Inject(IMAGEN_FIND_BY_ID_PROVIDER)
+    private readonly image: IFindById<Imagen>,
+    @Inject(STOCK_FIND_BY_ID_PROVIDER)
+    private readonly stock: IFindById<Stock>,
+  ) {}
+
+  async findById(id: string) {
+    const product = await this.productRepository.findById(id);
+    const imagem = await this.image.findById(id);
+    const stock = await this.stock.findById(id);
+    console.log(product, imagem, stock);
+    return {
+      product,
+      imagem,
+      stock,
+    };
+  }
 }

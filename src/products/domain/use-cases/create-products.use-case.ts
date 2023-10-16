@@ -1,16 +1,25 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { CloudinaryUseCase } from '../../../cloudinary/domain/use-cases/cloudinary.use-case';
 import { ProductRepository } from '../repository/products.repository';
-import { CreateImagenUseCase } from '../../../imagens/domain/use-cases/create-imagem.use-case';
-import { CreateStockUseCase } from '../../../stock/domain/use-cases/create-stock.use-case';
+import { ICreate } from '../../../shared/interfaces/create.interface';
+import { CreateImagenDto } from '../../../imagens/domain/dto/create-imagen.dto';
+import { Imagen } from '../../../imagens/domain/entities/imagen.entity';
+import { CreateStockDto } from '../../../stock/domain/dto/create-stock.dto';
+import { Stock } from '../../../stock/domain/entities/stock.entity';
+import {
+  IMAGEN_CREATE_PROVIDER,
+  STOCK_CREATE_PROVIDER,
+} from '../../../shared/constants/injection-tokens';
 
 @Injectable()
 export class CreateProductsUseCase {
   constructor(
     private readonly cloudinaryUseCase: CloudinaryUseCase,
-    private readonly createImagenUseCase: CreateImagenUseCase,
-    private readonly createStockUseCase: CreateStockUseCase,
+    @Inject(IMAGEN_CREATE_PROVIDER)
+    private readonly image: ICreate<CreateImagenDto, Imagen>,
+    @Inject(STOCK_CREATE_PROVIDER)
+    private readonly stock: ICreate<CreateStockDto, Stock>,
     private readonly productRepository: ProductRepository,
   ) {}
 
@@ -20,12 +29,12 @@ export class CreateProductsUseCase {
       descricao: input.descricao,
       valor: input.valor,
     });
-    const stock = await this.createStockUseCase.create({
+    const stock = await this.stock.create({
       quantidade: input.quantidade,
       id_produto: product.id,
     });
     const imageUrl = await this.cloudinaryUseCase.uploadImage(image);
-    const salvarImagem = await this.createImagenUseCase.create({
+    const salvarImagem = await this.image.create({
       url: imageUrl,
       id_produto: product.id,
     });

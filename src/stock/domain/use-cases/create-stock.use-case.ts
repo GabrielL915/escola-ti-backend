@@ -2,12 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { CreateStockDto } from '../dto/create-stock.dto';
 import { Stock } from '../entities/stock.entity';
 import { StockRepository } from '../repository/stock.repository';
+import { ICreate } from '../../../shared/interfaces/create.interface';
 
 @Injectable()
-export class CreateStockUseCase {
+export class CreateStockUseCase implements ICreate<CreateStockDto, Stock> {
   constructor(private readonly stockRepository: StockRepository) {}
 
-  async create(input: CreateStockDto): Promise<Stock> {
+  async create(input: CreateStockDto) {
     return this.stockRepository.create(input);
   }
 }
