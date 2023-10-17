@@ -7,9 +7,10 @@ import {
 } from '../../../shared/constants/injection-tokens';
 import { Imagen } from '../../../imagens/domain/entities/imagen.entity';
 import { Stock } from '../../../stock/domain/entities/stock.entity';
+import { Product } from '../entities/product.entity';
 
 @Injectable()
-export class FindByIdProductsUseCase {
+export class FindByIdProductsUseCase implements IFindById<Product>{
   constructor(
     private readonly productRepository: ProductRepository,
     @Inject(IMAGEN_FIND_BY_ID_PROVIDER)

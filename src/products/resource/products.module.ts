@@ -10,7 +10,7 @@ import { ProductRepository } from '../domain/repository/products.repository';
 import { CloudinaryModule } from '../../cloudinary/resource/cloudinary.module';
 import { ImagensModule } from '../../imagens/resource/imagens.module';
 import { StockModule } from '../../stock/resource/stock.module';
-
+import { PRODUCTS_FIND_BY_ID_PROVIDER } from '../../shared/constants/injection-tokens';
 
 @Module({
   imports: [CloudinaryModule, ImagensModule, StockModule],
@@ -25,6 +25,11 @@ import { StockModule } from '../../stock/resource/stock.module';
       provide: ProductRepository,
       useClass: ProductRepositoryImpl,
     },
+    {
+      provide: PRODUCTS_FIND_BY_ID_PROVIDER,
+      useClass: FindByIdProductsUseCase,
+    },
   ],
+  exports: [FindByIdProductsUseCase, PRODUCTS_FIND_BY_ID_PROVIDER],
 })
 export class ProductsModule {}

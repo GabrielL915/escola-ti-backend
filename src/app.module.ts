@@ -13,6 +13,8 @@ import { ProductsModule } from './products/resource/products.module';
 import { CloudinaryModule } from './cloudinary/resource/cloudinary.module';
 import { ImagensModule } from './imagens/resource/imagens.module';
 import { StockModule } from './stock/resource/stock.module';
+import { CarrinhoModule } from './carrinho/resource/carrinho.module';
+import { ItemCarrinhoModule } from './item-carrinho/item-carrinho.module';
 
 
 @Module({
@@ -47,6 +49,8 @@ import { StockModule } from './stock/resource/stock.module';
     ProductsModule,
     ImagensModule,
     StockModule,
+    CarrinhoModule,
+    ItemCarrinhoModule,
     
   ],
   controllers: [],
