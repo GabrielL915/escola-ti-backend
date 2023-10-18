@@ -7,8 +7,7 @@ import { CarrinhoRepository } from '../repository/carrinho.repository';
 export class CreateCarrinhoUseCase {
   constructor(private carrinhoRepository: CarrinhoRepository) {}
 
-  async create(input: CreateCarrinhoDto): Promise<Carrinho> {
-    console.log(input);
-    return await this.carrinhoRepository.create(input);
+  async create(id_motoboy: string): Promise<Carrinho> {
+    return await this.carrinhoRepository.create(id_motoboy);
   }
 }

@@ -43,6 +43,7 @@ import { UpdateStockUseCase } from '../../stock/domain/use-cases/update-stock.us
 
 describe('ProductsController (e2e)', () => {
   let app: INestApplication;
+  let id_
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({

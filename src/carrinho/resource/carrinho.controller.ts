@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Req
 } from '@nestjs/common';
 import { CreateCarrinhoDto } from '../domain/dto/create-carrinho.dto';
 import { UpdateCarrinhoDto } from '../domain/dto/update-carrinho.dto';
@@ -13,6 +15,7 @@ import { CreateCarrinhoUseCase } from '../domain/use-cases/create-carrinho.use-c
 import { AddCarrinhoUseCase } from '../domain/use-cases/add-carrinho.use-case';
 import { FinishCompraCarrinhoUseCase } from '../domain/use-cases/finish-compra-carrinho.use-case';
 import { DeleteCarrinhoUseCase } from '../domain/use-cases/delete-carrinho.use-case';
+import { AccessTokenGuard } from '../../auth/guards/access-token.guard';
 
 @Controller('carrinho')
 export class CarrinhoController {
@@ -24,8 +27,10 @@ export class CarrinhoController {
   ) {}
 
   @Post()
-  create(@Body() input: CreateCarrinhoDto) {
-    return this.createCarrinhoUseCase.create(input);
+  @UseGuards(AccessTokenGuard)
+  create(@Req() req: Request) {
+    const id_motoboy = req['user'].sub;
+    return this.createCarrinhoUseCase.create(id_motoboy);
   }
 
 

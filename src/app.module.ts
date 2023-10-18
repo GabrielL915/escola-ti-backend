@@ -51,7 +51,6 @@ import { ItemCarrinhoModule } from './item-carrinho/item-carrinho.module';
     StockModule,
     CarrinhoModule,
     ItemCarrinhoModule,
-    
   ],
   controllers: [],
   providers: [],
