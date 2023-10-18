@@ -8,7 +8,7 @@ export class FindObjectiveUseCase {
 
   async findAll(): Promise<Objective[]> {
     try {
-      return this.objectiveRepository.findAll();
+      return await this.objectiveRepository.findAll();
     } catch (error) {
       throw new InternalServerErrorException('Erro ao buscar Objetivos', error);
     }
@@ -16,7 +16,7 @@ export class FindObjectiveUseCase {
 
   async findOne(id: string): Promise<Objective> {
     try {
-      return this.objectiveRepository.findOne(id);
+      return await this.objectiveRepository.findOne(id);
     } catch (error) {
       throw new InternalServerErrorException('Erro ao buscar Objetivo por id', error);
     }

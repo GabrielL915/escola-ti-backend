@@ -12,7 +12,7 @@ export class UpdateObjectiveUseCase {
     input: UpdateObjectiveDto,
   ): Promise<Objective> {
     try {
-      return this.objectiveRepository.update(id, input);
+      return await this.objectiveRepository.update(id, input);
     } catch (error) {
       throw new InternalServerErrorException('Erro ao atualizar Objetivo', error);
     }

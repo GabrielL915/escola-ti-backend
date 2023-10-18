@@ -21,7 +21,7 @@ export class UpdateMetaUseCase {
       // Atualiza o valor em porcentagem (assumindo que você tem um campo valor_atingido_porcentagem)
       input.valor_atingido = porcentagemProgresso;
 
-      return this.metaRepository.update(id, input);
+      return await this.metaRepository.update(id, input);
     } catch (error) {
       throw new InternalServerErrorException('Erro ao atualizar Meta', error);
     }

@@ -8,7 +8,7 @@ export class FindMetaUseCase {
 
   async findAll(): Promise<Meta[]> {
     try {
-      return this.metaRepository.findAll();
+      return await this.metaRepository.findAll();
     } catch (error) {
       throw new InternalServerErrorException('Erro ao buscar Metas', error);
     }
@@ -16,7 +16,7 @@ export class FindMetaUseCase {
 
   async findOne(id: string): Promise<Meta> {
     try {
-      return this.metaRepository.findOne(id);
+      return await this.metaRepository.findOne(id);
     } catch (error) {
       throw new InternalServerErrorException('Erro ao buscar Meta por id', error);
     }

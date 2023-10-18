@@ -6,8 +6,10 @@ import { CreateCampaignUseCase } from '../domain/use-cases/create-campaign.use-c
 import { UpdateCampaignUseCase } from '../domain/use-cases/update-campaign.use-case';
 import { DeleteCampaignUseCase } from '../domain/use-cases/delete-campaign.use-cases';
 import { FindCampaignUseCase } from '../domain/use-cases/find-campaign.use-cases';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
+  imports: [ConfigModule],
   controllers: [CampaignController],
   providers: [
     {

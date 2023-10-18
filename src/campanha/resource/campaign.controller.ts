@@ -27,7 +27,7 @@ import { UpdateCampaignUseCase } from '../domain/use-cases/update-campaign.use-c
 import { DeleteCampaignUseCase } from '../domain/use-cases/delete-campaign.use-cases';
 import { FindCampaignUseCase } from '../domain/use-cases/find-campaign.use-cases';
 import { ErrorResponseDto } from '../../auth/domain/dto/error-response.dto';
-import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
+import { AccessTokenGuard } from '../../auth/guards/access-token.guard';
 
 @ApiTags('campaign')
 @ApiBearerAuth()
@@ -150,15 +150,7 @@ export class CampaignController {
         example: {
           error: true,
           list: {
-            tipo: 'Campanha Massas Março',
-            dias: ['Segunda-Feira', 'Terça-Feira'],
-            horario_inicial: '2023-12-01T08:00:00Z',
-            horario_final: '2023-12-10T16:00:00Z',
-            limite_corridas_ignoradas: 5,
-            limite_corridas_recusadas: 5,
-            tempo_de_tolerancia: '2023-12-01T08:10:00Z',
-            descricao:
-              'Participe da campanha de massas de Março e obtenha bônus por entrega!',
+            tipo: 'This is a very long campaign name that should definitely fail validation',
           },
           code: 1011,
           message: 'Erro ao criar Campanha',
@@ -167,7 +159,7 @@ export class CampaignController {
     },
   })
   async create(@Body() input: CreateCampaignDto) {
-    return this.createCampaignUseCase.create(input);
+    return await this.createCampaignUseCase.create(input);
   }
 
   @Put(':id')
@@ -202,7 +194,7 @@ export class CampaignController {
     description: 'Dados para atualização da campanha',
   })
   async update(@Param('id') id: string, @Body() input: UpdateCampaignDto) {
-    return this.updateCampaignUseCase.update(id, input);
+    return await this.updateCampaignUseCase.update(id, input);
   }
 
   @Delete(':id')
@@ -223,7 +215,7 @@ export class CampaignController {
   })
   @ApiParam({ name: 'id', description: 'ID da campanha' })
   async delete(@Param('id') id: string) {
-    return this.deleteCampaignUseCase.delete(id);
+    return await this.deleteCampaignUseCase.delete(id);
   }
 
   @Get()
@@ -243,7 +235,7 @@ export class CampaignController {
     },
   })
   async findAll() {
-    return this.findCampaignUseCase.findAll();
+    return await this.findCampaignUseCase.findAll();
   }
 
   @UseGuards(AccessTokenGuard)
@@ -280,7 +272,6 @@ export class CampaignController {
   @ApiParam({ name: 'id', description: 'ID da campanha' })
   async findOne(@Req() req: Request, @Param('id') id: string) {
     const motoboyId = req['user'].sub;
-    console.log(motoboyId);
-    return this.findCampaignUseCase.findOne(id, motoboyId);
+    return await this.findCampaignUseCase.findOne(id, motoboyId);
   }
 }

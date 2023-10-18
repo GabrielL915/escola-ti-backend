@@ -7,7 +7,8 @@ import {
   IsInt,
   Length,
   Max,
-  IsBoolean,
+  ArrayNotEmpty,
+  ArrayUnique,
 } from 'class-validator';
 
 export class CreateCampaignDto {
@@ -16,9 +17,9 @@ export class CreateCampaignDto {
     example: 'Campanha Massas Março',
     type: String,
   })
-  @IsString()
-  @IsNotEmpty()
-  @Length(0, 30)
+  @IsString({ message: 'O tipo deve ser uma string.' })
+  @IsNotEmpty({ message: 'O tipo não pode estar vazio.' })
+  @Length(1, 30, { message: 'O tipo deve ter entre 1 e 30 caracteres.' })
   tipo: string;
 
   @ApiProperty({
@@ -26,25 +27,26 @@ export class CreateCampaignDto {
     example: ['Segunda-feira', 'Terça-feira', 'Quarta-feira'],
     type: String,
   })
-  @IsArray()
-  @IsNotEmpty()
+  @IsArray({ message: 'Os dias devem ser um array.' })
+  @ArrayNotEmpty({ message: 'O array de dias não pode estar vazio.' })
+  @ArrayUnique({ message: 'Os dias devem ser únicos.' })
   dias: Array<string>;
 
   @ApiProperty({
     description: 'Horário inicial em que a campanha começa todos os dias',
-    example: '2023-09-18T09:00:00Z',
+    example: '2023-09-18T09:00:00.000Z',
     type: String,
   })
-  @IsString()
+  @IsString({ message: 'O horário inicial deve ser uma string.' })
   @IsISO8601()
   horario_inicial: string;
 
   @ApiProperty({
     description: 'Horário final em que a campanha termina todos os dias',
-    example: '2023-09-18T17:00:00Z',
+    example: '2023-09-18T17:00:00.000Z',
     type: String,
   })
-  @IsString()
+  @IsString({ message: 'O horário final deve ser uma string.' })
   @IsISO8601()
   horario_final: string;
 
@@ -54,9 +56,15 @@ export class CreateCampaignDto {
     example: 3,
     type: Number,
   })
-  @IsInt()
-  @IsNotEmpty()
-  @Max(9999)
+  @IsInt({
+    message: 'O limite de corridas ignoradas deve ser um número inteiro.',
+  })
+  @IsNotEmpty({
+    message: 'O limite de corridas ignoradas não pode estar vazio.',
+  })
+  @Max(9999, {
+    message: 'O limite de corridas ignoradas deve ser no máximo 9999.',
+  })
   limite_corridas_ignoradas: number;
 
   @ApiProperty({
@@ -65,18 +73,24 @@ export class CreateCampaignDto {
     example: 2,
     type: Number,
   })
-  @IsInt()
-  @IsNotEmpty()
-  @Max(9999)
+  @IsInt({
+    message: 'O limite de corridas recusadas deve ser um número inteiro.',
+  })
+  @IsNotEmpty({
+    message: 'O limite de corridas recusadas não pode estar vazio.',
+  })
+  @Max(9999, {
+    message: 'O limite de corridas recusadas deve ser no máximo 9999.',
+  })
   limite_corridas_recusadas: number;
 
   @ApiProperty({
     description:
       'Tempo (em minutos) que o entregador tem de tolerância para atrasos',
-    example: '2023-09-18T09:15:00Z',
+    example: '2023-09-18T09:15:00.000Z',
     type: String,
   })
-  @IsString()
+  @IsString({ message: 'O tempo de tolerância deve ser uma string.' })
   @IsISO8601()
   tempo_de_tolerancia: string;
 
@@ -86,8 +100,8 @@ export class CreateCampaignDto {
       'Participe da campanha de massas de Março e obtenha bônus por entrega!',
     type: String,
   })
-  @IsString()
-  @IsNotEmpty()
-  @Length(0, 500)
+  @IsString({ message: 'A descrição deve ser uma string.' })
+  @IsNotEmpty({ message: 'A descrição não pode estar vazia.' })
+  @Length(1, 500, { message: 'A descrição deve ter entre 1 e 500 caracteres.' })
   descricao: string;
 }

@@ -7,7 +7,7 @@ export class DeleteMetaUseCase {
 
   async delete(id: string): Promise<void> {
     try {
-      return this.metaRepository.delete(id);
+      return await this.metaRepository.delete(id);
     } catch (error) {
       throw new InternalServerErrorException('Erro ao deletar Meta', error);
     }
