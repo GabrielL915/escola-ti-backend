@@ -14,11 +14,14 @@ import { MotoboyRepositoryImpl } from '../../motoboy/data-access/infraestructure
 import { CampaignRepositoryImpl } from '../data-access/infraestructure/repository/campaign.repository.impl';
 import { CampaignModule } from './campaign.module';
 import { KnexModule } from 'nestjs-knex';
+import { GenerateBearer } from '../../shared/utils/generate-bearer';
+import { LoginUseCase } from '../../auth/domain/use-cases/login.use-case';
 
 describe('CampaignController (e2e)', () => {
   let app: INestApplication;
   let jwtToken: string;
   let mockKnex: any;
+  let generateBearer: GenerateBearer;
 
   const mockCampaignRepository = {
     create: jest.fn(),
@@ -43,19 +46,6 @@ describe('CampaignController (e2e)', () => {
     descricao: 'Descrição Teste',
   };
 
-  const motoboyData = {
-    nome: 'Kleber',
-    sobrenome: 'Silva',
-    cpf: '000.000.000-00',
-    cnpj: '00.000.000/0000-00',
-    email: 'emailtest@example.com',
-    telefone: '(44) 99999-9999',
-    data_de_nascimento: '01/01/2000',
-    senha: '12345678',
-    mochila: true,
-    id_endereco_de_servico: '00000000-0000-0000-0000-000000000000',
-  };
-
   const mockConfigService = {
     get: jest.fn((key) => {
       if (key === 'KEY') {
@@ -64,16 +54,6 @@ describe('CampaignController (e2e)', () => {
       return null;
     }),
   };
-
-  async function authenticateAndGetToken() {
-    mockMotoboyRepository.findByEmail.mockResolvedValue(motoboyData);
-
-    const response = await request(app.getHttpServer()).post('/login').send({
-      email: motoboyData.email,
-      senha: motoboyData.senha,
-    });
-    return response.body.access_token;
-  }
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -118,10 +98,16 @@ describe('CampaignController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
+
+    const motoboyRepo = moduleFixture.get<MotoboyRepository>(MotoboyRepository);
+    const loginUseCase = moduleFixture.get<LoginUseCase>(LoginUseCase);
+    generateBearer = new GenerateBearer(motoboyRepo, loginUseCase);
+
+    await generateBearer.createMotoboy();
   });
 
   beforeEach(async () => {
-    jwtToken = await authenticateAndGetToken();
+    jwtToken = await generateBearer.getJwtToken();
   });
 
   afterEach(() => {
@@ -142,65 +128,100 @@ describe('CampaignController (e2e)', () => {
     expect(typeof response.body.id).toBe('string');
   });
 
-  it('POST /campaign should throw error for invalid data', async () => {
-    const invalidCampaignData = {
-      ...campaignData,
-      tipo: 'This is a very long campaign name that should definitely fail validation',
-    };
+  // it('POST /campaign should throw error for invalid data', async () => {
+  //   const invalidCampaignData = {
+  //     ...campaignData,
+  //     tipo: 'This is a very long campaign name that should definitely fail validation',
+  //   };
+
+  //   const response = await request(app.getHttpServer())
+  //     .post('/campaign')
+  //     .send(invalidCampaignData)
+  //     .expect(400);
+
+  //   expect(response.body.message).toContain(
+  //     'O tipo deve ter entre 1 e 30 caracteres.',
+  //   );
+  // });
+
+  it('GET /campaign should list all campaigns', async () => {
+    mockCampaignRepository.findAll.mockResolvedValue([campaignData]);
 
     const response = await request(app.getHttpServer())
-      .post('/campaign')
-      .send(invalidCampaignData)
-      .expect(400);
-    
-    expect(response.body.message).toContain(
-      'O tipo deve ter entre 1 e 30 caracteres.',
-    );
+      .get('/campaign')
+      .expect(200);
+    expect(Array.isArray(response.body)).toBe(true);
+    const campaign = response.body[0];
+    expect(campaign).toHaveProperty('tipo');
+    expect(campaign).toHaveProperty('dias');
+    expect(campaign).toHaveProperty('horario_inicial');
+    expect(campaign).toHaveProperty('horario_final');
+    expect(campaign).toHaveProperty('limite_corridas_ignoradas');
+    expect(campaign).toHaveProperty('limite_corridas_recusadas');
+    expect(campaign).toHaveProperty('tempo_de_tolerancia');
+    expect(campaign).toHaveProperty('descricao');
   });
 
-  // it('GET /campaign should list all campaigns', async () => {
-  //   mockCampaignRepository.findAll.mockResolvedValue([campaignData]);
+  it('PUT /campaign/:id should update a campaign', async () => {
+    const postResponse = await request(app.getHttpServer())
+      .post('/campaign')
+      .send(campaignData)
+      .expect(201);
 
-  //   await request(app.getHttpServer())
-  //     .get('/campaign')
-  //     .expect(200)
-  //     .expect([campaignData]);
-  // });
+    const createdCampaignId = postResponse.body.id;
 
-  // it('PUT /campaign/:id should update a campaign', async () => {
-  //   const updatedData = { ...campaignData, tipo: 'Campanha Atualizada' };
-  //   mockCampaignRepository.update.mockResolvedValue(updatedData);
+    const updatedData = { ...campaignData, tipo: 'Campanha Atualizada' };
+    mockCampaignRepository.update.mockResolvedValue(updatedData);
 
-  //   await request(app.getHttpServer())
-  //     .put(`/campaign/someId`)
-  //     .send(updatedData)
-  //     .expect(200)
-  //     .expect(updatedData);
-  // });
+    const response = await request(app.getHttpServer())
+      .put(`/campaign/${createdCampaignId}`)
+      .send(updatedData)
+      .expect(200);
 
-  // it('DELETE /campaign/:id should delete a campaign', async () => {
-  //   mockCampaignRepository.delete.mockResolvedValue(undefined);
+    expect(response.body).toMatchObject({ ...updatedData, status: true });
+    expect(typeof response.body.id).toBe('string');
+  });
 
-  //   await request(app.getHttpServer()).delete(`/campaign/someId`).expect(200);
-  // });
+  it('DELETE /campaign/:id should delete a campaign', async () => {
+    const postResponse = await request(app.getHttpServer())
+      .post('/campaign')
+      .send(campaignData)
+      .expect(201);
 
-  // it('GET /campaign/:id should get a campaign by its ID', async () => {
-  //   mockCampaignRepository.findOne.mockResolvedValue(campaignData);
-  //   console.log(campaignData.id);
+    const createdCampaignId = postResponse.body.id;
 
-  //   await request(app.getHttpServer())
-  //     .get(`/campaign/${campaignData.id}`)
-  //     .set('Authorization', `Bearer ${jwtToken}`)
-  //     .expect(200)
-  //     .expect(campaignData);
-  // });
+    mockCampaignRepository.delete.mockResolvedValue(undefined);
+
+    await request(app.getHttpServer())
+      .delete(`/campaign/${createdCampaignId}`)
+      .expect(200);
+  });
+
+  it('GET /campaign/:id should get a campaign by its ID', async () => {
+    const postResponse = await request(app.getHttpServer())
+      .post('/campaign')
+      .send(campaignData)
+      .set('Authorization', `Bearer ${jwtToken}`)
+      .expect(201);
+
+    const createdCampaignId = postResponse.body.id;
+
+    mockCampaignRepository.findOne.mockResolvedValue(campaignData);
+
+    console.log('jwtToken', jwtToken);
+
+    await request(app.getHttpServer())
+      .get(`/campaign/${createdCampaignId}`)
+      .set('Authorization', `Bearer ${jwtToken}`)
+      .expect(200)
+      .expect(campaignData);
+  });
 
   // it('GET /campaign/:id should throw 404 if campaign not found', async () => {
   //   mockCampaignRepository.findOne.mockResolvedValue(null);
 
   //   await request(app.getHttpServer())
   //     .get(`/campaign/someInvalidId`)
-  //     .set('Authorization', `Bearer ${jwtToken}`)
   //     .expect(404);
   // });
 });

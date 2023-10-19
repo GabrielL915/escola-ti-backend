@@ -7,9 +7,10 @@ import { UpdateCampaignUseCase } from '../domain/use-cases/update-campaign.use-c
 import { DeleteCampaignUseCase } from '../domain/use-cases/delete-campaign.use-cases';
 import { FindCampaignUseCase } from '../domain/use-cases/find-campaign.use-cases';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from '../../auth/resource/auth.module';
 
 @Module({
-  imports: [ConfigModule],
+  imports: [ConfigModule, AuthModule],
   controllers: [CampaignController],
   providers: [
     {
