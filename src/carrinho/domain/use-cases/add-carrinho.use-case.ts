@@ -38,7 +38,7 @@ export class AddCarrinhoUseCase {
       throw new Error('Quantidade indisponível');
     }
 
-    const idCarrinho = await this.carrinhoRepository.findById(id_motoboy);
+    const idCarrinho = await this.carrinhoRepository.findByIdMotoboy(id_motoboy);
 
     await this.createItemCarrinho.create({
       id_produto: id_product,

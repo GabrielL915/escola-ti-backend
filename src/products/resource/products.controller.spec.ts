@@ -179,17 +179,17 @@ describe('ProductsController (e2e)', () => {
       nome: 'atualizado',
       descricao: 'descricao atualizada',
       valor: 1000,
-      quantidade: 0,
-      status: false,
+      quantidade: 20,
+
     };
 
     const response = await request(app.getHttpServer())
-      .patch('/products/396dc7c9-e599-49b0-a1b9-30dbad3e211c')
+      .patch('/products/2f5ef218-063a-4b5e-b695-3fe97071c706')
       .field('nome', updateProductDto.nome)
       .field('valor', updateProductDto.valor)
       .field('descricao', updateProductDto.descricao)
       .field('quantidade', updateProductDto.quantidade)
-      .field('status', updateProductDto.status)
+   /*    .field('status', updateProductDto.status) */
       .attach('image', 'test/assets/moscando.jpg');
       console.log(response.body);
     expect(response.status).toBe(200);

@@ -9,8 +9,11 @@ import { CarrinhoRepositoryImpl } from '../data-access/infraestructure/repositor
 import { CarrinhoRepository } from '../domain/repository/carrinho.repository';
 import { ProductsModule } from '../../products/resource/products.module';
 import { ItemCarrinhoModule } from 'src/item-carrinho/resource/item-carrinho.module';
+import { CARRINHO_FIND_ITENS_BY_ID_PROVIDER } from 'src/shared/constants/injection-tokens';
+import { StockModule } from 'src/stock/resource/stock.module';
+
 @Module({
-  imports: [ProductsModule, ItemCarrinhoModule],
+  imports: [ProductsModule, ItemCarrinhoModule, StockModule],
   controllers: [CarrinhoController],
   providers: [
     CreateCarrinhoUseCase,
@@ -22,6 +25,10 @@ import { ItemCarrinhoModule } from 'src/item-carrinho/resource/item-carrinho.mod
       provide: CarrinhoRepository,
       useClass: CarrinhoRepositoryImpl,
     },
+    {
+      provide: CARRINHO_FIND_ITENS_BY_ID_PROVIDER,
+      useClass: FindItensCarrinhoUseCase,
+    }
   ],
 })
 export class CarrinhoModule {}

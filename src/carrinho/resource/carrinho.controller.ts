@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  Put,
 } from '@nestjs/common';
 import { CreateCarrinhoDto } from '../domain/dto/create-carrinho.dto';
 import { UpdateCarrinhoDto } from '../domain/dto/update-carrinho.dto';
@@ -40,7 +41,7 @@ export class CarrinhoController {
   @UseGuards(AccessTokenGuard)
   findItensCarrinho(@Req() req: Request) {
     const id_motoboy = req['user'].sub;
-    return this.findItensCarrinhoUseCase.findItensCarrinho(id_motoboy);
+    return this.findItensCarrinhoUseCase.findById(id_motoboy);
   }
 
   @Delete(':id')
@@ -51,15 +52,15 @@ export class CarrinhoController {
   @UseGuards(AccessTokenGuard)
   @Patch('add/:id')
   add(
-    @Param('id') id: string,
+    @Param('id') id_produto: string,
     @Req() req: Request,
     @Body() input: AddCarrinhoDto,
   ) {
     const id_motoboy = req['user'].sub;
-    return this.addCarrinhoUseCase.addCarrinho(id, id_motoboy, input);
+    return this.addCarrinhoUseCase.addCarrinho(id_produto, id_motoboy, input);
   }
 
-  @Patch('finish/:id')
+  @Put('finish/:id')
   finish(@Param('id') id: string) {
     return this.finishCompraCarrinhoUseCase.finishCompra(id);
   }

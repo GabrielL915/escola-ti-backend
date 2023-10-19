@@ -32,10 +32,14 @@ export class CarrinhoRepositoryImpl implements CarrinhoRepository {
   /*   finishCompra(input: any) {
     throw new Error('Method not implemented.');
   } */
-  async findById(id: string): Promise<Carrinho> {
+  async findByIdMotoboy(id: string): Promise<Carrinho> {
     const [cart] = await this.knex('carrinho')
       .select('*')
       .where({ id_entregador: id, status: true });
+    return cart;
+  }
+  async findById(id: string): Promise<Carrinho> {
+    const [cart] = await this.knex('carrinho').select('*').where({ id });
     return cart;
   }
   delete(id: string): Promise<void> {

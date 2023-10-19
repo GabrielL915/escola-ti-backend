@@ -7,8 +7,9 @@ import {
   PRODUCTS_FIND_BY_ID_PROVIDER,
 } from '../../../shared/constants/injection-tokens';
 import { ItemCarrinho } from 'src/item-carrinho/domain/entities/item-carrinho.entity';
+import { FindItensCarrinhoResponseDto } from '../dto/find-itens-carrinho-response.dto';
 @Injectable()
-export class FindItensCarrinhoUseCase {
+export class FindItensCarrinhoUseCase implements IFindById<FindItensCarrinhoResponseDto> {
   constructor(
     private readonly carrinhoRepository: CarrinhoRepository,
     @Inject(ITEM_CARRINHO_FIND_ALL_BY_ID_PROVIDER)
@@ -17,8 +18,8 @@ export class FindItensCarrinhoUseCase {
     private readonly products: IFindById<any>,
   ) {}
 
-  async findItensCarrinho(id_motoboy: string) {
-    const carrinho = await this.carrinhoRepository.findById(id_motoboy);
+  async findById(id_motoboy: string): Promise<FindItensCarrinhoResponseDto> {
+    const carrinho = await this.carrinhoRepository.findByIdMotoboy(id_motoboy);
     const itensCarrinho = await this.findAllById.findAllById(carrinho.id);
     const itens = [];
 
@@ -33,6 +34,6 @@ export class FindItensCarrinhoUseCase {
         url: product.imagem.url,
       });
     }
-    return { valor_total: carrinho.valor_total, itens };
+    return { id: carrinho.id, valor_total: carrinho.valor_total, itens };
   }
 }
