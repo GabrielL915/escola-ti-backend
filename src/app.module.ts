@@ -14,7 +14,7 @@ import { CloudinaryModule } from './cloudinary/resource/cloudinary.module';
 import { ImagensModule } from './imagens/resource/imagens.module';
 import { StockModule } from './stock/resource/stock.module';
 import { CarrinhoModule } from './carrinho/resource/carrinho.module';
-import { ItemCarrinhoModule } from './item-carrinho/item-carrinho.module';
+import { ItemCarrinhoModule } from './item-carrinho/resource/item-carrinho.module';
 
 
 @Module({

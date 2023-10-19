@@ -1,6 +1,7 @@
 export interface Carrinho {
   id: string;
   id_entregador: string;
-  valor: number;
+  valor_total: number;
   status: boolean;
+  data_de_compra: string;
 }

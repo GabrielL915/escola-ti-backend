@@ -1,18 +1,18 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ItemCarrinhoService } from './item-carrinho.service';
-import { CreateItemCarrinhoDto } from './dto/create-item-carrinho.dto';
-import { UpdateItemCarrinhoDto } from './dto/update-item-carrinho.dto';
+import { CreateItemCarrinhoDto } from '../domain/dto/create-item-carrinho.dto';
+import { UpdateItemCarrinhoDto } from '../domain/dto/update-item-carrinho.dto';
+import { CreateItemCarrinhoUseCase } from '../domain/use-cases/create-item-carrinho.use-case';
 
 @Controller('item-carrinho')
 export class ItemCarrinhoController {
-  constructor(private readonly itemCarrinhoService: ItemCarrinhoService) {}
+  constructor(private readonly createItemCarrinhoUseCase: CreateItemCarrinhoUseCase) {}
 
   @Post()
   create(@Body() createItemCarrinhoDto: CreateItemCarrinhoDto) {
-    return this.itemCarrinhoService.create(createItemCarrinhoDto);
+    return this.createItemCarrinhoUseCase.create(createItemCarrinhoDto);
   }
 
-  @Get()
+/*   @Get()
   findAll() {
     return this.itemCarrinhoService.findAll();
   }
@@ -30,5 +30,5 @@ export class ItemCarrinhoController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.itemCarrinhoService.remove(+id);
-  }
+  } */
 }
