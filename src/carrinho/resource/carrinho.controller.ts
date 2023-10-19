@@ -14,6 +14,7 @@ import { UpdateCarrinhoDto } from '../domain/dto/update-carrinho.dto';
 import { AddCarrinhoDto } from '../domain/dto/add-carrinho.dto';
 import { CreateCarrinhoUseCase } from '../domain/use-cases/create-carrinho.use-case';
 import { AddCarrinhoUseCase } from '../domain/use-cases/add-carrinho.use-case';
+import { FindItensCarrinhoUseCase } from '../domain/use-cases/find-item-by-id-carrinho.use-case';
 import { FinishCompraCarrinhoUseCase } from '../domain/use-cases/finish-compra-carrinho.use-case';
 import { DeleteCarrinhoUseCase } from '../domain/use-cases/delete-carrinho.use-case';
 import { AccessTokenGuard } from '../../auth/guards/access-token.guard';
@@ -23,6 +24,7 @@ export class CarrinhoController {
   constructor(
     private readonly createCarrinhoUseCase: CreateCarrinhoUseCase,
     private readonly addCarrinhoUseCase: AddCarrinhoUseCase,
+    private readonly findItensCarrinhoUseCase: FindItensCarrinhoUseCase,
     private readonly finishCompraCarrinhoUseCase: FinishCompraCarrinhoUseCase,
     private readonly deleteCarrrinhoUseCase: DeleteCarrinhoUseCase,
   ) {}
@@ -32,6 +34,13 @@ export class CarrinhoController {
   create(@Req() req: Request) {
     const id_motoboy = req['user'].sub;
     return this.createCarrinhoUseCase.create(id_motoboy);
+  }
+
+  @Get('itens')
+  @UseGuards(AccessTokenGuard)
+  findItensCarrinho(@Req() req: Request) {
+    const id_motoboy = req['user'].sub;
+    return this.findItensCarrinhoUseCase.findItensCarrinho(id_motoboy);
   }
 
   @Delete(':id')

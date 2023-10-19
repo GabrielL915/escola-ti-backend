@@ -11,9 +11,6 @@ export class CreateItemCarrinhoUseCase
   constructor(private itemCarrinhoRepository: ItemCarrinhoRepository) {}
 
   async create(input: CreateItemCarrinhoDto): Promise<ItemCarrinho> {
-    return {
-      id: 'id',
-      ...input,
-    }
+    return await this.itemCarrinhoRepository.create(input);
   }
 }

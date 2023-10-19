@@ -3,4 +3,5 @@ import { ItemCarrinho } from "../entities/item-carrinho.entity";
 
 export abstract class ItemCarrinhoRepository {
     abstract create(input: CreateItemCarrinhoDto): Promise<ItemCarrinho>;
+    abstract findAllById(idCarrinho: string): Promise<ItemCarrinho[]>;
 }

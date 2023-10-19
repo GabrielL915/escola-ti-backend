@@ -35,7 +35,7 @@ export class CarrinhoRepositoryImpl implements CarrinhoRepository {
   async findById(id: string): Promise<Carrinho> {
     const [cart] = await this.knex('carrinho')
       .select('*')
-      .where({ id_entregador: id });
+      .where({ id_entregador: id, status: true });
     return cart;
   }
   delete(id: string): Promise<void> {
