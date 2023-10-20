@@ -3,11 +3,14 @@ import { CarrinhoRepository } from '../repository/carrinho.repository';
 import { IFindById } from '../../../shared/interfaces/find-by-id.interface';
 import { IUpdate } from '../../../shared/interfaces/update.interface';
 import { Stock } from '../../../stock/domain/entities/stock.entity';
+import { Motoboy } from '../../../motoboy/domain/entities/motoboy.entity';
 import { UpdateStockDto } from '../../../stock/domain/dto/update-stock.dto';
 import {
   CARRINHO_FIND_ITENS_BY_ID_PROVIDER,
   STOCK_UPDATE_PROVIDER,
   STOCK_FIND_BY_ID_PROVIDER,
+  MOTOBOY_UPDATE_PROVIDER,
+  MOTOBOY_FIND_BY_ID_PROVIDER
 } from 'src/shared/constants/injection-tokens';
 import { FindItensCarrinhoResponseDto } from '../dto/find-itens-carrinho-response.dto';
 
@@ -21,6 +24,10 @@ export class FinishCompraCarrinhoUseCase {
     private readonly updateStock: IUpdate<UpdateStockDto, Stock>,
     @Inject(STOCK_FIND_BY_ID_PROVIDER)
     private readonly findByIdStock: IFindById<Stock>,
+    @Inject(MOTOBOY_UPDATE_PROVIDER)
+    private readonly updateMotoboy: IUpdate<any, Motoboy>,
+    @Inject(MOTOBOY_FIND_BY_ID_PROVIDER)
+    private readonly findByIdMotoboy: IFindById<Motoboy>
   ) {}
 
   async finishCompra(id: string) {
@@ -37,6 +44,15 @@ export class FinishCompraCarrinhoUseCase {
             quantidade: newStockQuantity,
         });
     }
+
+    const motoboy = await this.findByIdMotoboy.findById(carrinho.id_entregador);
+    const newAiqCoins = motoboy.aiqcoins - carrinho.valor_total;
+    if (newAiqCoins < 0) {
+        throw new Error('Saldo insuficiente de AiqCoins para o entregador ' + carrinho.id_entregador);
+    }
+    await this.updateMotoboy.update(carrinho.id_entregador, {
+        aiqcoins: newAiqCoins,
+    });
 
     const itens = itensCarrinho.itens.map((item) => ({
       id_produto: item.id_produto,

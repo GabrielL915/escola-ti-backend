@@ -7,9 +7,10 @@ import {
   Param,
   Delete,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { CreateMotoboyDto } from '../domain/dto/create-motoboy.dto';
-import { UpdateMotoboyDto } from '../domain/dto/update-motoboy.dto';
+import { UpdateMotoboyRequestDto } from '../domain/dto/update-motoboy-request.dto';
 import { CreateMotoboyUseCase } from '../domain/use-cases/create-motoboy.use-case';
 import { FindAllMotoboyUseCase } from '../domain/use-cases/find-all-motoboy.use-case';
 import { FindByIdMotoboyUseCase } from '../domain/use-cases/find-by-id-motoboy.use-case';
@@ -38,14 +39,16 @@ export class MotoboyController {
   }
 
   @UseGuards(AccessTokenGuard)
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Get('findOne')
+  findOne(@Req() req: Request) {
+    const id = req['user'].sub;
     return this.findByIdMotoboyUseCase.findById(id);
   }
 
   @UseGuards(AccessTokenGuard)
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() input: UpdateMotoboyDto) {
+  @Patch('update')
+  update(@Req() req: Request, @Body() input: UpdateMotoboyRequestDto) {
+    const id = req['user'].sub;
     return this.updateMotoboyUseCase.update( id, input );
   }
 }

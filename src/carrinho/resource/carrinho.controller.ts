@@ -60,7 +60,7 @@ export class CarrinhoController {
     return this.addCarrinhoUseCase.addCarrinho(id_produto, id_motoboy, input);
   }
 
-  @Put('finish/:id')
+  @Patch('finish/:id')
   finish(@Param('id') id: string) {
     return this.finishCompraCarrinhoUseCase.finishCompra(id);
   }

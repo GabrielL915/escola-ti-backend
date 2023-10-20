@@ -7,9 +7,14 @@ import { FindByEmailMotoboyUseCase } from '../domain/use-cases/find-by-email-mot
 import { UpdateMotoboyUseCase } from '../domain/use-cases/update-motoboy.use-case';
 import { MotoboyRepositoryImpl } from '../data-access/infraestructure/repostitory/motoboy.repository.impl';
 import { MotoboyRepository } from '../domain/repository/motoboy.repository';
-
+import { CityModule } from 'src/city/resource/city.module';
+import {
+  MOTOBOY_UPDATE_PROVIDER,
+  MOTOBOY_FIND_BY_ID_PROVIDER,
+} from '../../shared/constants/injection-tokens';
 
 @Module({
+  imports: [CityModule],
   controllers: [MotoboyController],
   providers: [
     CreateMotoboyUseCase,
@@ -21,7 +26,21 @@ import { MotoboyRepository } from '../domain/repository/motoboy.repository';
       provide: MotoboyRepository,
       useClass: MotoboyRepositoryImpl,
     },
+    {
+      provide: MOTOBOY_UPDATE_PROVIDER,
+      useClass: UpdateMotoboyUseCase,
+    },
+    {
+      provide: MOTOBOY_FIND_BY_ID_PROVIDER,
+      useClass: FindByIdMotoboyUseCase,
+    },
   ],
-  exports: [MotoboyRepository],
+  exports: [
+    MotoboyRepository,
+    UpdateMotoboyUseCase,
+    MOTOBOY_UPDATE_PROVIDER,
+    MOTOBOY_FIND_BY_ID_PROVIDER,
+    FindByIdMotoboyUseCase,
+  ],
 })
 export class MotoboyModule {}

@@ -23,14 +23,14 @@ export class FindItensCarrinhoUseCase implements IFindById<FindItensCarrinhoResp
     const itensCarrinho = await this.findAllById.findAllById(carrinho.id);
     const itens = [];
 
-    for (let i = 0; i < itensCarrinho.length; i++) {
-      const product = await this.products.findById(itensCarrinho[i].id_produto);
+    for (const element of itensCarrinho) {
+      const product = await this.products.findById(element.id_produto);
       itens.push({
-        id: itensCarrinho[i].id,
-        id_produto: itensCarrinho[i].id_produto,
+        id: element.id,
+        id_produto: element.id_produto,
         nome: product.nome,
-        quantidade: itensCarrinho[i].quantidade,
-        valor: itensCarrinho[i].valor,
+        quantidade: element.quantidade,
+        valor: element.valor,
         url: product.imagem.url,
       });
     }

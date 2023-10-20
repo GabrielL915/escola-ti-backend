@@ -2,7 +2,7 @@ import { Knex } from 'knex';
 import { InjectKnex } from 'nestjs-knex';
 import { Motoboy } from '../../../domain/entities/motoboy.entity';
 import { CreateMotoboyDto } from '../../../domain/dto/create-motoboy.dto';
-import { UpdateMotoboyDto } from '../../../domain/dto/update-motoboy.dto';
+import { UpdateMotoboyRequestDto } from '../../../domain/dto/update-motoboy-request.dto';
 import { MotoboyRepository } from '../../../domain/repository/motoboy.repository';
 import {
   InternalServerErrorException,
@@ -33,7 +33,7 @@ export class MotoboyRepositoryImpl implements MotoboyRepository {
   async findById(id: string): Promise<Motoboy> {
     const [motoboy] = await this.knex
       .from('entregador')
-      .select('email')
+      .select('*')
       .where({ id: id });
     if (!motoboy) {
       throw new NotFoundException('Entregador não encontrado');
@@ -63,7 +63,7 @@ export class MotoboyRepositoryImpl implements MotoboyRepository {
     return motoboy;
   }
 
-  async update(id: string, input: UpdateMotoboyDto): Promise<Motoboy> {
+  async update(id: string, input: UpdateMotoboyRequestDto): Promise<Motoboy> {
     try {
       const existingMotoboy = await this.knex('entregador')
         .where({ id: id })

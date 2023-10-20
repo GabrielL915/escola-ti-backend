@@ -11,9 +11,9 @@ import { ProductsModule } from '../../products/resource/products.module';
 import { ItemCarrinhoModule } from 'src/item-carrinho/resource/item-carrinho.module';
 import { CARRINHO_FIND_ITENS_BY_ID_PROVIDER } from 'src/shared/constants/injection-tokens';
 import { StockModule } from 'src/stock/resource/stock.module';
-
+import { MotoboyModule } from 'src/motoboy/resource/motoboy.module';
 @Module({
-  imports: [ProductsModule, ItemCarrinhoModule, StockModule],
+  imports: [ProductsModule, ItemCarrinhoModule, StockModule, MotoboyModule],
   controllers: [CarrinhoController],
   providers: [
     CreateCarrinhoUseCase,
