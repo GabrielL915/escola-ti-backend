@@ -31,7 +31,6 @@ export class RegisterUseCase {
         uf: uf,
       };
       const city = await this.cityRepository.create(inputCity);
-      console.log(city);
       const newRegister = {
         nome: input.nome,
         sobrenome: input.sobrenome,

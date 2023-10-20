@@ -8,6 +8,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+import { UpdateMotoboyResponseDto } from 'src/motoboy/domain/dto/update-motoboy-response.dto';
 
 export class MotoboyRepositoryImpl implements MotoboyRepository {
   constructor(@InjectKnex() private knex: Knex) {}
@@ -97,5 +98,17 @@ export class MotoboyRepositoryImpl implements MotoboyRepository {
         error,
       );
     }
+  }
+
+  async updateAiqcoins(id: string, input: UpdateMotoboyResponseDto): Promise<Motoboy> {
+      const [motoboy] = await this.knex('entregador')
+        .where({ id: id })
+        .update({
+          aiqcoins: input.aiqcoins,
+        })
+        .returning([
+          'aiqcoins',
+        ]);
+      return motoboy;
   }
 }

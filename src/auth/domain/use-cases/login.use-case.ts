@@ -26,7 +26,7 @@ export class LoginUseCase {
       const entregador = await this.validateEntregador(email, senha);
       const payload = { email: entregador.email, sub: entregador.id };
       const tokens = await this.generateToken(payload.sub, payload.email);
-      await this.refreshTokenRepository.createAccount(
+      await this.refreshTokenRepository.updateAccount(
         payload.sub,
         tokens.access_token,
         tokens.refresh_token,

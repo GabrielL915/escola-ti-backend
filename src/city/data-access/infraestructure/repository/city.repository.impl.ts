@@ -10,7 +10,6 @@ export class CityRepositoryImpl implements CityRepository {
 
   async create(input: CreateCityDto): Promise<City> {
     try {
-      console.log(input);
       const [city] = await this.knex('cidade')
         .insert({ cidade: input.city, uf: input.uf })
         .returning('*');
@@ -25,7 +24,7 @@ export class CityRepositoryImpl implements CityRepository {
 
   findByName(name: string): Promise<City> {
     try {
-      
+      console.log(name);
       return this.knex('cidade').where({ cidade: name }).first();
     } catch (error) {
       throw new InternalServerErrorException(

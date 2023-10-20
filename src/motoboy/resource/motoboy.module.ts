@@ -12,6 +12,7 @@ import {
   MOTOBOY_UPDATE_PROVIDER,
   MOTOBOY_FIND_BY_ID_PROVIDER,
 } from '../../shared/constants/injection-tokens';
+import { UpdateMotoboyAiqcoinsUseCase } from '../domain/use-cases/update-motoboy-aiqcoins.use-case';
 
 @Module({
   imports: [CityModule],
@@ -22,13 +23,14 @@ import {
     FindByIdMotoboyUseCase,
     FindByEmailMotoboyUseCase,
     UpdateMotoboyUseCase,
+    UpdateMotoboyAiqcoinsUseCase,
     {
       provide: MotoboyRepository,
       useClass: MotoboyRepositoryImpl,
     },
     {
       provide: MOTOBOY_UPDATE_PROVIDER,
-      useClass: UpdateMotoboyUseCase,
+      useClass: UpdateMotoboyAiqcoinsUseCase,
     },
     {
       provide: MOTOBOY_FIND_BY_ID_PROVIDER,
@@ -41,6 +43,7 @@ import {
     MOTOBOY_UPDATE_PROVIDER,
     MOTOBOY_FIND_BY_ID_PROVIDER,
     FindByIdMotoboyUseCase,
+    UpdateMotoboyAiqcoinsUseCase
   ],
 })
 export class MotoboyModule {}

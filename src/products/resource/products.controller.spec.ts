@@ -184,7 +184,7 @@ describe('ProductsController (e2e)', () => {
     };
 
     const response = await request(app.getHttpServer())
-      .patch('/products/2f5ef218-063a-4b5e-b695-3fe97071c706')
+      .patch('/products/f445c4e9-a0fd-4a9d-b051-30f1912ad579')
       .field('nome', updateProductDto.nome)
       .field('valor', updateProductDto.valor)
       .field('descricao', updateProductDto.descricao)

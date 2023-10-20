@@ -73,7 +73,6 @@ export class UpdateMotoboyResponseDto extends PartialType(CreateMotoboyDto) {
   })
   senha?: string;
 
-  @IsNotEmpty()
   @IsBoolean()
   @ApiProperty({
     description: 'Se o entregador possui mochila',
@@ -83,9 +82,16 @@ export class UpdateMotoboyResponseDto extends PartialType(CreateMotoboyDto) {
   })
   mochila?: boolean;
 
+  @IsNotEmpty()
+  @IsBoolean()
+  @ApiProperty({
+    description: 'Se o entregador está ativo',
+    example: true,
+    type: Boolean,
+    required: false,
+  })
   aiqcoins?: number;
 
-  @IsNotEmpty()
   @IsString()
   @ApiProperty({
     description: 'Id da cidade do entregador',

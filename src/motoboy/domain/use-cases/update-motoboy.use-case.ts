@@ -9,9 +9,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 @Injectable()
-export class UpdateMotoboyUseCase
-  implements IUpdate<UpdateMotoboyRequestDto, Motoboy>
-{
+export class UpdateMotoboyUseCase {
   constructor(
     private readonly motoboyRepository: MotoboyRepository,
     private readonly cityRepository: CityRepository,
