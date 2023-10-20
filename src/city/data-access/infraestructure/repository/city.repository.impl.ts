@@ -24,7 +24,6 @@ export class CityRepositoryImpl implements CityRepository {
 
   findByName(name: string): Promise<City> {
     try {
-      console.log(name);
       return this.knex('cidade').where({ cidade: name }).first();
     } catch (error) {
       throw new InternalServerErrorException(

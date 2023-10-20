@@ -9,7 +9,7 @@ import {
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateMotoboyDto } from './create-motoboy.dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { SmsDto } from 'src/auth/domain/dto/sms.dto';
+
 export class UpdateMotoboyResponseDto extends PartialType(CreateMotoboyDto) {
   @IsString()
   @MinLength(2)
@@ -44,15 +44,14 @@ export class UpdateMotoboyResponseDto extends PartialType(CreateMotoboyDto) {
   email?: string;
 
   @IsString()
-  @MaxLength(15)
-  @MinLength(15)
+  @MaxLength(13)
   @ApiProperty({
     description: 'Telefone do entregador',
     example: '(44) 99999-9999',
     type: String,
     required: true,
   })
-  telefone?: SmsDto['telefone'];
+  telefone?: string;
 
   @ApiProperty({
     description: 'Data de nascimento do entregador',
