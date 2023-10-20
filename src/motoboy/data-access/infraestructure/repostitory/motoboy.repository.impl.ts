@@ -15,6 +15,7 @@ export class MotoboyRepositoryImpl implements MotoboyRepository {
     const [motoboy] = await this.knex('entregador')
       .insert(input)
       .returning([
+        'id',
         'nome',
         'sobrenome',
         'email',

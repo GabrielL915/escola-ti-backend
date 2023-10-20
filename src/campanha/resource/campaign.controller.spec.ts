@@ -8,32 +8,19 @@ import { CreateCampaignUseCase } from '../domain/use-cases/create-campaign.use-c
 import { FindCampaignUseCase } from '../domain/use-cases/find-campaign.use-cases';
 import { UpdateCampaignUseCase } from '../domain/use-cases/update-campaign.use-case';
 import { MotoboyRepository } from '../../motoboy/domain/repository/motoboy.repository';
-import { AuthModule } from '../../auth/resource/auth.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { MotoboyRepositoryImpl } from '../../motoboy/data-access/infraestructure/repostitory/motoboy.repository.impl';
 import { CampaignRepositoryImpl } from '../data-access/infraestructure/repository/campaign.repository.impl';
 import { CampaignModule } from './campaign.module';
 import { KnexModule } from 'nestjs-knex';
 import { GenerateBearer } from '../../shared/utils/generate-bearer';
 import { LoginUseCase } from '../../auth/domain/use-cases/login.use-case';
+import { RegisterUseCase } from '../../auth/domain/use-cases/register.use-case';
 
 describe('CampaignController (e2e)', () => {
   let app: INestApplication;
   let jwtToken: string;
-  let mockKnex: any;
   let generateBearer: GenerateBearer;
-
-  const mockCampaignRepository = {
-    create: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
-    findAll: jest.fn(),
-    findOne: jest.fn(),
-  };
-
-  const mockMotoboyRepository = {
-    findByEmail: jest.fn(),
-  };
 
   const campaignData = {
     tipo: 'Teta',
@@ -44,15 +31,6 @@ describe('CampaignController (e2e)', () => {
     limite_corridas_recusadas: 2,
     tempo_de_tolerancia: '2023-09-18T09:15:00.000Z',
     descricao: 'Descrição Teste',
-  };
-
-  const mockConfigService = {
-    get: jest.fn((key) => {
-      if (key === 'KEY') {
-        return 'defaultSecretKeyForTests';
-      }
-      return null;
-    }),
   };
 
   beforeAll(async () => {
@@ -99,14 +77,9 @@ describe('CampaignController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     await app.init();
 
-    const motoboyRepo = moduleFixture.get<MotoboyRepository>(MotoboyRepository);
+    const motoboyRepo = moduleFixture.get<RegisterUseCase>(RegisterUseCase);
     const loginUseCase = moduleFixture.get<LoginUseCase>(LoginUseCase);
     generateBearer = new GenerateBearer(motoboyRepo, loginUseCase);
-
-    await generateBearer.createMotoboy();
-  });
-
-  beforeEach(async () => {
     jwtToken = await generateBearer.getJwtToken();
   });
 
@@ -128,38 +101,30 @@ describe('CampaignController (e2e)', () => {
     expect(typeof response.body.id).toBe('string');
   });
 
-  // it('POST /campaign should throw error for invalid data', async () => {
-  //   const invalidCampaignData = {
-  //     ...campaignData,
-  //     tipo: 'This is a very long campaign name that should definitely fail validation',
-  //   };
-
-  //   const response = await request(app.getHttpServer())
-  //     .post('/campaign')
-  //     .send(invalidCampaignData)
-  //     .expect(400);
-
-  //   expect(response.body.message).toContain(
-  //     'O tipo deve ter entre 1 e 30 caracteres.',
-  //   );
-  // });
-
   it('GET /campaign should list all campaigns', async () => {
-    mockCampaignRepository.findAll.mockResolvedValue([campaignData]);
-
     const response = await request(app.getHttpServer())
       .get('/campaign')
       .expect(200);
     expect(Array.isArray(response.body)).toBe(true);
-    const campaign = response.body[0];
-    expect(campaign).toHaveProperty('tipo');
-    expect(campaign).toHaveProperty('dias');
-    expect(campaign).toHaveProperty('horario_inicial');
-    expect(campaign).toHaveProperty('horario_final');
-    expect(campaign).toHaveProperty('limite_corridas_ignoradas');
-    expect(campaign).toHaveProperty('limite_corridas_recusadas');
-    expect(campaign).toHaveProperty('tempo_de_tolerancia');
-    expect(campaign).toHaveProperty('descricao');
+    const campaignFirst = response.body[0];
+    expect(campaignFirst).toHaveProperty('tipo');
+    expect(campaignFirst).toHaveProperty('dias');
+    expect(campaignFirst).toHaveProperty('horario_inicial');
+    expect(campaignFirst).toHaveProperty('horario_final');
+    expect(campaignFirst).toHaveProperty('limite_corridas_ignoradas');
+    expect(campaignFirst).toHaveProperty('limite_corridas_recusadas');
+    expect(campaignFirst).toHaveProperty('tempo_de_tolerancia');
+    expect(campaignFirst).toHaveProperty('descricao');
+
+    const campaignLast = response.body[-1];
+    expect(campaignLast).toHaveProperty('tipo');
+    expect(campaignLast).toHaveProperty('dias');
+    expect(campaignLast).toHaveProperty('horario_inicial');
+    expect(campaignLast).toHaveProperty('horario_final');
+    expect(campaignLast).toHaveProperty('limite_corridas_ignoradas');
+    expect(campaignLast).toHaveProperty('limite_corridas_recusadas');
+    expect(campaignLast).toHaveProperty('tempo_de_tolerancia');
+    expect(campaignLast).toHaveProperty('descricao');
   });
 
   it('PUT /campaign/:id should update a campaign', async () => {
@@ -171,7 +136,6 @@ describe('CampaignController (e2e)', () => {
     const createdCampaignId = postResponse.body.id;
 
     const updatedData = { ...campaignData, tipo: 'Campanha Atualizada' };
-    mockCampaignRepository.update.mockResolvedValue(updatedData);
 
     const response = await request(app.getHttpServer())
       .put(`/campaign/${createdCampaignId}`)
@@ -190,8 +154,6 @@ describe('CampaignController (e2e)', () => {
 
     const createdCampaignId = postResponse.body.id;
 
-    mockCampaignRepository.delete.mockResolvedValue(undefined);
-
     await request(app.getHttpServer())
       .delete(`/campaign/${createdCampaignId}`)
       .expect(200);
@@ -206,22 +168,24 @@ describe('CampaignController (e2e)', () => {
 
     const createdCampaignId = postResponse.body.id;
 
-    mockCampaignRepository.findOne.mockResolvedValue(campaignData);
-
-    console.log('jwtToken', jwtToken);
-
-    await request(app.getHttpServer())
+    const response = await request(app.getHttpServer())
       .get(`/campaign/${createdCampaignId}`)
       .set('Authorization', `Bearer ${jwtToken}`)
-      .expect(200)
-      .expect(campaignData);
+      .expect(200);
+
+    expect(response.body.tipo).toEqual(campaignData.tipo);
+    expect(response.body.dias).toEqual(campaignData.dias);
+    expect(response.body.horario_inicial).toEqual(campaignData.horario_inicial);
+    expect(response.body.horario_final).toEqual(campaignData.horario_final);
+    expect(response.body.limite_corridas_ignoradas).toEqual(
+      campaignData.limite_corridas_ignoradas,
+    );
+    expect(response.body.limite_corridas_recusadas).toEqual(
+      campaignData.limite_corridas_recusadas,
+    );
+    expect(response.body.tempo_de_tolerancia).toEqual(
+      campaignData.tempo_de_tolerancia,
+    );
+    expect(response.body.descricao).toEqual(campaignData.descricao);
   });
-
-  // it('GET /campaign/:id should throw 404 if campaign not found', async () => {
-  //   mockCampaignRepository.findOne.mockResolvedValue(null);
-
-  //   await request(app.getHttpServer())
-  //     .get(`/campaign/someInvalidId`)
-  //     .expect(404);
-  // });
 });

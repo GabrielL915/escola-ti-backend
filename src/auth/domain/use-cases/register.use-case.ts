@@ -31,7 +31,6 @@ export class RegisterUseCase {
         uf: uf,
       };
       const city = await this.cityRepository.create(inputCity);
-      console.log(city);
       const newRegister = {
         nome: input.nome,
         sobrenome: input.sobrenome,
@@ -48,6 +47,7 @@ export class RegisterUseCase {
       const motoboy = await this.motoboyRepository.create(newRegister);
       return motoboy;
     } catch (error) {
+      console.log(error);
       if (error.code === '23505') {
         throw new ConflictException('Registro já existe.', error);
       }

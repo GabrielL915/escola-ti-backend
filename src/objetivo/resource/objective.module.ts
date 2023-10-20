@@ -7,9 +7,11 @@ import { DeleteObjectiveUseCase } from '../domain/use-cases/delete-objective.use
 import { FindObjectiveUseCase } from '../domain/use-cases/find-objective.use-cases';
 import { ObjectiveController } from './objective.controller';
 import { ObjectiveRepository } from '../domain/repository/objective.repository';
+import { AuthModule } from '../../auth/resource/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [],
+  imports: [ConfigModule, AuthModule],
   controllers: [ObjectiveController],
   providers: [
     {

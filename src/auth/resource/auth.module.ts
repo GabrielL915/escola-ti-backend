@@ -37,6 +37,6 @@ import { CityModule } from '../../city/resource/city.module';
       useClass: RefreshTokenRepositoryImpl,
     },
   ],
-  exports: [SmsUseCase],
+  exports: [SmsUseCase, RegisterUseCase],
 })
 export class AuthModule {}
