@@ -33,7 +33,7 @@ export class UpdateMotoboyRequestDto extends PartialType(CreateMotoboyDto) {
   })
   sobrenome?: string;
 
-   @IsString()
+  @IsString()
   @MaxLength(14)
   @MinLength(14)
   @ApiProperty({
