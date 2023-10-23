@@ -2,6 +2,7 @@ import {
   IsBoolean,
   IsEmail,
   IsNotEmpty,
+  IsOptional,
   IsString,
   MaxLength,
   MinLength,
@@ -96,7 +97,7 @@ export class UpdateMotoboyRequestDto extends PartialType(CreateMotoboyDto) {
   })
   senha?: string;
 
-  @IsNotEmpty()
+
   @IsBoolean()
   @ApiProperty({
     description: 'Se o entregador possui mochila',
@@ -108,17 +109,7 @@ export class UpdateMotoboyRequestDto extends PartialType(CreateMotoboyDto) {
 
   aiqcoins?: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   cidade?: string;
-
-  /*   @IsNotEmpty()
-  @IsString()
-  @ApiProperty({
-    description: 'Id da cidade do entregador',
-    example: '00000000-0000-0000-0000-000000000000',
-    type: String,
-    required: true,
-  })
-  id_endereco_de_servico: string; */
 }
