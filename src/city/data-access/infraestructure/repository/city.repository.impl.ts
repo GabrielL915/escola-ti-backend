@@ -12,8 +12,19 @@ export class CityRepositoryImpl implements CityRepository {
     try {
       const [city] = await this.knex('cidade')
         .insert({ cidade: input.city, uf: input.uf })
-        .returning('id');
+        .returning('*');
       return city;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Erro interno ao tentar registrar no banco.',
+        error,
+      );
+    }
+  }
+
+  findByName(name: string): Promise<City> {
+    try {
+      return this.knex('cidade').where({ cidade: name }).first();
     } catch (error) {
       throw new InternalServerErrorException(
         'Erro interno ao tentar registrar no banco.',

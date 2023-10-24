@@ -10,7 +10,10 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor() {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: (req) => {
+        const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
+        return token;
+      },
       ignoreExpiration: false,
       secretOrKey: process.env.KEY,
     });
