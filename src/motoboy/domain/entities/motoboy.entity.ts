@@ -14,5 +14,5 @@ export interface Motoboy {
   ativo: boolean;
   token_dispositivo: string;
   entregas_realizadas: number;
-  id_endereco_de_servico: string;
+  cidade: string;
 }
