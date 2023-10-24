@@ -7,7 +7,7 @@ import { FindByEmailMotoboyUseCase } from '../domain/use-cases/find-by-email-mot
 import { UpdateMotoboyUseCase } from '../domain/use-cases/update-motoboy.use-case';
 import { MotoboyRepositoryImpl } from '../data-access/infraestructure/repostitory/motoboy.repository.impl';
 import { MotoboyRepository } from '../domain/repository/motoboy.repository';
-import { CityModule } from 'src/city/resource/city.module';
+import { CityModule } from '../../city/resource/city.module';
 import {
   MOTOBOY_UPDATE_PROVIDER,
   MOTOBOY_FIND_BY_ID_PROVIDER,
