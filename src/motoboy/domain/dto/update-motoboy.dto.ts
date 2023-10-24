@@ -121,5 +121,5 @@ export class UpdateMotoboyDto extends PartialType(CreateMotoboyDto) {
     type: String,
     required: true,
   })
-  id_endereco_de_servico: string;
+  cidade?: string;
 }
