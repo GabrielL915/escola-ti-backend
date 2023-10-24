@@ -9,10 +9,18 @@ import { MetaModule } from './meta/resource/meta.module';
 import { RegisteredModule } from './inscrito/resource/registered.module';
 import { CityModule } from './city/resource/city.module'
 import { MotoboyModule } from './motoboy/resource/motoboy.module';
+import { ProductsModule } from './products/resource/products.module';
+import { CloudinaryModule } from './cloudinary/resource/cloudinary.module';
+import { ImagensModule } from './imagens/resource/imagens.module';
+import { StockModule } from './stock/resource/stock.module';
+import { CarrinhoModule } from './carrinho/resource/carrinho.module';
+import { ItemCarrinhoModule } from './item-carrinho/resource/item-carrinho.module';
+
 
 @Module({
   imports: [
     AuthModule,
+    CloudinaryModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env'
@@ -38,7 +46,11 @@ import { MotoboyModule } from './motoboy/resource/motoboy.module';
     RegisteredModule,
     MotoboyModule,
     CityModule,
-    
+    ProductsModule,
+    ImagensModule,
+    StockModule,
+    CarrinhoModule,
+    ItemCarrinhoModule,
   ],
   controllers: [],
   providers: [],

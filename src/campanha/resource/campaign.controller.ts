@@ -28,7 +28,7 @@ import { UpdateCampaignUseCase } from '../domain/use-cases/update-campaign.use-c
 import { DeleteCampaignUseCase } from '../domain/use-cases/delete-campaign.use-cases';
 import { FindCampaignUseCase } from '../domain/use-cases/find-campaign.use-cases';
 import { ErrorResponseDto } from '../../auth/domain/dto/error-response.dto';
-import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
+import { AccessTokenGuard } from '../../auth/guards/access-token.guard';
 
 @ApiTags('campaign')
 @ApiBearerAuth()

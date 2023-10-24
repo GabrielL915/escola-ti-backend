@@ -31,7 +31,6 @@ export class RegisterUseCase {
         uf: uf,
       };
       const city = await this.cityRepository.create(inputCity);
-      console.log(city);
       const newRegister = {
         nome: input.nome,
         sobrenome: input.sobrenome,
@@ -43,7 +42,7 @@ export class RegisterUseCase {
         telefone: phoneWithoutMask,
         senha: hashedPassword,
         token_dispositivo: 'token-do-dispositivo',
-        id_endereco_de_servico: city.id,
+        cidade: input.cidade,
       };
       const motoboy = await this.motoboyRepository.create(newRegister);
       return motoboy;
