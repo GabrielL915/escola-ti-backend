@@ -43,7 +43,6 @@ import { UpdateStockUseCase } from '../../stock/domain/use-cases/update-stock.us
 
 describe('ProductsController (e2e)', () => {
   let app: INestApplication;
-  let id_
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -154,23 +153,18 @@ describe('ProductsController (e2e)', () => {
       .field('descricao', createProductDto.descricao)
       .field('quantidade', createProductDto.quantidade)
       .attach('image', 'test/assets/moscando.jpg');
-
     expect(response.status).toBe(201);
-    console.log(response.body);
   });
 
   it('should find all products', async () => {
     const response = await request(app.getHttpServer()).get('/products');
-
     expect(response.status).toBe(200);
-    console.log(response.body);
   });
 
   it('should find a product by id', async () => {
     const response = await request(app.getHttpServer()).get(
       '/products/2f5ef218-063a-4b5e-b695-3fe97071c706',
     );
-    console.log(response.body);
     expect(response.status).toBe(200);
   });
 
@@ -180,7 +174,6 @@ describe('ProductsController (e2e)', () => {
       descricao: 'descricao atualizada',
       valor: 1000,
       quantidade: 20,
-
     };
 
     const response = await request(app.getHttpServer())
@@ -189,18 +182,15 @@ describe('ProductsController (e2e)', () => {
       .field('valor', updateProductDto.valor)
       .field('descricao', updateProductDto.descricao)
       .field('quantidade', updateProductDto.quantidade)
-   /*    .field('status', updateProductDto.status) */
+      /*    .field('status', updateProductDto.status) */
       .attach('image', 'test/assets/moscando.jpg');
-      console.log(response.body);
     expect(response.status).toBe(200);
-
   });
 
   it('should delete a product', async () => {
     const response = await request(app.getHttpServer()).delete(
       '/products/c8fe1f8c-b50f-4374-80cc-369c5d5b5334',
     );
-
     expect(response.status).toBe(200);
   });
 });

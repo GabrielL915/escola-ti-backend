@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { CloudinaryUseCase } from '../../../cloudinary/domain/use-cases/cloudinary.use-case';
 import { ProductRepository } from '../repository/products.repository';
@@ -28,14 +28,23 @@ export class UpdateProductsUseCase {
     input: UpdateProductDto,
     image: Express.Multer.File,
   ) {
-    const product = await this.productRepository.update(id, {
-      nome: input.nome,
-      descricao: input.descricao,
-      valor: input.valor,
-    });
-    const stock = await this.stock.update(id, { quantidade: input.quantidade });
-    const imageUrl = await this.cloudinaryUseCase.uploadImage(image);
-    const imagem = await this.image.update(id, { url: imageUrl });
-    return { ...product, imagem: imageUrl, estoque: stock };
+    try {
+      const product = await this.productRepository.update(id, {
+        nome: input.nome,
+        descricao: input.descricao,
+        valor: input.valor,
+      });
+      const stock = await this.stock.update(id, {
+        quantidade: input.quantidade,
+      });
+      const imageUrl = await this.cloudinaryUseCase.uploadImage(image);
+      await this.image.update(id, { url: imageUrl });
+      return { ...product, imagem: imageUrl, estoque: stock };
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Erro ao atualizar produto',
+        error,
+      );
+    }
   }
 }
