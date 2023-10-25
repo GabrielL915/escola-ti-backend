@@ -93,8 +93,7 @@
       "!<rootDir>/app.module.ts",
       "!<rootDir>/main.ts",
       "!<rootDir>/motoboy/resource/motoboy.module.ts",
-      "!<rootDir>/auth/resource/auth.module.ts",
-      "!<rootDir>/city/resource/city.module.ts"
+      "!<rootDir>/auth/resource/auth.module.ts"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
@@ -102,8 +101,7 @@
       "<rootDir>/app.module.ts",
       "<rootDir>/main.ts",
       "<rootDir>/motoboy/resource/motoboy.module.ts",
-      "!<rootDir>/auth/resource/auth.module.ts",
-      "!<rootDir>/city/resource/city.module.ts"
+      "!<rootDir>/auth/resource/auth.module.ts"
     ]
   }
 }

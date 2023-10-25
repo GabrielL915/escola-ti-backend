@@ -7,7 +7,6 @@ import { SmsPhoneMiddleware } from './common/middleware/sms-phone.middleware';
 import { ConfigModule } from '@nestjs/config';
 import { MetaModule } from './meta/resource/meta.module';
 import { RegisteredModule } from './inscrito/resource/registered.module';
-import { CityModule } from './city/resource/city.module'
 import { MotoboyModule } from './motoboy/resource/motoboy.module';
 import { ProductsModule } from './products/resource/products.module';
 import { CloudinaryModule } from './cloudinary/resource/cloudinary.module';
@@ -45,7 +44,6 @@ import { ItemCarrinhoModule } from './item-carrinho/resource/item-carrinho.modul
     MetaModule,
     RegisteredModule,
     MotoboyModule,
-    CityModule,
     ProductsModule,
     ImagensModule,
     StockModule,
