@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateImagenDto } from '../dto/create-imagen.dto';
 import { Imagen } from '../entities/imagen.entity';
 import { ImagemRepository } from '../repository/imagem.repository';
@@ -9,6 +9,10 @@ export class CreateImagenUseCase implements ICreate<CreateImagenDto, Imagen> {
   constructor(private readonly imagenRepository: ImagemRepository) {}
 
   async create(input: CreateImagenDto) {
-    return await this.imagenRepository.create(input);
+    try {
+      return await this.imagenRepository.create(input);
+    } catch (error) {
+      throw new InternalServerErrorException('Erro ao salvar a imagem', error);
+    }
   }
 }

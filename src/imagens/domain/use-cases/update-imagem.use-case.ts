@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ImagemRepository } from '../repository/imagem.repository';
 import { IUpdate } from '../../../shared/interfaces/update.interface';
 import { UpdateImagenDto } from '../dto/update-imagen.dto';
@@ -9,6 +9,13 @@ export class UpdateImagemUseCase implements IUpdate<UpdateImagenDto, Imagen> {
   constructor(private readonly imagemRepository: ImagemRepository) {}
 
   async update(id: string, input: UpdateImagenDto) {
-    return await this.imagemRepository.update(id, input);
+    try {
+      return await this.imagemRepository.update(id, input);
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Erro ao atualizar a imagem',
+        error,
+      );
+    }
   }
 }

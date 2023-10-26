@@ -81,6 +81,7 @@ export class MotoboyRepositoryImpl implements MotoboyRepository {
           telefone: input.telefone,
           data_de_nascimento: input.data_de_nascimento,
           mochila: input.mochila,
+          cidade: input.cidade,
         })
         .returning([
           'nome',
@@ -89,6 +90,7 @@ export class MotoboyRepositoryImpl implements MotoboyRepository {
           'telefone',
           'data_de_nascimento',
           'mochila',
+          'cidade'
         ]);
       return motoboy;
     } catch (error) {
