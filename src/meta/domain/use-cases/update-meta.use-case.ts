@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Meta } from '../entities/meta.entity';
 import { MetaRepository } from '../repository/meta.repository';
-import { ObjectiveRepository } from 'src/objetivo/domain/repository/objective.repository';
+import { ObjectiveRepository } from '../../../objetivo/domain/repository/objective.repository';
 import { UpdateMetaDto } from '../dto/update-meta.dto';
 
 @Injectable()

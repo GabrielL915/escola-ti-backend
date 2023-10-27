@@ -1,7 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsNumber, Min } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsDate,
+  IsNumber,
+  Min,
+} from 'class-validator';
 
-export class CreateRegisteredDto {
+import { CreateSubscribeDto } from './create-subscribe.dto';
+
+export class UpdateSubscribeDto extends CreateSubscribeDto {
   @ApiProperty({
     description: 'ID do entregador',
     example: '1234-5678',
@@ -25,10 +33,8 @@ export class CreateRegisteredDto {
     example: '2023-09-21',
     type: String,
   })
-  /* @IsDate() */
+  @IsDate()
   @IsNotEmpty()
-  @IsString()
-  /*   @IsISO8601() */
   data_de_inscricao: string;
 
   @ApiProperty({

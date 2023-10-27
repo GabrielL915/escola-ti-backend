@@ -116,15 +116,15 @@ describe('CampaignController (e2e)', () => {
     expect(campaignFirst).toHaveProperty('tempo_de_tolerancia');
     expect(campaignFirst).toHaveProperty('descricao');
 
-    // const campaignLast = response.body[-1];
-    // expect(campaignLast).toHaveProperty('tipo');
-    // expect(campaignLast).toHaveProperty('dias');
-    // expect(campaignLast).toHaveProperty('horario_inicial');
-    // expect(campaignLast).toHaveProperty('horario_final');
-    // expect(campaignLast).toHaveProperty('limite_corridas_ignoradas');
-    // expect(campaignLast).toHaveProperty('limite_corridas_recusadas');
-    // expect(campaignLast).toHaveProperty('tempo_de_tolerancia');
-    // expect(campaignLast).toHaveProperty('descricao');
+    const campaignLast = response.body[response.body.length - 1];
+    expect(campaignLast).toHaveProperty('tipo');
+    expect(campaignLast).toHaveProperty('dias');
+    expect(campaignLast).toHaveProperty('horario_inicial');
+    expect(campaignLast).toHaveProperty('horario_final');
+    expect(campaignLast).toHaveProperty('limite_corridas_ignoradas');
+    expect(campaignLast).toHaveProperty('limite_corridas_recusadas');
+    expect(campaignLast).toHaveProperty('tempo_de_tolerancia');
+    expect(campaignLast).toHaveProperty('descricao');
   });
 
   it('PUT /campaign/:id should update a campaign', async () => {
@@ -137,13 +137,13 @@ describe('CampaignController (e2e)', () => {
 
     const updatedData = { ...campaignData, tipo: 'Campanha Atualizada' };
 
-    const response = await request(app.getHttpServer())
+    const putResponse = await request(app.getHttpServer())
       .put(`/campaign/${createdCampaignId}`)
       .send(updatedData)
       .expect(200);
 
-    expect(response.body).toMatchObject({ ...updatedData, status: true });
-    expect(typeof response.body.id).toBe('string');
+    expect(putResponse.body).toMatchObject({ ...updatedData, status: true });
+    expect(typeof putResponse.body.id).toBe('string');
   });
 
   it('DELETE /campaign/:id should delete a campaign', async () => {

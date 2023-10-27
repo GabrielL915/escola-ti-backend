@@ -4,15 +4,15 @@ import {
 } from '@nestjs/common';
 import { Knex } from 'knex';
 import { InjectKnex } from 'nestjs-knex';
-import { CreateRegisteredDto } from '../../../domain/dto/create-registered.dto';
-import { UpdateRegisteredDto } from '../../../domain/dto/update-registered.dto';
-import { Registered } from '../../../domain/entities/registered.entity';
-import { RegisteredRepository } from '../../../domain/repository/registered.repository';
+import { CreateSubscribeDto } from '../../../domain/dto/create-subscribe.dto';
+import { UpdateSubscribeDto } from '../../../domain/dto/update-subscribe.dto';
+import { Subscribe } from '../../../domain/entities/subscribe.entity';
+import { SubscribeRepository } from '../../../domain/repository/subscribe.repository';
 
-export class RegisteredRepositoryImpl implements RegisteredRepository {
+export class SubscribeRepositoryImpl implements SubscribeRepository {
   constructor(@InjectKnex() private readonly knex: Knex) {}
 
-  async create(input: CreateRegisteredDto): Promise<Registered> {
+  async create(input: CreateSubscribeDto): Promise<Subscribe> {
     try {
       const [registered] = await this.knex('inscrito')
         .insert(input)
@@ -20,19 +20,19 @@ export class RegisteredRepositoryImpl implements RegisteredRepository {
       return registered;
     } catch (error) {
       throw new InternalServerErrorException(
+        console.log(error),
         'Erro ao criar Inscrito no banco',
-        error,
       );
     }
   }
 
-  async update(id: string, input: UpdateRegisteredDto): Promise<Registered> {
+  async update(id: string, input: UpdateSubscribeDto): Promise<Subscribe> {
     try {
-      const [updatedRegistered] = await this.knex('inscrito')
+      const [updatedSubscribe] = await this.knex('inscrito')
         .where({ id })
         .update(input)
         .returning('*');
-      return updatedRegistered;
+      return updatedSubscribe;
     } catch (error) {
       throw new InternalServerErrorException(
         'Erro ao atualizar Inscrito no banco',
@@ -43,7 +43,7 @@ export class RegisteredRepositoryImpl implements RegisteredRepository {
 
   async delete(id: string): Promise<void> {
     try {
-      await this.knex('registered').where({ id }).del();
+      await this.knex('inscrito').where({ id }).del();
     } catch (error) {
       throw new InternalServerErrorException(
         'Erro ao deletar Inscrito no banco',
@@ -52,10 +52,10 @@ export class RegisteredRepositoryImpl implements RegisteredRepository {
     }
   }
 
-  async findAll(): Promise<Registered[]> {
+  async findAll(): Promise<Subscribe[]> {
     try {
-      const registereds = await this.knex('inscrito').select('*');
-      return registereds;
+      const subscribes = await this.knex('inscrito').select('*');
+      return subscribes;
     } catch (error) {
       throw new InternalServerErrorException(
         'Erro ao buscar Inscritos no banco',
@@ -64,13 +64,13 @@ export class RegisteredRepositoryImpl implements RegisteredRepository {
     }
   }
 
-  async findOne(id: string): Promise<Registered> {
+  async findOne(id: string): Promise<Subscribe> {
     try {
-      const [registered] = await this.knex('inscrito')
+      const [subscribe] = await this.knex('inscrito')
         .where({ id })
         .select('*');
-      if (!registered) throw new NotFoundException('Inscrito não encontrado');
-      return registered;
+      if (!subscribe) throw new NotFoundException('Inscrito não encontrado');
+      return subscribe;
     } catch (error) {
       throw new InternalServerErrorException(
         'Erro ao buscar Inscrito no banco',

@@ -6,7 +6,6 @@ import { AuthModule } from './auth/resource/auth.module';
 import { SmsPhoneMiddleware } from './common/middleware/sms-phone.middleware';
 import { ConfigModule } from '@nestjs/config';
 import { MetaModule } from './meta/resource/meta.module';
-import { RegisteredModule } from './inscrito/resource/registered.module';
 import { CityModule } from './city/resource/city.module'
 import { MotoboyModule } from './motoboy/resource/motoboy.module';
 import { ProductsModule } from './products/resource/products.module';
@@ -15,6 +14,7 @@ import { ImagensModule } from './imagens/resource/imagens.module';
 import { StockModule } from './stock/resource/stock.module';
 import { CarrinhoModule } from './carrinho/resource/carrinho.module';
 import { ItemCarrinhoModule } from './item-carrinho/resource/item-carrinho.module';
+import { SubscribeModule } from './inscrito/resource/subscribe.module';
 
 
 @Module({
@@ -43,7 +43,7 @@ import { ItemCarrinhoModule } from './item-carrinho/resource/item-carrinho.modul
     CampaignModule,
     ObjectiveModule,
     MetaModule,
-    RegisteredModule,
+    SubscribeModule,
     MotoboyModule,
     CityModule,
     ProductsModule,
