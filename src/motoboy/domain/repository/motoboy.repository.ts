@@ -10,4 +10,5 @@ export abstract class MotoboyRepository {
   abstract profile(email: string): Promise<Motoboy>;
   abstract update(id: string, input: UpdateMotoboyResponseDto): Promise<Motoboy>;
   abstract updateAiqcoins(id: string, input: UpdateMotoboyResponseDto): Promise<Motoboy>;
+  abstract delete(id: string): Promise<void>;
 }

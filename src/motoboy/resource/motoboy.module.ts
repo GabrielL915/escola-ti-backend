@@ -5,6 +5,7 @@ import { FindAllMotoboyUseCase } from '../domain/use-cases/find-all-motoboy.use-
 import { FindByIdMotoboyUseCase } from '../domain/use-cases/find-by-id-motoboy.use-case';
 import { FindByEmailMotoboyUseCase } from '../domain/use-cases/find-by-email-motoboy.use-case';
 import { UpdateMotoboyUseCase } from '../domain/use-cases/update-motoboy.use-case';
+import { DeleteMotoboyUseCase } from '../domain/use-cases/delete-motoboy.use-case';
 import { MotoboyRepositoryImpl } from '../data-access/infraestructure/repostitory/motoboy.repository.impl';
 import { MotoboyRepository } from '../domain/repository/motoboy.repository';
 import {
@@ -23,6 +24,7 @@ import { UpdateMotoboyAiqcoinsUseCase } from '../domain/use-cases/update-motoboy
     FindByEmailMotoboyUseCase,
     UpdateMotoboyUseCase,
     UpdateMotoboyAiqcoinsUseCase,
+    DeleteMotoboyUseCase,
     {
       provide: MotoboyRepository,
       useClass: MotoboyRepositoryImpl,
