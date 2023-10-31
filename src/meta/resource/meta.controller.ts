@@ -4,8 +4,8 @@ import {
   Body,
   Get,
   Delete,
-  Param,
   Patch,
+  Query,
 } from '@nestjs/common';
 import { CreateMetaDto } from '../domain/dto/create-meta.dto';
 import { UpdateMetaDto } from '../domain/dto/update-meta.dto';
@@ -43,24 +43,45 @@ export class MetaController {
     return this.createMetaUseCase.create(input);
   }
 
-  @Patch(':id')
+  @Patch()
   @ApiOperation({ summary: 'Atualizar uma Meta existente' })
-  @ApiParam({ name: 'id', description: 'ID da Meta para atualizar' })
+  @ApiParam({
+    name: 'id_objetivo',
+    description: 'ID do Objetivo da Meta a ser atualizada',
+  })
+  @ApiParam({
+    name: 'id_inscrito',
+    description: 'ID do Inscrito da Meta a ser atualizada',
+  })
   @ApiBody({ type: UpdateMetaDto, description: 'Dados atualizados da Meta' })
   @ApiResponse({ status: 200, description: 'Meta atualizada com sucesso.' })
   @ApiResponse({ status: 404, description: 'Meta não encontrada.' })
   @ApiResponse({ status: 400, description: 'Entrada inválida.' })
-  async update(@Param('id') id: string, @Body() input: UpdateMetaDto) {
-    return this.updateMetaUseCase.update(id, input);
+  async update(
+    @Query('id_objetivo') idObjetivo: string,
+    @Query('id_inscrito') idInscrito: string,
+    @Body() input: UpdateMetaDto,
+  ) {
+    return this.updateMetaUseCase.update(idObjetivo, idInscrito, input);
   }
 
-  @Delete(':id')
+  @Delete()
   @ApiOperation({ summary: 'Excluir uma Meta' })
-  @ApiParam({ name: 'id', description: 'ID da Meta para excluir' })
+  @ApiParam({
+    name: 'id_objetivo',
+    description: 'ID do Objetivo da Meta a ser excluída',
+  })
+  @ApiParam({
+    name: 'id_inscrito',
+    description: 'ID do Inscrito da Meta a ser excluída',
+  })
   @ApiResponse({ status: 200, description: 'Meta excluída com sucesso.' })
   @ApiResponse({ status: 404, description: 'Meta não encontrada.' })
-  async delete(@Param('id') id: string) {
-    return this.deleteMetaUseCase.delete(id);
+  async delete(
+    @Query('id_objetivo') idObjetivo: string,
+    @Query('id_inscrito') idInscrito: string,
+  ) {
+    return this.deleteMetaUseCase.delete(idObjetivo, idInscrito);
   }
 
   @Get()
@@ -74,16 +95,26 @@ export class MetaController {
     return this.findMetaUseCase.findAll();
   }
 
-  @Get(':id')
+  @Get()
   @ApiOperation({ summary: 'Buscar uma Meta específica' })
-  @ApiParam({ name: 'id', description: 'ID da Meta a ser recuperada' })
+  @ApiParam({
+    name: 'id_objetivo',
+    description: 'ID do Objetivo da Meta a ser recuperada',
+  })
+  @ApiParam({
+    name: 'id_inscrito',
+    description: 'ID do Inscrito da Meta a ser recuperada',
+  })
   @ApiResponse({
     status: 200,
     description: 'Detalhes da Meta',
     type: CreateMetaDto,
   })
   @ApiResponse({ status: 404, description: 'Meta não encontrada.' })
-  async findOne(@Param('id') id: string) {
-    return this.findMetaUseCase.findOne(id);
+  async findOne(
+    @Query('id_objetivo') idObjetivo: string,
+    @Query('id_inscrito') idInscrito: string,
+  ) {
+    return this.findMetaUseCase.findOne(idObjetivo, idInscrito);
   }
 }

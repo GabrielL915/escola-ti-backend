@@ -9,7 +9,8 @@ export class CreateMetaUseCase {
 
   async create(input: CreateMetaDto): Promise<Meta> {
     try {
-      return await this.metaRepository.create(input);
+      const response = await this.metaRepository.create(input);
+      return response;
     } catch (error) {
       throw new InternalServerErrorException('Erro ao criar Meta', error);
     }

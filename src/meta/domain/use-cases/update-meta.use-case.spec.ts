@@ -3,14 +3,21 @@ import { UpdateMetaUseCase } from './update-meta.use-case';
 import { MetaRepository } from '../repository/meta.repository';
 import { InternalServerErrorException } from '@nestjs/common';
 import { UpdateMetaDto } from '../dto/update-meta.dto';
+import { ObjectiveRepository } from '../../../objetivo/domain/repository/objective.repository';
 
 describe('UpdateMetaUseCase', () => {
   let updateMetaUseCase: UpdateMetaUseCase;
   let mockMetaRepository: Partial<jest.Mocked<MetaRepository>>;
+  let mockObjectiveRepository: Partial<jest.Mocked<ObjectiveRepository>>;
 
   beforeEach(async () => {
     mockMetaRepository = {
       update: jest.fn(),
+    };
+    mockObjectiveRepository = {
+      findOne: jest.fn().mockResolvedValue({
+        meta: 0,
+      }),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -19,6 +26,10 @@ describe('UpdateMetaUseCase', () => {
         {
           provide: MetaRepository,
           useValue: mockMetaRepository,
+        },
+        {
+          provide: ObjectiveRepository,
+          useValue: mockObjectiveRepository,
         },
       ],
     }).compile();
@@ -31,7 +42,8 @@ describe('UpdateMetaUseCase', () => {
   });
 
   it('should throw InternalServerErrorException when metaRepository.update fails', async () => {
-    const mockMetaId = 'mockId';
+    const mockIdObjetivo = '1';
+    const mockIdInscrito = '1';
 
     mockMetaRepository.update.mockRejectedValueOnce(
       new Error('Erro ao atualizar meta'),
@@ -45,7 +57,7 @@ describe('UpdateMetaUseCase', () => {
     };
 
     await expect(
-      updateMetaUseCase.update(mockMetaId, mockMetaDto),
+      updateMetaUseCase.update(mockIdObjetivo, mockIdInscrito, mockMetaDto),
     ).rejects.toThrow(InternalServerErrorException);
   });
 });

@@ -1,9 +1,9 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { FindMetaUseCase } from "./find-meta.use-cases";
-import { MetaRepository } from "../repository/meta.repository";
-import { InternalServerErrorException } from "@nestjs/common";
+import { Test, TestingModule } from '@nestjs/testing';
+import { FindMetaUseCase } from './find-meta.use-cases';
+import { MetaRepository } from '../repository/meta.repository';
+import { InternalServerErrorException } from '@nestjs/common';
 
-describe("FindMetaUseCase", () => {
+describe('FindMetaUseCase', () => {
   let findMetaUseCase: FindMetaUseCase;
   let mockMetaRepository: Partial<jest.Mocked<MetaRepository>>;
 
@@ -26,29 +26,30 @@ describe("FindMetaUseCase", () => {
     findMetaUseCase = module.get<FindMetaUseCase>(FindMetaUseCase);
   });
 
-  it("should be defined", () => {
+  it('should be defined', () => {
     expect(findMetaUseCase).toBeDefined();
   });
 
-  it("should throw InternalServerErrorException when metaRepository.findAll fails", async () => {
+  it('should throw InternalServerErrorException when metaRepository.findAll fails', async () => {
     mockMetaRepository.findAll.mockRejectedValueOnce(
-      new Error("Erro ao buscar metas")
+      new Error('Erro ao buscar metas'),
     );
 
     await expect(findMetaUseCase.findAll()).rejects.toThrow(
-      InternalServerErrorException
+      InternalServerErrorException,
     );
   });
 
-  it("should throw InternalServerErrorException when metaRepository.findOne fails", async () => {
-    const mockMetaId = "mockId";
+  it('should throw InternalServerErrorException when metaRepository.findOne fails', async () => {
+    const mockIdObjetivo = 'mockObjetivoId';
+    const mockIdInscrito = 'mockInscritoId';
 
     mockMetaRepository.findOne.mockRejectedValueOnce(
-      new Error("Erro ao buscar meta por id")
+      new Error('Erro ao buscar meta por id'),
     );
 
-    await expect(findMetaUseCase.findOne(mockMetaId)).rejects.toThrow(
-      InternalServerErrorException
-    );
+    await expect(
+      findMetaUseCase.findOne(mockIdObjetivo, mockIdInscrito),
+    ).rejects.toThrow(InternalServerErrorException);
   });
 });

@@ -14,11 +14,11 @@ export class FindMetaUseCase {
     }
   }
 
-  async findOne(id: string): Promise<Meta> {
+  async findOne(idObjetivo: string, idInscrito: string): Promise<Meta> {
     try {
-      return await this.metaRepository.findOne(id);
+      return await this.metaRepository.findOne(idObjetivo, idInscrito);
     } catch (error) {
-      throw new InternalServerErrorException('Erro ao buscar Meta por id', error);
+      throw new InternalServerErrorException('Erro ao buscar Meta', error);
     }
   }
 }

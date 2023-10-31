@@ -1,9 +1,9 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { DeleteMetaUseCase } from "./delete-meta.use-cases";
-import { MetaRepository } from "../repository/meta.repository";
-import { InternalServerErrorException } from "@nestjs/common";
+import { Test, TestingModule } from '@nestjs/testing';
+import { DeleteMetaUseCase } from './delete-meta.use-cases';
+import { MetaRepository } from '../repository/meta.repository';
+import { InternalServerErrorException } from '@nestjs/common';
 
-describe("DeleteMetaUseCase", () => {
+describe('DeleteMetaUseCase', () => {
   let deleteMetaUseCase: DeleteMetaUseCase;
   let mockMetaRepository: Partial<jest.Mocked<MetaRepository>>;
 
@@ -25,19 +25,20 @@ describe("DeleteMetaUseCase", () => {
     deleteMetaUseCase = module.get<DeleteMetaUseCase>(DeleteMetaUseCase);
   });
 
-  it("should be defined", () => {
+  it('should be defined', () => {
     expect(deleteMetaUseCase).toBeDefined();
   });
 
-  it("should throw InternalServerErrorException when metaRepository.delete fails", async () => {
-    const mockMetaId = "mockId";
+  it('should throw InternalServerErrorException when metaRepository.delete fails', async () => {
+    const mockIdObjetivo = '1';
+    const mockIdInscrito = '1';
 
     mockMetaRepository.delete.mockRejectedValueOnce(
-      new Error("Erro ao deletar meta")
+      new Error('Erro ao deletar meta'),
     );
 
-    await expect(deleteMetaUseCase.delete(mockMetaId)).rejects.toThrow(
-      InternalServerErrorException
-    );
+    await expect(
+      deleteMetaUseCase.delete(mockIdObjetivo, mockIdInscrito),
+    ).rejects.toThrow(InternalServerErrorException);
   });
 });
