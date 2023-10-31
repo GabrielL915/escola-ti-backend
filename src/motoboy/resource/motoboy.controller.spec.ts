@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, forwardRef } from '@nestjs/common';
 import request from 'supertest';
 import { ConfigModule } from '@nestjs/config';
 import { KnexModule } from 'nestjs-knex';
@@ -18,34 +18,39 @@ import {
   MOTOBOY_UPDATE_PROVIDER,
   MOTOBOY_FIND_BY_ID_PROVIDER,
 } from '../../shared/constants/injection-tokens';
+import { GenerateBearer } from '../../shared/utils/generate-bearer';
+import { LoginUseCase } from '../../auth/domain/use-cases/login.use-case';
+import { AuthModule } from '../../auth/resource/auth.module';
+import { hashPassword } from '../../auth/utils/hash-password';
 
 enum UserInfoFields {
   cnpj = '00000000000100',
   cpf = '00000000000',
   nome = 'User0003',
   sobrenome = 'Sobrenome0003',
-  email = 'userSobrenome0003@gmail.com',
+  email = 'userSobre001@gmail.com',
   telefone = '00000000000',
-  token_dispositivo = "token_dispositivo",
+  token_dispositivo = 'token_dispositivo',
   data_de_nascimento = '05/09/2023',
   senha = 'senha123',
   mochila = 'true',
   cidade = 'Maringa',
 }
 
-
-
 describe('MotoboyController (e2e)', () => {
   let app: INestApplication;
-  let mockemail: string; 
+  let mockemail: string;
   let mocksenha: string;
   let mockid: string;
+  let jwtToken: string;
   let motoboyRepo: MotoboyRepository;
+  let generateBearer: GenerateBearer;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
         MotoboyModule,
+        forwardRef(() => AuthModule),
         ConfigModule.forRoot({
           isGlobal: true,
           envFilePath: '.env',
@@ -93,6 +98,8 @@ describe('MotoboyController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     await app.init();
     motoboyRepo = moduleFixture.get<MotoboyRepository>(MotoboyRepository);
+    const loginUseCase = moduleFixture.get<LoginUseCase>(LoginUseCase);
+    generateBearer = new GenerateBearer(loginUseCase);
   });
 
   afterAll(async () => {
@@ -113,16 +120,44 @@ describe('MotoboyController (e2e)', () => {
         email: UserInfoFields.email,
         data_de_nascimento: UserInfoFields.data_de_nascimento,
         telefone: UserInfoFields.telefone,
-        senha: UserInfoFields.senha,
+        senha: hashPassword(UserInfoFields.senha),
         token_dispositivo: UserInfoFields.token_dispositivo,
         mochila: true,
         cidade: UserInfoFields.cidade,
       });
-      mockemail = response.body.email;
-      mocksenha = response.body.senha;
-      mockid = response.body.id;
-      expect(response.status).toBe(201);
+    mockemail = UserInfoFields.email;
+    mocksenha = UserInfoFields.senha;
+    mockid = response.body.id;
+    jwtToken = await generateBearer.getJwtToken(mockemail, mocksenha, mockid);
+    expect(response.status).toBe(201);
   });
 
+  it('/motoboy (GET)', async () => {
+    const response = await request(app.getHttpServer())
+      .get('/motoboy')
+      .set('Authorization', `Bearer ${jwtToken}`);
+    expect(response.status).toBe(200);
+  });
 
+  it('/motoboy/findOne (GET)', async () => {
+    const response = await request(app.getHttpServer())
+      .get(`/motoboy/findOne`)
+      .set('Authorization', `Bearer ${jwtToken}`);
+    expect(response.status).toBe(200);
+  });
+
+  it('/motoboy/update (PATCH)', async () => {
+    const response = await request(app.getHttpServer())
+    .patch(`/motoboy/update`)
+    .set('Authorization', `Bearer ${jwtToken}`)
+    .send({
+      nome: UserInfoFields.nome,
+      sobrenome: UserInfoFields.sobrenome,
+      email: UserInfoFields.email,
+      telefone: UserInfoFields.telefone,
+      data_de_nascimento: UserInfoFields.data_de_nascimento,
+      cidade: UserInfoFields.cidade
+    })
+    expect(response.status).toBe(200)
+  })
 });

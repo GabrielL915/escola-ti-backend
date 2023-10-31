@@ -41,7 +41,7 @@ export class CreateProductsUseCase {
       const imageUrl = await this.cloudinaryUseCase.uploadImage(image);
       await this.image.create({
         url: imageUrl,
-        id_produto: product.id,
+        id_origem: product.id,
       });
       return { ...product, imageUrl, stock };
     } catch (error) {

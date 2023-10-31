@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { MotoboyController } from './motoboy.controller';
 import { CreateMotoboyUseCase } from '../domain/use-cases/create-motoboy.use-case';
 import { FindAllMotoboyUseCase } from '../domain/use-cases/find-all-motoboy.use-case';
@@ -13,9 +13,11 @@ import {
   MOTOBOY_FIND_BY_ID_PROVIDER,
 } from '../../shared/constants/injection-tokens';
 import { UpdateMotoboyAiqcoinsUseCase } from '../domain/use-cases/update-motoboy-aiqcoins.use-case';
+import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from '../../auth/resource/auth.module';
 
 @Module({
-  imports: [],
+  imports: [ConfigModule, forwardRef(() => AuthModule)],
   controllers: [MotoboyController],
   providers: [
     CreateMotoboyUseCase,

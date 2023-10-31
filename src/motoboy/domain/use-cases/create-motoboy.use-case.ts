@@ -9,7 +9,6 @@ export class CreateMotoboyUseCase {
 
     async create(input: CreateMotoboyDto): Promise<Motoboy> {
         try {
-            console.log(input);
         return await this.motoboyRepository.create(input);
         } catch (error) {
             console.error(error);

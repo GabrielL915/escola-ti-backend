@@ -1,4 +1,3 @@
-import { Motoboy } from '../entities/motoboy.entity';
 import { MotoboyRepository } from '../repository/motoboy.repository';
 import { UpdateMotoboyRequestDto } from '../dto/update-motoboy-request.dto';
 import {

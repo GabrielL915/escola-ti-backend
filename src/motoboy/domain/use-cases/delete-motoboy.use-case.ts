@@ -9,7 +9,6 @@ export class DeleteMotoboyUseCase {
         try {
             return await this.motoboyRepository.delete(id);
         } catch (error) {
-            console.error(error);
             throw new InternalServerErrorException('Erro ao deletar Entregador', error);
         }
     }

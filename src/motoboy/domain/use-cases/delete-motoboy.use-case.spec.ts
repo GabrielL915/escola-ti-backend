@@ -1,20 +1,20 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreateMotoboyUseCase } from './create-motoboy.use-case';
 import { MotoboyRepository } from '../repository/motoboy.repository';
 import { InternalServerErrorException } from '@nestjs/common';
+import { DeleteMotoboyUseCase } from './delete-motoboy.use-case';
 
-describe('CreateMotoboyUseCase', () => {
-  let service: CreateMotoboyUseCase;
+describe('DeleteMotoboyUseCase', () => {
+  let service: DeleteMotoboyUseCase;
   let mockMotoboyRepository: jest.Mocked<MotoboyRepository>;
 
   beforeEach(async () => {
     mockMotoboyRepository = {
-      create: jest.fn(),
+      delete: jest.fn(),
     } as unknown as jest.Mocked<MotoboyRepository>;
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        CreateMotoboyUseCase,
+        DeleteMotoboyUseCase,
         {
           provide: MotoboyRepository,
           useValue: mockMotoboyRepository,
@@ -22,7 +22,7 @@ describe('CreateMotoboyUseCase', () => {
       ],
     }).compile();
 
-    service = module.get<CreateMotoboyUseCase>(CreateMotoboyUseCase);
+    service = module.get<DeleteMotoboyUseCase>(DeleteMotoboyUseCase);
   });
 
   it('should be defined', () => {
@@ -30,9 +30,9 @@ describe('CreateMotoboyUseCase', () => {
   });
 
   it('should throw InternalServerErrorException when there is an error', async () => {
-    mockMotoboyRepository.create.mockRejectedValue(new Error('Fake error'));
+    mockMotoboyRepository.delete.mockRejectedValue(new Error('Fake error'));
 
-    await expect(service.create({} as any)).rejects.toThrow(
+    await expect(service.delete('1')).rejects.toThrow(
       InternalServerErrorException,
     );
   });

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -19,7 +19,7 @@ import { MotoboyModule } from '../../motoboy/resource/motoboy.module';
       defaultStrategy: 'jwt',
       session: false,
     }),
-    MotoboyModule,
+    forwardRef(() => MotoboyModule),
   ],
   controllers: [AuthController],
   providers: [
@@ -35,6 +35,6 @@ import { MotoboyModule } from '../../motoboy/resource/motoboy.module';
       useClass: RefreshTokenRepositoryImpl,
     },
   ],
-  exports: [SmsUseCase],
+  exports: [SmsUseCase, LoginUseCase],
 })
 export class AuthModule {}

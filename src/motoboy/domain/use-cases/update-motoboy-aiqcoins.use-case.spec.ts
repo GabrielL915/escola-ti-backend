@@ -1,20 +1,20 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreateMotoboyUseCase } from './create-motoboy.use-case';
 import { MotoboyRepository } from '../repository/motoboy.repository';
 import { InternalServerErrorException } from '@nestjs/common';
+import { UpdateMotoboyAiqcoinsUseCase } from './update-motoboy-aiqcoins.use-case';
 
-describe('CreateMotoboyUseCase', () => {
-  let service: CreateMotoboyUseCase;
+describe('UpdateMotoboyAiqcoinsUseCase', () => {
+  let service: UpdateMotoboyAiqcoinsUseCase;
   let mockMotoboyRepository: jest.Mocked<MotoboyRepository>;
 
   beforeEach(async () => {
     mockMotoboyRepository = {
-      create: jest.fn(),
+      updateAiqcoins: jest.fn(),
     } as unknown as jest.Mocked<MotoboyRepository>;
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        CreateMotoboyUseCase,
+        UpdateMotoboyAiqcoinsUseCase,
         {
           provide: MotoboyRepository,
           useValue: mockMotoboyRepository,
@@ -22,7 +22,9 @@ describe('CreateMotoboyUseCase', () => {
       ],
     }).compile();
 
-    service = module.get<CreateMotoboyUseCase>(CreateMotoboyUseCase);
+    service = module.get<UpdateMotoboyAiqcoinsUseCase>(
+      UpdateMotoboyAiqcoinsUseCase,
+    );
   });
 
   it('should be defined', () => {
@@ -30,10 +32,21 @@ describe('CreateMotoboyUseCase', () => {
   });
 
   it('should throw InternalServerErrorException when there is an error', async () => {
-    mockMotoboyRepository.create.mockRejectedValue(new Error('Fake error'));
+    mockMotoboyRepository.updateAiqcoins.mockRejectedValue(
+      new Error('Fake error'),
+    );
 
-    await expect(service.create({} as any)).rejects.toThrow(
+    await expect(service.update('1', 1)).rejects.toThrow(
       InternalServerErrorException,
     );
   });
+
+  it('should throw NotFoundException when motoboy is not found', async () => {
+    mockMotoboyRepository.updateAiqcoins.mockResolvedValue(
+        undefined,
+    );
+    await expect(service.update('1', 1)).rejects.toThrow(
+      InternalServerErrorException,
+    );
+  })
 });

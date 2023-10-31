@@ -22,7 +22,6 @@ export class UpdateMotoboyAiqcoinsUseCase
 
       return updateMotoboy;
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException(
         'Erro ao atualizar AiQCoins do entregador',
         error,

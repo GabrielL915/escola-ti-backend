@@ -36,7 +36,7 @@ export class ImagemRepositoryImpl implements ImagemRepository {
     try {
       const [imagen] = await this.knex('imagem')
         .select('*')
-        .where({ id_produto: id });
+        .where({ id_origem: id });
       return imagen;
     } catch (error) {
       throw new InternalServerErrorException('Erro ao buscar a imagem no banco', error);
@@ -46,7 +46,7 @@ export class ImagemRepositoryImpl implements ImagemRepository {
   async update(id: string, input: UpdateImagenDto): Promise<Imagen> {
     try {
       const [imagen] = await this.knex('imagem')
-        .where({ id_produto: id })
+        .where({ id_origem: id })
         .update(input)
         .returning('*');
       return imagen;
@@ -60,7 +60,7 @@ export class ImagemRepositoryImpl implements ImagemRepository {
 
   async delete(id: string): Promise<void> {
     try {
-      await this.knex('imagem').where({ id_produto: id }).del();
+      await this.knex('imagem').where({ id_origem: id }).del();
     } catch (error) {
       throw new InternalServerErrorException('Erro ao deletar a imagem no banco', error);
     }
