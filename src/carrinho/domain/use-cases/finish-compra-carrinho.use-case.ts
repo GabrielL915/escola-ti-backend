@@ -11,7 +11,7 @@ import {
   STOCK_FIND_BY_ID_PROVIDER,
   MOTOBOY_UPDATE_PROVIDER,
   MOTOBOY_FIND_BY_ID_PROVIDER,
-} from 'src/shared/constants/injection-tokens';
+} from '../../../shared/constants/injection-tokens';
 import { FindItensCarrinhoResponseDto } from '../dto/find-itens-carrinho-response.dto';
 
 @Injectable()
