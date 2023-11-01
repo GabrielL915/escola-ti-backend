@@ -119,7 +119,7 @@ describe('CarrinhoController (e2e)', () => {
       .field('quantidade', productData.quantidade)
       .attach('image', 'test/assets/moscando.jpg');
     productId = response.body.id;
-  });
+  }, 10000);
 
   afterAll(async () => {
     if (mockid) {
@@ -132,17 +132,9 @@ describe('CarrinhoController (e2e)', () => {
     const response = await request(app.getHttpServer())
       .get('/carrinho/itens')
       .set('Authorization', `Bearer ${jwtToken.access_token}`);
-      carrinhoId = response.body.id;
+    carrinhoId = response.body.id;
     expect(response.status).toBe(200);
   });
-  /* 
-  it('/carrinho (POST)', async () => {
-    const response = await request(app.getHttpServer())
-      .post('/carrinho')
-      .set('Authorization', `Bearer ${jwtToken.access_token}`);
-    expect(response.status).toBe(201);
-  });
- */
 
   it('/carrinho/add/:id (PATCH)', async () => {
     const response = await request(app.getHttpServer())
@@ -154,18 +146,17 @@ describe('CarrinhoController (e2e)', () => {
     expect(response.status).toBe(200);
   });
 
-  /*   it('/carrinho/:id (DELETE)', async () => {
-    const response = await request(app.getHttpServer())
-      .delete('/carrinho/1')
-      .set('Authorization', `Bearer ${jwtToken.access_token}`);
-    expect(response.status).toBe(200);
-  });
- */
-
-    it('/carrinho/finish (PATCH)', async () => {
+  it('/carrinho/finish (PATCH)', async () => {
     const response = await request(app.getHttpServer())
       .patch(`/carrinho/finish/${carrinhoId}`)
       .set('Authorization', `Bearer ${jwtToken.access_token}`);
     expect(response.status).toBe(200);
-  }); 
+  });
+/* 
+  it('/carrinho/:id (DELETE)', async () => {
+    const response = await request(app.getHttpServer())
+      .delete(`/carrinho/${carrinhoId}`)
+      .set('Authorization', `Bearer ${jwtToken.access_token}`);
+    expect(response.status).toBe(200);
+  }); */
 });

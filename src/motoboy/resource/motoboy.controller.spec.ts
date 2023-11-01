@@ -28,7 +28,7 @@ enum UserInfoFields {
   cpf = '00000000000',
   nome = 'User0003',
   sobrenome = 'Sobrenome0003',
-  email = 'userSobre001@gmail.com',
+  email = 'userSobre002@gmail.com',
   telefone = '00000000001',
   token_dispositivo = 'token_dispositivo',
   data_de_nascimento = '05/09/2023',
@@ -104,6 +104,7 @@ describe('MotoboyController (e2e)', () => {
 
   afterAll(async () => {
     if (mockid) {
+      console.log('deletando motoboy');
       await motoboyRepo.delete(mockid);
     }
     await app.close();
