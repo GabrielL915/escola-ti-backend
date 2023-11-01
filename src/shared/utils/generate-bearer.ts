@@ -8,7 +8,7 @@ export class GenerateBearer {
     sobrenome: 'Kleber',
     cpf: '11111111111',
     cnpj: '11111111111111',
-    email: 'dfsdfssdags@gmail.com',
+    email: 'emailteste003@gmail.com',
     telefone: '44999999999',
     data_de_nascimento: '01/01/2000',
     senha: '12345678',
@@ -23,23 +23,35 @@ export class GenerateBearer {
 
   public async createMotoboy() {
     if (!this.registerUseCase) {
-     return
+      return;
     }
     const response = await this.registerUseCase.register(this.motoboyData);
     return response;
   }
 
-  public async getJwtToken(emailSend?: string, passwordSend?: string, idSend?: string): Promise<string> {
+  public async getJwtToken(
+    emailSend?: string,
+    passwordSend?: string,
+    idSend?: string,
+  ): Promise<any> {
     let createdMotoboy;
     if (!emailSend || !passwordSend || !idSend) {
       createdMotoboy = await this.createMotoboy();
     }
 
     const response = await this.loginUseCase.login({
-      email: emailSend,
-      senha: passwordSend,
-      id: idSend,
+      email: emailSend || this.motoboyData.email,
+      senha: passwordSend || this.motoboyData.senha,
+      id: idSend || createdMotoboy.id,
     });
-    return response.access_token;
+
+    if (createdMotoboy && createdMotoboy.id) {
+      return {
+        access_token: response.access_token,
+        id_resgister: createdMotoboy.id,
+      };
+    }
+
+    return { access_token: response.access_token, id: idSend };
   }
 }

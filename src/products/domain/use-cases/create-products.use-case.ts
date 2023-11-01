@@ -34,11 +34,13 @@ export class CreateProductsUseCase {
         descricao: input.descricao,
         valor: input.valor,
       });
+
       const stock = await this.stock.create({
         quantidade: input.quantidade,
         id_produto: product.id,
       });
       const imageUrl = await this.cloudinaryUseCase.uploadImage(image);
+      console.log('cloud passou', imageUrl);
       await this.image.create({
         url: imageUrl,
         id_origem: product.id,

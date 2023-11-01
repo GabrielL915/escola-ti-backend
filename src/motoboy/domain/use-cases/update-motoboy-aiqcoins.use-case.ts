@@ -7,18 +7,19 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 @Injectable()
-export class UpdateMotoboyAiqcoinsUseCase
-  implements IUpdate<any, Motoboy>
-{
+export class UpdateMotoboyAiqcoinsUseCase implements IUpdate<any, Motoboy> {
   constructor(private readonly motoboyRepository: MotoboyRepository) {}
 
-  async update(id: string, input: any): Promise<Motoboy> {
+  async updateAiqcoins(id: string, input: any): Promise<Motoboy> {
+    const motoboy = await this.motoboyRepository.findById(id);
+    if (!motoboy) {
+      throw new NotFoundException('Entregador não encontrado');
+    }
     try {
-      const motoboy = await this.motoboyRepository.findById(id);
-      if (!motoboy) {
-        throw new NotFoundException('Entregador não encontrado');
-      }
-      const updateMotoboy = await this.motoboyRepository.updateAiqcoins(id, input);
+      const updateMotoboy = await this.motoboyRepository.updateAiqcoins(
+        id,
+        input,
+      );
 
       return updateMotoboy;
     } catch (error) {

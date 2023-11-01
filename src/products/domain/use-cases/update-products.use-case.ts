@@ -34,11 +34,11 @@ export class UpdateProductsUseCase {
         descricao: input.descricao,
         valor: input.valor,
       });
-      const stock = await this.stock.update(id, {
+      const stock = await this.stock.updateAiqcoins(id, {
         quantidade: input.quantidade,
       });
       const imageUrl = await this.cloudinaryUseCase.uploadImage(image);
-      await this.image.update(id, { url: imageUrl });
+      await this.image.updateAiqcoins(id, { url: imageUrl });
       return { ...product, imagem: imageUrl, estoque: stock };
     } catch (error) {
       throw new InternalServerErrorException(

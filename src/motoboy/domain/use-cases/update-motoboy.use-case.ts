@@ -5,21 +5,19 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+import { UpdateMotoboyResponseDto } from '../dto/update-motoboy-response.dto';
 
 @Injectable()
 export class UpdateMotoboyUseCase {
-  constructor(
-    private readonly motoboyRepository: MotoboyRepository,
-  ) {}
+  constructor(private readonly motoboyRepository: MotoboyRepository) {}
 
-  async update(id: string, input: UpdateMotoboyRequestDto): Promise<any> {
+  async update(id: string, input: UpdateMotoboyRequestDto): Promise<UpdateMotoboyResponseDto> {
+    const motoboy = await this.motoboyRepository.findById(id);
+    if (!motoboy) {
+      throw new NotFoundException('Entregador não encontrado');
+    }
     try {
-      const motoboy = await this.motoboyRepository.findById(id);
-      if (!motoboy) {
-        throw new NotFoundException('Entregador não encontrado');
-      }
-
-      const motoboyUpdated: any = {
+      const motoboyUpdated: UpdateMotoboyRequestDto = {
         nome: input.nome,
         sobrenome: input.sobrenome,
         email: input.email,
@@ -27,7 +25,7 @@ export class UpdateMotoboyUseCase {
         data_de_nascimento: input.data_de_nascimento,
         mochila: input.mochila,
         aiqcoins: input.aiqcoins,
-        cidade: input.cidade  // A cidade é diretamente atribuída aqui
+        cidade: input.cidade,
       };
 
       const updateMotoboy = await this.motoboyRepository.update(

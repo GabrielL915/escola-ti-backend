@@ -8,7 +8,7 @@ import { StockRepository } from '../repository/stock.repository';
 export class UpdateStockUseCase implements IUpdate<UpdateStockDto, Stock> {
   constructor(private readonly stockRepository: StockRepository) {}
 
-  async update(id: string, input: UpdateStockDto): Promise<Stock> {
+  async updateAiqcoins(id: string, input: UpdateStockDto): Promise<Stock> {
     try {
       return await this.stockRepository.update(id, input);
     } catch (error) {

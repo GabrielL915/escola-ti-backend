@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CarrinhoRepository } from '../repository/carrinho.repository';
-import { IFindAllById } from 'src/shared/interfaces/find-all-by-id.interface';
+import { IFindAllById } from '../../../shared/interfaces/find-all-by-id.interface';
 import { IFindById } from '../../../shared/interfaces/find-by-id.interface';
 import {
   ITEM_CARRINHO_FIND_ALL_BY_ID_PROVIDER,
   PRODUCTS_FIND_BY_ID_PROVIDER,
 } from '../../../shared/constants/injection-tokens';
-import { ItemCarrinho } from 'src/item-carrinho/domain/entities/item-carrinho.entity';
+import { ItemCarrinho } from '../../../item-carrinho/domain/entities/item-carrinho.entity';
 import { FindItensCarrinhoResponseDto } from '../dto/find-itens-carrinho-response.dto';
 @Injectable()
 export class FindItensCarrinhoUseCase implements IFindById<FindItensCarrinhoResponseDto> {

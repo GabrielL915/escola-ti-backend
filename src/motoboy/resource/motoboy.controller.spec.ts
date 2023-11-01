@@ -29,7 +29,7 @@ enum UserInfoFields {
   nome = 'User0003',
   sobrenome = 'Sobrenome0003',
   email = 'userSobre001@gmail.com',
-  telefone = '00000000000',
+  telefone = '00000000001',
   token_dispositivo = 'token_dispositivo',
   data_de_nascimento = '05/09/2023',
   senha = 'senha123',
@@ -42,7 +42,7 @@ describe('MotoboyController (e2e)', () => {
   let mockemail: string;
   let mocksenha: string;
   let mockid: string;
-  let jwtToken: string;
+  let jwtToken: any;
   let motoboyRepo: MotoboyRepository;
   let generateBearer: GenerateBearer;
 
@@ -135,21 +135,21 @@ describe('MotoboyController (e2e)', () => {
   it('/motoboy (GET)', async () => {
     const response = await request(app.getHttpServer())
       .get('/motoboy')
-      .set('Authorization', `Bearer ${jwtToken}`);
+      .set('Authorization', `Bearer ${jwtToken.access_token}`);
     expect(response.status).toBe(200);
   });
 
   it('/motoboy/findOne (GET)', async () => {
     const response = await request(app.getHttpServer())
       .get(`/motoboy/findOne`)
-      .set('Authorization', `Bearer ${jwtToken}`);
+      .set('Authorization', `Bearer ${jwtToken.access_token}`);
     expect(response.status).toBe(200);
   });
 
   it('/motoboy/update (PATCH)', async () => {
     const response = await request(app.getHttpServer())
     .patch(`/motoboy/update`)
-    .set('Authorization', `Bearer ${jwtToken}`)
+    .set('Authorization', `Bearer ${jwtToken.access_token}`)
     .send({
       nome: UserInfoFields.nome,
       sobrenome: UserInfoFields.sobrenome,

@@ -47,7 +47,7 @@ export class FinishCompraCarrinhoUseCase {
             item.id_produto,
         );
       }
-      await this.updateStock.update(item.id_produto, {
+      await this.updateStock.updateAiqcoins(item.id_produto, {
         quantidade: newStockQuantity,
       });
     }
@@ -60,7 +60,7 @@ export class FinishCompraCarrinhoUseCase {
           carrinho.id_entregador,
       );
     }
-    await this.updateMotoboy.update(carrinho.id_entregador, {
+    await this.updateMotoboy.updateAiqcoins(carrinho.id_entregador, {
       aiqcoins: newAiqCoins,
     });
 

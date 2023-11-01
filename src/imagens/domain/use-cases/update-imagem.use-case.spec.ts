@@ -31,6 +31,6 @@ describe('UpdateImagemUseCase', () => {
   it('should throw InternalServerErrorException when there is an error', async () => {
     mockImagemRepository.update.mockRejectedValue(new Error('Fake error'));
 
-    await expect(service.update('id', {} as any)).rejects.toThrowError();
+    await expect(service.updateAiqcoins('id', {} as any)).rejects.toThrowError();
   });
 });

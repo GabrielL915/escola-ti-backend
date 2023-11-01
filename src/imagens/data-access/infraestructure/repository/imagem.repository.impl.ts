@@ -39,7 +39,10 @@ export class ImagemRepositoryImpl implements ImagemRepository {
         .where({ id_origem: id });
       return imagen;
     } catch (error) {
-      throw new InternalServerErrorException('Erro ao buscar a imagem no banco', error);
+      throw new InternalServerErrorException(
+        'Erro ao buscar a imagem no banco',
+        error,
+      );
     }
   }
 
@@ -62,7 +65,10 @@ export class ImagemRepositoryImpl implements ImagemRepository {
     try {
       await this.knex('imagem').where({ id_origem: id }).del();
     } catch (error) {
-      throw new InternalServerErrorException('Erro ao deletar a imagem no banco', error);
+      throw new InternalServerErrorException(
+        'Erro ao deletar a imagem no banco',
+        error,
+      );
     }
   }
 }

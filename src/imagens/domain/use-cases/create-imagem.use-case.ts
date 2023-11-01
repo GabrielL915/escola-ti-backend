@@ -12,6 +12,7 @@ export class CreateImagenUseCase implements ICreate<CreateImagenDto, Imagen> {
     try {
       return await this.imagenRepository.create(input);
     } catch (error) {
+      console.error(error);
       throw new InternalServerErrorException('Erro ao salvar a imagem', error);
     }
   }
