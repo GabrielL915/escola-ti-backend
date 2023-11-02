@@ -1,3 +1,3 @@
 export interface IUpdate<T, R> {
-  updateAiqcoins(id: string, input: T): Promise<R>;
+  update(id: string, input: T): Promise<R>;
 }

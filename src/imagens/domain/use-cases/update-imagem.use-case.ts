@@ -8,7 +8,7 @@ import { Imagen } from '../entities/imagen.entity';
 export class UpdateImagemUseCase implements IUpdate<UpdateImagenDto, Imagen> {
   constructor(private readonly imagemRepository: ImagemRepository) {}
 
-  async updateAiqcoins(id: string, input: UpdateImagenDto) {
+  async update(id: string, input: UpdateImagenDto) {
     try {
       return await this.imagemRepository.update(id, input);
     } catch (error) {

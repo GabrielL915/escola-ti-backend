@@ -10,7 +10,7 @@ import {
 export class UpdateMotoboyAiqcoinsUseCase implements IUpdate<any, Motoboy> {
   constructor(private readonly motoboyRepository: MotoboyRepository) {}
 
-  async updateAiqcoins(id: string, input: any): Promise<Motoboy> {
+  async update(id: string, input: any): Promise<Motoboy> {
     const motoboy = await this.motoboyRepository.findById(id);
     if (!motoboy) {
       throw new NotFoundException('Entregador não encontrado');

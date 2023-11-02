@@ -33,7 +33,7 @@ describe('UpdateStockUseCase', () => {
     mockStockRepository.update.mockRejectedValue(new Error('Fake error'));
 
     await expect(
-      service.updateAiqcoins('1', {} as UpdateStockDto),
+      service.update('1', {} as UpdateStockDto),
     ).rejects.toThrowError();
   });
 });

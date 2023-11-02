@@ -1,4 +1,9 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CarrinhoRepository } from '../repository/carrinho.repository';
 import { IFindById } from '../../../shared/interfaces/find-by-id.interface';
 import { IUpdate } from '../../../shared/interfaces/update.interface';
@@ -42,17 +47,20 @@ export class FinishCompraCarrinhoUseCase {
       );
       const newStockQuantity = currentStockItem.quantidade - item.quantidade;
       if (newStockQuantity < 0) {
-        throw new Error(
+        throw new BadRequestException(
           'Quantidade insuficiente em estoque para o produto ' +
             item.id_produto,
         );
       }
-      await this.updateStock.updateAiqcoins(item.id_produto, {
+      await this.updateStock.update(item.id_produto, {
         quantidade: newStockQuantity,
       });
     }
 
     const motoboy = await this.findByIdMotoboy.findById(carrinho.id_entregador);
+    if (!motoboy) {
+      throw new BadRequestException('Entregador não foi encontrado');
+    }
     const newAiqCoins = motoboy.aiqcoins - carrinho.valor_total;
     if (newAiqCoins < 0) {
       throw new BadRequestException(
@@ -60,23 +68,25 @@ export class FinishCompraCarrinhoUseCase {
           carrinho.id_entregador,
       );
     }
-    await this.updateMotoboy.updateAiqcoins(carrinho.id_entregador, {
-      aiqcoins: newAiqCoins,
-    });
 
-    const itens = itensCarrinho.itens.map((item) => ({
-      id_produto: item.id_produto,
-      quantidade: item.quantidade,
-      valor: item.valor,
-    }));
+      await this.updateMotoboy.update(carrinho.id_entregador, {
+        aiqcoins: newAiqCoins,
+      });
 
-    const compra = {
-      id_carrinho: carrinho.id,
-      id_entregador: carrinho.id_entregador,
-      valor_total: carrinho.valor_total,
-      itens,
-    };
+      const itens = itensCarrinho.itens.map((item) => ({
+        id_produto: item.id_produto,
+        quantidade: item.quantidade,
+        valor: item.valor,
+      }));
 
-    return compra;
+      const compra = {
+        id_carrinho: carrinho.id,
+        id_entregador: carrinho.id_entregador,
+        valor_total: carrinho.valor_total,
+        itens,
+      };
+
+      return compra;
+  
   }
 }

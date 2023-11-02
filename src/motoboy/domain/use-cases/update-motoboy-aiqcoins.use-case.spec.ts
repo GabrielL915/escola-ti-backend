@@ -58,7 +58,7 @@ describe('UpdateMotoboyAiqcoinsUseCase', () => {
     mockMotoboyRepository.updateAiqcoins.mockRejectedValue(
       new Error('Fake error'),
     );
-    await expect(service.updateAiqcoins('1', 1)).rejects.toThrow(
+    await expect(service.update('1', 1)).rejects.toThrow(
       InternalServerErrorException,
     );
   });
@@ -66,7 +66,7 @@ describe('UpdateMotoboyAiqcoinsUseCase', () => {
   it('should throw NotFoundException when motoboy is not found', async () => {
     mockMotoboyRepository.findById.mockResolvedValue(null);
     await expect(async () => {
-      await service.updateAiqcoins('1', { aiqcoins: 2 });
+      await service.update('1', { aiqcoins: 2 });
     }).rejects.toThrow(NotFoundException);
     expect(mockMotoboyRepository.findById).toBeCalledWith('1');
   });

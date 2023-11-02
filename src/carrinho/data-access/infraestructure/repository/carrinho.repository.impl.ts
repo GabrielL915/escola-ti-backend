@@ -1,4 +1,3 @@
-import { CreateCarrinhoDto } from 'src/carrinho/domain/dto/create-carrinho.dto';
 import { Knex } from 'knex';
 import { InjectKnex } from 'nestjs-knex';
 import { Carrinho } from 'src/carrinho/domain/entities/carrinho.entity';
