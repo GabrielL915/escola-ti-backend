@@ -43,7 +43,6 @@ import { UpdateStockUseCase } from '../../stock/domain/use-cases/update-stock.us
 
 describe('ProductsController (e2e)', () => {
   let app: INestApplication;
-  let id_
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -156,21 +155,21 @@ describe('ProductsController (e2e)', () => {
       .attach('image', 'test/assets/moscando.jpg');
 
     expect(response.status).toBe(201);
-    console.log(response.body);
+    
   });
 
   it('should find all products', async () => {
     const response = await request(app.getHttpServer()).get('/products');
 
     expect(response.status).toBe(200);
-    console.log(response.body);
+    
   });
 
   it('should find a product by id', async () => {
     const response = await request(app.getHttpServer()).get(
       '/products/2f5ef218-063a-4b5e-b695-3fe97071c706',
     );
-    console.log(response.body);
+    
     expect(response.status).toBe(200);
   });
 
@@ -191,7 +190,7 @@ describe('ProductsController (e2e)', () => {
       .field('quantidade', updateProductDto.quantidade)
    /*    .field('status', updateProductDto.status) */
       .attach('image', 'test/assets/moscando.jpg');
-      console.log(response.body);
+     
     expect(response.status).toBe(200);
 
   });

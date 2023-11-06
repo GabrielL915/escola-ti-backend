@@ -11,7 +11,6 @@ export class CreateMotoboyUseCase {
         try {
         return await this.motoboyRepository.create(input);
         } catch (error) {
-            console.error(error);
             throw new InternalServerErrorException('Erro ao criar Entregador', error);
         }
     }

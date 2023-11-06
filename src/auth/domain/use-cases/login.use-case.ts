@@ -23,9 +23,9 @@ export class LoginUseCase {
 
   async login({ email, senha }: LoginDto) {
     try {
-      console.log('senha: ', senha);
+
       const entregador = await this.validateEntregador(email, senha);
-      console.log('entregador: ', entregador);
+
       const payload = { email: entregador.email, sub: entregador.id };
       const tokens = await this.generateToken(payload.sub, payload.email);
       await this.refreshTokenRepository.updateAccount(
@@ -41,7 +41,6 @@ export class LoginUseCase {
       ) {
         throw error;
       }
-      console.error(error);
       throw new InternalServerErrorException('Erro ao realizar login.', error);
     }
   }

@@ -35,7 +35,6 @@ export class UpdateMotoboyUseCase {
 
       return updateMotoboy;
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException(
         'Erro ao atualizar Entregador',
         error,

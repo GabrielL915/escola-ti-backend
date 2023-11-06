@@ -52,8 +52,7 @@ export class MotoboyController {
     const id = req['user'].sub;
     return this.updateMotoboyUseCase.update( id, input );
   }
-/* 
-  @UseGuards(AccessTokenGuard) */
+
   @Delete('delete')
   delete(@Param('id') id: string) {
     return this.deleteMotoboyUseCase.delete(id);

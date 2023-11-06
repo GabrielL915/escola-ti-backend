@@ -40,7 +40,6 @@ export class CreateProductsUseCase {
         id_produto: product.id,
       });
       const imageUrl = await this.cloudinaryUseCase.uploadImage(image);
-      console.log('cloud passou', imageUrl);
       await this.image.create({
         url: imageUrl,
         id_origem: product.id,

@@ -104,7 +104,6 @@ describe('MotoboyController (e2e)', () => {
 
   afterAll(async () => {
     if (mockid) {
-      console.log('deletando motoboy');
       await motoboyRepo.delete(mockid);
     }
     await app.close();

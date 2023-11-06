@@ -8,8 +8,6 @@ export class CarrinhoRepositoryImpl implements CarrinhoRepository {
   constructor(@InjectKnex() private readonly knex: Knex) {}
 
   async create(id_motoboy: string): Promise<Carrinho> {
-    console.log(createdAt);
-    console.log(id_motoboy);
     const newCarrinho = {
       id_entregador: id_motoboy,
       valor: 0,
@@ -28,9 +26,7 @@ export class CarrinhoRepositoryImpl implements CarrinhoRepository {
       .returning('*');
     return carrinho;
   }
-  /*   finishCompra(input: any) {
-    throw new Error('Method not implemented.');
-  } */
+
   async findByIdMotoboy(id: string): Promise<Carrinho> {
     const [cart] = await this.knex('carrinho')
       .select('*')
@@ -41,7 +37,7 @@ export class CarrinhoRepositoryImpl implements CarrinhoRepository {
     const [cart] = await this.knex('carrinho').select('*').where({ id });
     return cart;
   }
-  delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+  async delete(id: string): Promise<void> {
+    await this.knex('carrinho').where({ id }).del();
   }
 }
