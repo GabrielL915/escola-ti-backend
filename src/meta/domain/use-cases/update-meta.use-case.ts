@@ -9,7 +9,7 @@ export class UpdateMetaUseCase {
   constructor(
     private readonly metaRepository: MetaRepository,
     private readonly objectiveRepository: ObjectiveRepository,
-  ) {}
+  ) { }
 
   async update(
     idObjetivo: string,
@@ -23,9 +23,10 @@ export class UpdateMetaUseCase {
 
       input.valor_atingido = porcentagemProgresso;
 
-      const response =  await this.metaRepository.update(idObjetivo, idInscrito, input);
+      const response = await this.metaRepository.update(idObjetivo, idInscrito, input);
       return response;
     } catch (error) {
+      console.error(error);
       throw new InternalServerErrorException('Erro ao atualizar Meta', error);
     }
   }
