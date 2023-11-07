@@ -6,6 +6,7 @@ import {
   Delete,
   Patch,
   Query,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { CreateMetaDto } from '../domain/dto/create-meta.dto';
 import { UpdateMetaDto } from '../domain/dto/update-meta.dto';
@@ -32,7 +33,7 @@ export class MetaController {
     private readonly updateMetaUseCase: UpdateMetaUseCase,
     private readonly deleteMetaUseCase: DeleteMetaUseCase,
     private readonly findMetaUseCase: FindMetaUseCase,
-  ) {}
+  ) { }
 
   @Post()
   @ApiOperation({ summary: 'Criar uma nova Meta' })
@@ -40,7 +41,14 @@ export class MetaController {
   @ApiResponse({ status: 201, description: 'Meta criada com sucesso.' })
   @ApiResponse({ status: 400, description: 'Entrada inválida.' })
   async create(@Body() input: CreateMetaDto) {
-    return this.createMetaUseCase.create(input);
+    try {
+      return await this.createMetaUseCase.create(input);
+    } catch (error) {
+      if (error.message === 'Meta já cadastrada para o inscrito e objetivo informados.') {
+        throw new InternalServerErrorException(error.message);
+      }
+      throw new InternalServerErrorException('Erro ao criar Meta', error);
+    }
   }
 
   @Patch()
@@ -95,7 +103,7 @@ export class MetaController {
     return this.findMetaUseCase.findAll();
   }
 
-  @Get()
+  @Get('specific')
   @ApiOperation({ summary: 'Buscar uma Meta específica' })
   @ApiParam({
     name: 'id_objetivo',
