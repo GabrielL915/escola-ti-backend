@@ -19,7 +19,7 @@ import { RegisterUseCase } from '../../auth/domain/use-cases/register.use-case';
 
 describe('CampaignController (e2e)', () => {
   let app: INestApplication;
-  let jwtToken: string;
+  let jwtToken: any;
   let generateBearer: GenerateBearer;
 
   const campaignData = {
@@ -79,7 +79,7 @@ describe('CampaignController (e2e)', () => {
 
     const motoboyRepo = moduleFixture.get<RegisterUseCase>(RegisterUseCase);
     const loginUseCase = moduleFixture.get<LoginUseCase>(LoginUseCase);
-    generateBearer = new GenerateBearer(motoboyRepo, loginUseCase);
+    generateBearer = new GenerateBearer(loginUseCase, motoboyRepo);
     jwtToken = await generateBearer.getJwtToken();
   });
 
@@ -163,14 +163,14 @@ describe('CampaignController (e2e)', () => {
     const postResponse = await request(app.getHttpServer())
       .post('/campaign')
       .send(campaignData)
-      .set('Authorization', `Bearer ${jwtToken}`)
+      .set('Authorization', `Bearer ${jwtToken.access_token}`)
       .expect(201);
 
     const createdCampaignId = postResponse.body.id;
 
     const response = await request(app.getHttpServer())
       .get(`/campaign/${createdCampaignId}`)
-      .set('Authorization', `Bearer ${jwtToken}`)
+      .set('Authorization', `Bearer ${jwtToken.access_token}`)
       .expect(200);
 
     expect(response.body.tipo).toEqual(campaignData.tipo);

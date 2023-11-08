@@ -12,7 +12,6 @@ export class CreateMetaUseCase {
       const response = await this.metaRepository.create(input);
       return response;
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException('Erro ao criar Meta', error);
     }
   }

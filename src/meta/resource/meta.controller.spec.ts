@@ -16,12 +16,11 @@ import { ObjectiveRepositoryImpl } from '../../objetivo/data-access/infraestruct
 
 describe('MetaController (e2e)', () => {
   let app: INestApplication;
-  let metaId: string;
 
   const MetaData = {
-    id_inscrito: 'ae98efbc-20e9-4399-8c9f-822a60819548',
-    id_campanha: 'ae98efbc-20e9-4399-8c9f-822a60819548',
-    id_objetivo: 'd5ffe8d8-af4e-482d-9e11-9072c00f1c7f',
+    id_inscrito: 'ac961430-b90f-4504-8229-23054ad45915',
+    id_campanha: '3a092750-b478-47b2-b237-0f312b8c8e1e',
+    id_objetivo: 'c47cdfd7-b385-49af-8dc1-db4fe9457f13',
     valor_atingido: 50,
   };
 
@@ -77,15 +76,13 @@ describe('MetaController (e2e)', () => {
       .expect(201);
 
     expect(body).toMatchObject({ ...MetaData });
-    expect(typeof body.id_objetivo).toBe('string');
-    expect(typeof body.id_inscrito).toBe('string');
-
-    metaId = body.id_objetivo;
+    expect(body.id_objetivo).toBe(MetaData.id_objetivo);
+    expect(body.id_inscrito).toBe(MetaData.id_inscrito);
   });
 
   it('/GET /meta should list all metas', async () => {
     const response = await request(app.getHttpServer())
-      .get('/meta')
+      .get('/meta/all')
       .expect(200);
 
     expect(Array.isArray(response.body)).toBe(true);
@@ -104,37 +101,43 @@ describe('MetaController (e2e)', () => {
 
   it('GET /meta should return a specific meta', async () => {
     const response = await request(app.getHttpServer())
-      .get(`/meta?id_objetivo=${metaId}&id_inscrito=${MetaData.id_inscrito}`)
+      .get(
+        `/meta?id_objetivo=${MetaData.id_objetivo}&id_inscrito=${MetaData.id_inscrito}`,
+      )
       .expect(200);
 
     const specificMeta = Array.isArray(response.body)
       ? response.body[0]
       : response.body;
-
     expect(specificMeta).toMatchObject({ ...MetaData });
-    expect(specificMeta).toHaveProperty('id_objetivo');
-    expect(specificMeta).toHaveProperty('id_inscrito');
+    expect(specificMeta).toHaveProperty('id_objetivo', MetaData.id_objetivo);
+    expect(specificMeta).toHaveProperty('id_inscrito', MetaData.id_inscrito);
   });
 
-  it('PATCH /meta should update a meta', async () => {
+  it('PUT /meta should update a meta', async () => {
     const updatedMetaData = {
-      ...MetaData,
-      valor_atingido: 80,
+      valor_atingido: 50
     };
 
-    const patchResponse = await request(app.getHttpServer())
-      .patch(`/meta?id_objetivo=${metaId}&id_inscrito=${MetaData.id_inscrito}`)
+    const putResponse = await request(app.getHttpServer())
+      .put(
+        `/meta?id_objetivo=${MetaData.id_objetivo}&id_inscrito=${MetaData.id_inscrito}`,
+      )
       .send(updatedMetaData)
       .expect(200);
 
-    expect(patchResponse.body).toMatchObject({ ...updatedMetaData });
-    expect(typeof patchResponse.body.id_objetivo).toBe('string');
-    expect(typeof patchResponse.body.id_inscrito).toBe('string');
+    expect(putResponse.body).toMatchObject({
+      ...updatedMetaData,
+      id_objetivo: MetaData.id_objetivo,
+      id_inscrito: MetaData.id_inscrito,
+    });
   });
 
   it('DELETE /meta should delete a meta', async () => {
     await request(app.getHttpServer())
-      .delete(`/meta?id_objetivo=${metaId}&id_inscrito=${MetaData.id_inscrito}`)
+      .delete(
+        `/meta?id_objetivo=${MetaData.id_objetivo}&id_inscrito=${MetaData.id_inscrito}`,
+      )
       .expect(200);
   });
 

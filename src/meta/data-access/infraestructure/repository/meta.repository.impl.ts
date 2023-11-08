@@ -7,16 +7,19 @@ import { Meta } from 'src/meta/domain/entities/meta.entity';
 import { MetaRepository } from 'src/meta/domain/repository/meta.repository';
 
 export class MetaRepositoryImpl implements MetaRepository {
-  constructor(@InjectKnex() private readonly knex: Knex) { }
+  constructor(@InjectKnex() private readonly knex: Knex) {}
 
   async create(input: CreateMetaDto): Promise<Meta> {
     try {
       const existingMeta = await this.knex('meta_atingida')
-        .where({ id_objetivo: input.id_objetivo, id_inscrito: input.id_inscrito })
+        .where({
+          id_objetivo: input.id_objetivo,
+          id_inscrito: input.id_inscrito,
+        })
         .first();
 
       if (existingMeta) {
-        throw new Error('Meta já cadastrada para o inscrito e objetivo informados.');
+        throw new Error('Meta já existe');
       }
 
       const [meta] = await this.knex('meta_atingida')

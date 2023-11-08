@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UpdateMetaUseCase } from './update-meta.use-case';
 import { MetaRepository } from '../repository/meta.repository';
-import { InternalServerErrorException } from '@nestjs/common';
+import { InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { UpdateMetaDto } from '../dto/update-meta.dto';
 import { ObjectiveRepository } from '../../../objetivo/domain/repository/objective.repository';
 
@@ -41,6 +41,23 @@ describe('UpdateMetaUseCase', () => {
     expect(updateMetaUseCase).toBeDefined();
   });
 
+  it('should throw NotFoundException when the objective is not found', async () => {
+    const mockIdObjetivo = '1';
+    const mockIdInscrito = '1';
+    const mockMetaDto: UpdateMetaDto = {
+      id_inscrito: '1',
+      id_campanha: '1',
+      id_objetivo: '1',
+      valor_atingido: 25,
+    };
+
+    mockObjectiveRepository.findOne.mockResolvedValue(undefined);
+
+    await expect(
+      updateMetaUseCase.update(mockIdObjetivo, mockIdInscrito, mockMetaDto),
+    ).rejects.toThrow(NotFoundException);
+  });
+
   it('should throw InternalServerErrorException when metaRepository.update fails', async () => {
     const mockIdObjetivo = '1';
     const mockIdInscrito = '1';
@@ -53,7 +70,7 @@ describe('UpdateMetaUseCase', () => {
       id_inscrito: '1',
       id_campanha: '1',
       id_objetivo: '1',
-      valor_atingido: 25,
+      valor_atingido: 0.5,
     };
 
     await expect(

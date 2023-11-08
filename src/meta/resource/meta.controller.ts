@@ -7,6 +7,7 @@ import {
   Patch,
   Query,
   InternalServerErrorException,
+  Put,
 } from '@nestjs/common';
 import { CreateMetaDto } from '../domain/dto/create-meta.dto';
 import { UpdateMetaDto } from '../domain/dto/update-meta.dto';
@@ -33,7 +34,7 @@ export class MetaController {
     private readonly updateMetaUseCase: UpdateMetaUseCase,
     private readonly deleteMetaUseCase: DeleteMetaUseCase,
     private readonly findMetaUseCase: FindMetaUseCase,
-  ) { }
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Criar uma nova Meta' })
@@ -44,14 +45,11 @@ export class MetaController {
     try {
       return await this.createMetaUseCase.create(input);
     } catch (error) {
-      if (error.message === 'Meta já cadastrada para o inscrito e objetivo informados.') {
-        throw new InternalServerErrorException(error.message);
-      }
       throw new InternalServerErrorException('Erro ao criar Meta', error);
     }
   }
 
-  @Patch()
+  @Put()
   @ApiOperation({ summary: 'Atualizar uma Meta existente' })
   @ApiParam({
     name: 'id_objetivo',
@@ -70,7 +68,7 @@ export class MetaController {
     @Query('id_inscrito') idInscrito: string,
     @Body() input: UpdateMetaDto,
   ) {
-    return this.updateMetaUseCase.update(idObjetivo, idInscrito, input);
+    return await this.updateMetaUseCase.update(idObjetivo, idInscrito, input);
   }
 
   @Delete()
@@ -92,7 +90,7 @@ export class MetaController {
     return this.deleteMetaUseCase.delete(idObjetivo, idInscrito);
   }
 
-  @Get()
+  @Get('/all')
   @ApiOperation({ summary: 'Listar todas as Metas' })
   @ApiResponse({
     status: 200,
@@ -103,7 +101,7 @@ export class MetaController {
     return this.findMetaUseCase.findAll();
   }
 
-  @Get('specific')
+  @Get('')
   @ApiOperation({ summary: 'Buscar uma Meta específica' })
   @ApiParam({
     name: 'id_objetivo',

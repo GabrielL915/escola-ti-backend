@@ -23,7 +23,6 @@ import { UpdateSubscribeUseCase } from '../domain/use-cases/update-subscribe.use
 import { DeleteSubscribeUseCase } from '../domain/use-cases/delete-subscribe.use-cases';
 import { FindSubscribeUseCase } from '../domain/use-cases/find-subscribe.use-cases';
 
-//INSCRITO
 @ApiTags('subscribe')
 @ApiBearerAuth()
 @Controller('subscribe')
