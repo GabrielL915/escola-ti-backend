@@ -6,33 +6,22 @@ import { UpdateMetaDto } from 'src/meta/domain/dto/update-meta.dto';
 import { Meta } from 'src/meta/domain/entities/meta.entity';
 import { MetaRepository } from 'src/meta/domain/repository/meta.repository';
 
-export class MetaRepositoryImpl implements MetaRepository {
-  constructor(@InjectKnex() private readonly knex: Knex) {}
+  export class MetaRepositoryImpl implements MetaRepository {
+    constructor(@InjectKnex() private readonly knex: Knex) {}
 
-  async create(input: CreateMetaDto): Promise<Meta> {
-    try {
-      const existingMeta = await this.knex('meta_atingida')
-        .where({
-          id_objetivo: input.id_objetivo,
-          id_inscrito: input.id_inscrito,
-        })
-        .first();
-
-      if (existingMeta) {
-        throw new Error('Meta já existe');
+    async create(input: CreateMetaDto): Promise<Meta> {
+      try {
+        const [meta] = await this.knex('meta_atingida')
+          .insert(input)
+          .returning('*');
+        return meta;
+      } catch (error) {
+        throw new InternalServerErrorException(
+          'Erro ao criar Meta no banco',
+          error,
+        );
       }
-
-      const [meta] = await this.knex('meta_atingida')
-        .insert(input)
-        .returning('*');
-      return meta;
-    } catch (error) {
-      throw new InternalServerErrorException(
-        'Erro ao criar Meta no banco',
-        error,
-      );
     }
-  }
 
   async update(
     idObjetivo: string,

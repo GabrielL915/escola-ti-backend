@@ -13,7 +13,7 @@ export class UpdateMetaUseCase {
   constructor(
     private readonly metaRepository: MetaRepository,
     private readonly objectiveRepository: ObjectiveRepository,
-  ) {}
+  ) { }
 
   async update(
     idObjetivo: string,
@@ -36,9 +36,6 @@ export class UpdateMetaUseCase {
 
       return response;
     } catch (error) {
-      if (error instanceof InternalServerErrorException) {
-        throw error;
-      }
       throw new InternalServerErrorException('Erro ao atualizar Meta', error);
     }
   }
