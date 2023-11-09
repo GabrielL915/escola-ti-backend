@@ -21,7 +21,6 @@ import {
   ApiUnauthorizedResponse,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
 import { LoginDto } from '../domain/dto/login.dto';
 import { ProfileDto } from '../domain/dto/profile.dto';
 import { SmsDto } from '../domain/dto/sms.dto';
@@ -312,7 +311,7 @@ export class AuthController {
   })
   @Get('profile')
   getProfile(@Req() req: Request) {
-    const email: string = req.user['email'];
+    const email = req.user['email'];
     return this.profileUseCase.profile(email);
   }
 

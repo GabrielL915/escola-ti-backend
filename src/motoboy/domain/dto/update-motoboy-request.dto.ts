@@ -2,6 +2,8 @@ import {
   IsBoolean,
   IsEmail,
   IsNotEmpty,
+  IsNumber,
+  IsOptional,
   IsString,
   MaxLength,
   MinLength,
@@ -9,10 +11,10 @@ import {
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateMotoboyDto } from './create-motoboy.dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { SmsDto } from 'src/auth/domain/dto/sms.dto';
-export class UpdateMotoboyDto extends PartialType(CreateMotoboyDto) {
-  @IsNotEmpty()
+
+export class UpdateMotoboyRequestDto extends PartialType(CreateMotoboyDto) {
   @IsString()
+  @IsOptional()
   @MinLength(2)
   @MaxLength(100)
   @ApiProperty({
@@ -23,20 +25,20 @@ export class UpdateMotoboyDto extends PartialType(CreateMotoboyDto) {
     type: String,
     required: true,
   })
-  nome: string;
+  nome?: string;
 
-  @IsNotEmpty()
   @IsString()
+  @IsOptional()
   @ApiProperty({
     description: 'Sobrenome do entregador',
     example: 'Almeida',
     type: String,
     required: true,
   })
-  sobrenome: string;
+  sobrenome?: string;
 
-  @IsNotEmpty()
   @IsString()
+  @IsOptional()
   @MaxLength(14)
   @MinLength(14)
   @ApiProperty({
@@ -45,10 +47,11 @@ export class UpdateMotoboyDto extends PartialType(CreateMotoboyDto) {
     type: String,
     required: true,
   })
-  cpf: string;
+  cpf?: string;
 
-  @IsNotEmpty()
+
   @IsString()
+  @IsOptional()
   @MaxLength(18)
   @MinLength(18)
   @ApiProperty({
@@ -57,42 +60,42 @@ export class UpdateMotoboyDto extends PartialType(CreateMotoboyDto) {
     type: String,
     required: true,
   })
-  cnpj: string;
+  cnpj?: string;
+ 
 
-  @IsNotEmpty()
   @IsString()
   @IsEmail()
+  @IsOptional()
   @ApiProperty({
     description: 'Email do entregador',
     example: 'joao.almeida@example.com',
     type: String,
     required: true,
   })
-  email: string;
+  email?: string;
 
-  @IsNotEmpty()
   @IsString()
-  @MaxLength(15)
-  @MinLength(15)
+  @IsOptional()
+  @MaxLength(13)
   @ApiProperty({
     description: 'Telefone do entregador',
     example: '(44) 99999-9999',
     type: String,
     required: true,
   })
-  telefone: SmsDto['telefone'];
+  telefone?: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @ApiProperty({
     description: 'Data de nascimento do entregador',
     example: '01/01/1990',
     type: String,
     required: true,
   })
-  data_de_nascimento: string;
+  data_de_nascimento?: string;
 
-  @IsNotEmpty()
   @IsString()
+  @IsOptional()
   @MinLength(8)
   @ApiProperty({
     description: 'Senha do entregador',
@@ -101,25 +104,24 @@ export class UpdateMotoboyDto extends PartialType(CreateMotoboyDto) {
     type: String,
     required: true,
   })
-  senha: string;
+  senha?: string;
 
-  @IsNotEmpty()
+
   @IsBoolean()
+  @IsOptional()
   @ApiProperty({
     description: 'Se o entregador possui mochila',
     example: true,
     type: Boolean,
-    required: true,
+    required: false,
   })
-  mochila: boolean;
+  mochila?: boolean;
 
-  @IsNotEmpty()
+  @IsOptional()
+  @IsNumber()
+  aiqcoins?: number;
+
+  @IsOptional()
   @IsString()
-  @ApiProperty({
-    description: 'Id da cidade do entregador',
-    example: '00000000-0000-0000-0000-000000000000',
-    type: String,
-    required: true,
-  })
-  id_endereco_de_servico: string;
+  cidade?: string;
 }

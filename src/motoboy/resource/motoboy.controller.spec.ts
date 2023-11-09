@@ -1,121 +1,163 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { INestApplication, forwardRef } from '@nestjs/common';
+import request from 'supertest';
+import { ConfigModule } from '@nestjs/config';
+import { KnexModule } from 'nestjs-knex';
+import { MotoboyModule } from './motoboy.module';
 import { MotoboyController } from './motoboy.controller';
 import { CreateMotoboyUseCase } from '../domain/use-cases/create-motoboy.use-case';
 import { FindAllMotoboyUseCase } from '../domain/use-cases/find-all-motoboy.use-case';
 import { FindByIdMotoboyUseCase } from '../domain/use-cases/find-by-id-motoboy.use-case';
+import { FindByEmailMotoboyUseCase } from '../domain/use-cases/find-by-email-motoboy.use-case';
 import { UpdateMotoboyUseCase } from '../domain/use-cases/update-motoboy.use-case';
-import { CreateMotoboyDto } from '../domain/dto/create-motoboy.dto';
-import { UpdateMotoboyDto } from '../domain/dto/update-motoboy.dto';
+import { UpdateMotoboyAiqcoinsUseCase } from '../domain/use-cases/update-motoboy-aiqcoins.use-case';
+import { DeleteMotoboyUseCase } from '../domain/use-cases/delete-motoboy.use-case';
+import { MotoboyRepository } from '../domain/repository/motoboy.repository';
+import { MotoboyRepositoryImpl } from '../data-access/infraestructure/repostitory/motoboy.repository.impl';
+import {
+  MOTOBOY_UPDATE_PROVIDER,
+  MOTOBOY_FIND_BY_ID_PROVIDER,
+} from '../../shared/constants/injection-tokens';
+import { GenerateBearer } from '../../shared/utils/generate-bearer';
+import { LoginUseCase } from '../../auth/domain/use-cases/login.use-case';
+import { AuthModule } from '../../auth/resource/auth.module';
+import { hashPassword } from '../../auth/utils/hash-password';
 
-const mockCreateMotoboyUseCase = {
-  create: jest.fn(),
-};
-
-const mockFindAllMotoboyUseCase = {
-  findAll: jest.fn(),
-};
-
-const mockFindByIdMotoboyUseCase = {
-  findById: jest.fn(),
-};
-
-const mockUpdateMotoboyUseCase = {
-  update: jest.fn(),
-};
-
-const mockCreateDto: CreateMotoboyDto = {
-    cnpj: "00.000.000/0000-00",
-    cpf: "111.111.111-11",
-    nome: "Entregador7",
-    sobrenome: "Sobrenome4",
-    email: "teste@gmail.com",
-    data_de_nascimento: "05/09/2023",
-    senha: "senha123",
-    mochila: false,
-    telefone: "(44) 99999-9999",
-    id_endereco_de_servico: "00000000-0000-0000-0000-000000000000"
+enum UserInfoFields {
+  cnpj = '00000000000100',
+  cpf = '00000000000',
+  nome = 'User0003',
+  sobrenome = 'Sobrenome0003',
+  email = 'userSobre002@gmail.com',
+  telefone = '00000000001',
+  token_dispositivo = 'token_dispositivo',
+  data_de_nascimento = '05/09/2023',
+  senha = 'senha123',
+  mochila = 'true',
+  cidade = 'Maringa',
 }
 
-describe('MotoboyController', () => {
-  let controller: MotoboyController;
+describe('MotoboyController (e2e)', () => {
+  let app: INestApplication;
+  let mockemail: string;
+  let mocksenha: string;
+  let mockid: string;
+  let jwtToken: any;
+  let motoboyRepo: MotoboyRepository;
+  let generateBearer: GenerateBearer;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+  beforeAll(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [
+        MotoboyModule,
+        forwardRef(() => AuthModule),
+        ConfigModule.forRoot({
+          isGlobal: true,
+          envFilePath: '.env',
+        }),
+        KnexModule.forRoot({
+          config: {
+            client: 'postgresql',
+            useNullAsDefault: true,
+            connection: {
+              connectionString: process.env.CONNECTION_STRING,
+              ssl: { rejectUnauthorized: false },
+              host: process.env.HOST,
+              port: 5432,
+              user: process.env.USER,
+              database: process.env.DATABASE,
+              password: process.env.PASSWORD,
+            },
+          },
+        }),
+      ],
       controllers: [MotoboyController],
       providers: [
+        CreateMotoboyUseCase,
+        FindAllMotoboyUseCase,
+        FindByIdMotoboyUseCase,
+        FindByEmailMotoboyUseCase,
+        UpdateMotoboyUseCase,
+        UpdateMotoboyAiqcoinsUseCase,
+        DeleteMotoboyUseCase,
         {
-          provide: CreateMotoboyUseCase,
-          useValue: mockCreateMotoboyUseCase,
+          provide: MotoboyRepository,
+          useClass: MotoboyRepositoryImpl,
         },
         {
-          provide: FindAllMotoboyUseCase,
-          useValue: mockFindAllMotoboyUseCase,
+          provide: MOTOBOY_UPDATE_PROVIDER,
+          useClass: UpdateMotoboyAiqcoinsUseCase,
         },
         {
-          provide: FindByIdMotoboyUseCase,
-          useValue: mockFindByIdMotoboyUseCase,
-        },
-        {
-          provide: UpdateMotoboyUseCase,
-          useValue: mockUpdateMotoboyUseCase,
+          provide: MOTOBOY_FIND_BY_ID_PROVIDER,
+          useClass: FindByIdMotoboyUseCase,
         },
       ],
     }).compile();
 
-    controller = module.get<MotoboyController>(MotoboyController);
+    app = moduleFixture.createNestApplication();
+    await app.init();
+    motoboyRepo = moduleFixture.get<MotoboyRepository>(MotoboyRepository);
+    const loginUseCase = moduleFixture.get<LoginUseCase>(LoginUseCase);
+    generateBearer = new GenerateBearer(loginUseCase);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  afterAll(async () => {
+    if (mockid) {
+      await motoboyRepo.delete(mockid);
+    }
+    await app.close();
   });
 
-  describe('create', () => {
-    it('should call create with correct params and return the result', async () => {
-      const createDto: CreateMotoboyDto = {
-        ...mockCreateDto,
-      };
-      mockCreateMotoboyUseCase.create.mockResolvedValueOnce(mockCreateDto);
-
-      const result = await controller.create(createDto);
-
-      expect(mockCreateMotoboyUseCase.create).toHaveBeenCalledWith(createDto);
-      expect(result).toEqual(mockCreateDto);
-    });
-  });
-
-  describe('findAll', () => {
-    it('should call findAll with correct params and return the result', async () => {
-      const result = await controller.findAll();
-
-      expect(mockFindAllMotoboyUseCase.findAll).toHaveBeenCalledWith();
-      expect(result).toEqual(result);
-    });
-  });
-
-  describe('findOne', () => {
-    it('should call findById with correct params and return the result', async () => {
-      const id = '1';
-      const result = await controller.findOne(id);
-
-      expect(mockFindByIdMotoboyUseCase.findById).toHaveBeenCalledWith(id);
-      expect(result).toEqual(result);
-    });
-  });
-
-  describe('update', () => {
-    it('should call update with correct params and return the result', async () => {
-      const updateDto: UpdateMotoboyDto = {
-        ...mockCreateDto,
-      };
-      const id = '1';
-      const result = await controller.update(id, updateDto);
-
-      expect(mockUpdateMotoboyUseCase.update).toHaveBeenCalledWith({
-        id,
-        input: updateDto,
+  it('/motoboy (POST)', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/motoboy')
+      .send({
+        cnpj: UserInfoFields.cnpj,
+        cpf: UserInfoFields.cpf,
+        nome: UserInfoFields.nome,
+        sobrenome: UserInfoFields.sobrenome,
+        email: UserInfoFields.email,
+        data_de_nascimento: UserInfoFields.data_de_nascimento,
+        telefone: UserInfoFields.telefone,
+        senha: hashPassword(UserInfoFields.senha),
+        token_dispositivo: UserInfoFields.token_dispositivo,
+        mochila: true,
+        cidade: UserInfoFields.cidade,
       });
-      expect(result).toEqual(result);
-    });
+    mockemail = UserInfoFields.email;
+    mocksenha = UserInfoFields.senha;
+    mockid = response.body.id;
+    jwtToken = await generateBearer.getJwtToken(mockemail, mocksenha, mockid);
+    expect(response.status).toBe(201);
   });
 
+  it('/motoboy (GET)', async () => {
+    const response = await request(app.getHttpServer())
+      .get('/motoboy')
+      .set('Authorization', `Bearer ${jwtToken.access_token}`);
+    expect(response.status).toBe(200);
+  });
+
+  it('/motoboy/findOne (GET)', async () => {
+    const response = await request(app.getHttpServer())
+      .get(`/motoboy/findOne`)
+      .set('Authorization', `Bearer ${jwtToken.access_token}`);
+    expect(response.status).toBe(200);
+  });
+
+  it('/motoboy/update (PATCH)', async () => {
+    const response = await request(app.getHttpServer())
+    .patch(`/motoboy/update`)
+    .set('Authorization', `Bearer ${jwtToken.access_token}`)
+    .send({
+      nome: UserInfoFields.nome,
+      sobrenome: UserInfoFields.sobrenome,
+      email: UserInfoFields.email,
+      telefone: UserInfoFields.telefone,
+      data_de_nascimento: UserInfoFields.data_de_nascimento,
+      cidade: UserInfoFields.cidade
+    })
+    expect(response.status).toBe(200)
+  })
 });

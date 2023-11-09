@@ -23,10 +23,12 @@ export class LoginUseCase {
 
   async login({ email, senha }: LoginDto) {
     try {
+
       const entregador = await this.validateEntregador(email, senha);
+
       const payload = { email: entregador.email, sub: entregador.id };
       const tokens = await this.generateToken(payload.sub, payload.email);
-      await this.refreshTokenRepository.createAccount(
+      await this.refreshTokenRepository.updateAccount(
         payload.sub,
         tokens.access_token,
         tokens.refresh_token,
@@ -78,13 +80,10 @@ export class LoginUseCase {
   async validateEntregador(email: string, senha: string): Promise<LoginDto> {
     try {
       const entregador = await this.motoboyRepository.findByEmail(email);
-
       if (!entregador) {
-
         throw new NotFoundException('Entregador não encontrado.');
       }
       const validPassword = this.comparePassword(entregador.senha, senha);
-
       if (!validPassword) {
         throw new UnauthorizedException(
           'Senha incorreta ou entregador inativo.',

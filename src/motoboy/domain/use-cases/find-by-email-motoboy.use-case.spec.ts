@@ -1,37 +1,41 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MotoboyRepository } from '../repository/motoboy.repository';
-import { FindByEmailMotoboyUseCase } from './find-by-email-motoboy.use-case';
 import { InternalServerErrorException } from '@nestjs/common';
+import { FindByEmailMotoboyUseCase } from './find-by-email-motoboy.use-case';
 
 describe('FindByEmailMotoboyUseCase', () => {
-  let findByEmailMotoboyUseCase: FindByEmailMotoboyUseCase;
-  let mockRepository: Partial<MotoboyRepository>;
+  let service: FindByEmailMotoboyUseCase;
+  let mockMotoboyRepository: jest.Mocked<MotoboyRepository>;
 
   beforeEach(async () => {
-    mockRepository = {
+    mockMotoboyRepository = {
       findByEmail: jest.fn(),
-    };
+    } as unknown as jest.Mocked<MotoboyRepository>;
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         FindByEmailMotoboyUseCase,
-        { provide: MotoboyRepository, useValue: mockRepository },
+        {
+          provide: MotoboyRepository,
+          useValue: mockMotoboyRepository,
+        },
       ],
     }).compile();
 
-    findByEmailMotoboyUseCase = module.get<FindByEmailMotoboyUseCase>(FindByEmailMotoboyUseCase);
+    service = module.get<FindByEmailMotoboyUseCase>(FindByEmailMotoboyUseCase);
   });
 
   it('should be defined', () => {
-    expect(findByEmailMotoboyUseCase).toBeDefined();
+    expect(service).toBeDefined();
   });
 
-  it('should throw an InternalServerErrorException when there is an error', async () => {
-    const mockEmail = 'test@example.com';
-    (mockRepository.findByEmail as jest.Mock).mockRejectedValueOnce(new Error());
+  it('should throw InternalServerErrorException when there is an error', async () => {
+    mockMotoboyRepository.findByEmail.mockRejectedValue(
+      new Error('Fake error'),
+    );
 
-    await expect(findByEmailMotoboyUseCase.findByEmail(mockEmail)).rejects.toThrow(
-      new InternalServerErrorException('Erro ao buscar Entregador por Email')
+    await expect(service.findByEmail('fakeMail@gmail.com')).rejects.toThrow(
+      InternalServerErrorException,
     );
   });
 });

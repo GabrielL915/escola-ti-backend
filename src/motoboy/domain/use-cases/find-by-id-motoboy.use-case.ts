@@ -1,9 +1,15 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { Motoboy } from '../entities/motoboy.entity';
 import { MotoboyRepository } from '../repository/motoboy.repository';
+import { IFindById } from '../../../shared/interfaces/find-by-id.interface';
+
 
 @Injectable()
-export class FindByIdMotoboyUseCase {
+export class FindByIdMotoboyUseCase implements IFindById<Motoboy> {
   constructor(private readonly motoboyRepository: MotoboyRepository) {}
 
   async findById(id: string): Promise<Motoboy> {
