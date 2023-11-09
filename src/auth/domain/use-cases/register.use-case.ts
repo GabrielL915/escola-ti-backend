@@ -11,12 +11,10 @@ import {
   removeCnpjMask,
 } from '../../../shared/utils/remove-mask';
 import { MotoboyRepository } from '../../../motoboy/domain/repository/motoboy.repository';
-import { CityRepository } from '../../../city/domain/repository/city.repository';
 @Injectable()
 export class RegisterUseCase {
   constructor(
     private readonly motoboyRepository: MotoboyRepository,
-    private readonly cityRepository: CityRepository,
   ) {}
 
   async register(input: RegisterDto): Promise<any> {
@@ -25,12 +23,6 @@ export class RegisterUseCase {
       const phoneWithoutMask = removePhoneMask(input.telefone);
       const cpfWithoutMask = removeCpfMask(input.cpf);
       const cnpjWithoutMask = removeCnpjMask(input.cnpj);
-      const uf = 'PR';
-      const inputCity = {
-        city: input.cidade,
-        uf: uf,
-      };
-      const city = await this.cityRepository.create(inputCity);
       const newRegister = {
         nome: input.nome,
         sobrenome: input.sobrenome,

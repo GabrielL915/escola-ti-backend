@@ -1,38 +1,39 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MotoboyRepository } from '../repository/motoboy.repository';
-import { FindByIdMotoboyUseCase } from './find-by-id-motoboy.use-case';
 import { InternalServerErrorException } from '@nestjs/common';
+import { FindByIdMotoboyUseCase } from './find-by-id-motoboy.use-case';
 
 describe('FindByIdMotoboyUseCase', () => {
-    let findByIdMotoboyUseCase: FindByIdMotoboyUseCase;
-    let mockRepository: Partial<MotoboyRepository>;
-  
-    beforeEach(async () => {
-      mockRepository = {
-        findById: jest.fn(),
-      };
-  
-      const module: TestingModule = await Test.createTestingModule({
-        providers: [
-            FindByIdMotoboyUseCase,
-          { provide: MotoboyRepository, useValue: mockRepository },
-        ],
-      }).compile();
-  
-      findByIdMotoboyUseCase = module.get<FindByIdMotoboyUseCase>(FindByIdMotoboyUseCase);
-    });
-  
-    it('should be defined', () => {
-      expect(findByIdMotoboyUseCase).toBeDefined();
-    });
+  let service: FindByIdMotoboyUseCase;
+  let mockMotoboyRepository: jest.Mocked<MotoboyRepository>;
 
-    it('should throw an InternalServerErrorException when there is an error', async () => {
-      const mockId = '12345';
-      (mockRepository.findById as jest.Mock).mockRejectedValueOnce(new Error());
+  beforeEach(async () => {
+    mockMotoboyRepository = {
+      findById: jest.fn(),
+    } as unknown as jest.Mocked<MotoboyRepository>;
 
-      await expect(findByIdMotoboyUseCase.findById(mockId)).rejects.toThrow(
-        new InternalServerErrorException('Erro ao buscar Entregador pro Id')
-      );
-    });
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        FindByIdMotoboyUseCase,
+        {
+          provide: MotoboyRepository,
+          useValue: mockMotoboyRepository,
+        },
+      ],
+    }).compile();
 
+    service = module.get<FindByIdMotoboyUseCase>(FindByIdMotoboyUseCase);
+  });
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+
+  it('should throw InternalServerErrorException when there is an error', async () => {
+    mockMotoboyRepository.findById.mockRejectedValue(new Error('Fake error'));
+
+    await expect(service.findById('1')).rejects.toThrow(
+      InternalServerErrorException,
+    );
+  });
 });

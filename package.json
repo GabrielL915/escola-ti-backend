@@ -17,7 +17,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/e2e/jest-e2e.json"
+    "test:e2e": "jest --config ./test/e2e/jest-e2e.json",
+    "clear:jest": "jest --clearCache"
   },
   "dependencies": {
     "@fastify/static": "^6.11.2",
@@ -93,8 +94,7 @@
       "!<rootDir>/app.module.ts",
       "!<rootDir>/main.ts",
       "!<rootDir>/motoboy/resource/motoboy.module.ts",
-      "!<rootDir>/auth/resource/auth.module.ts",
-      "!<rootDir>/city/resource/city.module.ts"
+      "!<rootDir>/auth/resource/auth.module.ts"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
@@ -102,8 +102,7 @@
       "<rootDir>/app.module.ts",
       "<rootDir>/main.ts",
       "<rootDir>/motoboy/resource/motoboy.module.ts",
-      "!<rootDir>/auth/resource/auth.module.ts",
-      "!<rootDir>/city/resource/city.module.ts"
+      "!<rootDir>/auth/resource/auth.module.ts"
     ]
   }
 }

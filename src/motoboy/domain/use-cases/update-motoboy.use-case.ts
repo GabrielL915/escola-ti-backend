@@ -1,36 +1,23 @@
-import { Motoboy } from '../entities/motoboy.entity';
 import { MotoboyRepository } from '../repository/motoboy.repository';
-import { CityRepository } from 'src/city/domain/repository/city.repository';
 import { UpdateMotoboyRequestDto } from '../dto/update-motoboy-request.dto';
-import { IUpdate } from '../../../shared/interfaces/update.interface';
 import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+import { UpdateMotoboyResponseDto } from '../dto/update-motoboy-response.dto';
+
 @Injectable()
 export class UpdateMotoboyUseCase {
-  constructor(
-    private readonly motoboyRepository: MotoboyRepository,
-    private readonly cityRepository: CityRepository,
-  ) {}
+  constructor(private readonly motoboyRepository: MotoboyRepository) {}
 
-  async update(id: string, input: UpdateMotoboyRequestDto): Promise<any> {
-    let id_endereco_de_servico = null;
+  async update(id: string, input: UpdateMotoboyRequestDto): Promise<UpdateMotoboyResponseDto> {
+    const motoboy = await this.motoboyRepository.findById(id);
+    if (!motoboy) {
+      throw new NotFoundException('Entregador não encontrado');
+    }
     try {
-      const motoboy = await this.motoboyRepository.findById(id);
-      if (!motoboy) {
-        throw new NotFoundException('Entregador não encontrado');
-      }
-
-      if (input.cidade) {
-        const cityExists = await this.cityRepository.findByName(input.cidade);
-        if (cityExists) {
-          id_endereco_de_servico = cityExists.id;
-        }
-      }
-
-      const motoboyUpdated: any = {
+      const motoboyUpdated: UpdateMotoboyRequestDto = {
         nome: input.nome,
         sobrenome: input.sobrenome,
         email: input.email,
@@ -38,11 +25,8 @@ export class UpdateMotoboyUseCase {
         data_de_nascimento: input.data_de_nascimento,
         mochila: input.mochila,
         aiqcoins: input.aiqcoins,
+        cidade: input.cidade,
       };
-
-      if (id_endereco_de_servico) {
-        motoboyUpdated.id_endereco_de_servico = id_endereco_de_servico;
-      }
 
       const updateMotoboy = await this.motoboyRepository.update(
         id,
@@ -51,7 +35,6 @@ export class UpdateMotoboyUseCase {
 
       return updateMotoboy;
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException(
         'Erro ao atualizar Entregador',
         error,

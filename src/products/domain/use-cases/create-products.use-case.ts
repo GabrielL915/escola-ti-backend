@@ -1,4 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { CloudinaryUseCase } from '../../../cloudinary/domain/use-cases/cloudinary.use-case';
 import { ProductRepository } from '../repository/products.repository';
@@ -24,22 +28,25 @@ export class CreateProductsUseCase {
   ) {}
 
   async create(input: CreateProductDto, image: Express.Multer.File) {
-    const product = await this.productRepository.create({
-      nome: input.nome,
-      descricao: input.descricao,
-      valor: input.valor,
-    });
-    const stock = await this.stock.create({
-      quantidade: input.quantidade,
-      id_produto: product.id,
-    });
-    const imageUrl = await this.cloudinaryUseCase.uploadImage(image);
-    const salvarImagem = await this.image.create({
-      url: imageUrl,
-      id_produto: product.id,
-    });
-    console.log(salvarImagem);
-    console.log(stock);
-    return { ...product, imageUrl, stock };
+    try {
+      const product = await this.productRepository.create({
+        nome: input.nome,
+        descricao: input.descricao,
+        valor: input.valor,
+      });
+
+      const stock = await this.stock.create({
+        quantidade: input.quantidade,
+        id_produto: product.id,
+      });
+      const imageUrl = await this.cloudinaryUseCase.uploadImage(image);
+      await this.image.create({
+        url: imageUrl,
+        id_origem: product.id,
+      });
+      return { ...product, imageUrl, stock };
+    } catch (error) {
+      throw new InternalServerErrorException('Erro ao criar produto', error);
+    }
   }
 }

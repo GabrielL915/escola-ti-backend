@@ -16,6 +16,7 @@ export class MotoboyRepositoryImpl implements MotoboyRepository {
     const [motoboy] = await this.knex('entregador')
       .insert(input)
       .returning([
+        'id',
         'nome',
         'sobrenome',
         'email',
@@ -81,6 +82,7 @@ export class MotoboyRepositoryImpl implements MotoboyRepository {
           telefone: input.telefone,
           data_de_nascimento: input.data_de_nascimento,
           mochila: input.mochila,
+          cidade: input.cidade,
         })
         .returning([
           'nome',
@@ -89,6 +91,7 @@ export class MotoboyRepositoryImpl implements MotoboyRepository {
           'telefone',
           'data_de_nascimento',
           'mochila',
+          'cidade',
         ]);
       return motoboy;
     } catch (error) {
@@ -100,15 +103,28 @@ export class MotoboyRepositoryImpl implements MotoboyRepository {
     }
   }
 
-  async updateAiqcoins(id: string, input: UpdateMotoboyResponseDto): Promise<Motoboy> {
-      const [motoboy] = await this.knex('entregador')
-        .where({ id: id })
-        .update({
-          aiqcoins: input.aiqcoins,
-        })
-        .returning([
-          'aiqcoins',
-        ]);
-      return motoboy;
+  async updateAiqcoins(
+    id: string,
+    input: UpdateMotoboyResponseDto,
+  ): Promise<Motoboy> {
+    const [motoboy] = await this.knex('entregador')
+      .where({ id: id })
+      .update({
+        aiqcoins: input.aiqcoins,
+      })
+      .returning(['aiqcoins']);
+    return motoboy;
+  }
+
+  async delete(id: string): Promise<void> {
+    const existingMotoboy = await this.knex('entregador')
+      .where({ id: id })
+      .select('*');
+    if (existingMotoboy.length === 0) {
+      throw new NotFoundException('Entregador não encontrado para deletar');
+    }
+    await this.knex('conta').where({ id_entregador: id }).del();
+    await this.knex('entregador').where({ id: id }).del();
+    
   }
 }

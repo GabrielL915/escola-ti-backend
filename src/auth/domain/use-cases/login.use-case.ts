@@ -23,7 +23,9 @@ export class LoginUseCase {
 
   async login({ email, senha }: LoginDto) {
     try {
+
       const entregador = await this.validateEntregador(email, senha);
+
       const payload = { email: entregador.email, sub: entregador.id };
       const tokens = await this.generateToken(payload.sub, payload.email);
       await this.refreshTokenRepository.updateAccount(

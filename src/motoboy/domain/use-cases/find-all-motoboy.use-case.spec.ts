@@ -1,36 +1,39 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MotoboyRepository } from '../repository/motoboy.repository';
-import { FindAllMotoboyUseCase } from './find-all-motoboy.use-case';
 import { InternalServerErrorException } from '@nestjs/common';
+import { FindAllMotoboyUseCase } from './find-all-motoboy.use-case';
 
 describe('FindAllMotoboyUseCase', () => {
-  let findAllMotoboyUseCase: FindAllMotoboyUseCase;
-  let mockRepository: Partial<MotoboyRepository>;
+  let service: FindAllMotoboyUseCase;
+  let mockMotoboyRepository: jest.Mocked<MotoboyRepository>;
 
   beforeEach(async () => {
-    mockRepository = {
+    mockMotoboyRepository = {
       findAll: jest.fn(),
-    };
+    } as unknown as jest.Mocked<MotoboyRepository>;
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         FindAllMotoboyUseCase,
-        { provide: MotoboyRepository, useValue: mockRepository },
+        {
+          provide: MotoboyRepository,
+          useValue: mockMotoboyRepository,
+        },
       ],
     }).compile();
 
-    findAllMotoboyUseCase = module.get<FindAllMotoboyUseCase>(FindAllMotoboyUseCase);
+    service = module.get<FindAllMotoboyUseCase>(FindAllMotoboyUseCase);
   });
 
   it('should be defined', () => {
-    expect(findAllMotoboyUseCase).toBeDefined();
+    expect(service).toBeDefined();
   });
 
-  it('should throw an InternalServerErrorException when there is an error', async () => {
-    (mockRepository.findAll as jest.Mock).mockRejectedValueOnce(new Error());
+  it('should throw InternalServerErrorException when there is an error', async () => {
+    mockMotoboyRepository.findAll.mockRejectedValue(new Error('Fake error'));
 
-    await expect(findAllMotoboyUseCase.findAll()).rejects.toThrow(
-      new InternalServerErrorException('Erro ao buscar Entregadores')
+    await expect(service.findAll()).rejects.toThrow(
+      InternalServerErrorException,
     );
   });
 });

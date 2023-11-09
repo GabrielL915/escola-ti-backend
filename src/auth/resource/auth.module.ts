@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -12,7 +12,6 @@ import { RefreshTokenUseCase } from '../domain/use-cases/refresh-token.use-case'
 import { RefreshTokenRepository } from '../domain/repository/refresh-token.repository';
 import { RefreshTokenRepositoryImpl } from '../data-access/infraestructure/repository/refresh-token.repository.impl';
 import { MotoboyModule } from '../../motoboy/resource/motoboy.module';
-import { CityModule } from '../../city/resource/city.module';
 @Module({
   imports: [
     JwtModule.register({}),
@@ -20,8 +19,7 @@ import { CityModule } from '../../city/resource/city.module';
       defaultStrategy: 'jwt',
       session: false,
     }),
-    MotoboyModule,
-    CityModule,
+    forwardRef(() => MotoboyModule),
   ],
   controllers: [AuthController],
   providers: [
@@ -37,6 +35,6 @@ import { CityModule } from '../../city/resource/city.module';
       useClass: RefreshTokenRepositoryImpl,
     },
   ],
-  exports: [SmsUseCase],
+  exports: [SmsUseCase, LoginUseCase],
 })
 export class AuthModule {}
