@@ -4,9 +4,7 @@ import {
   Body,
   Get,
   Delete,
-  Patch,
   Query,
-  InternalServerErrorException,
   Put,
 } from '@nestjs/common';
 import { CreateMetaDto } from '../domain/dto/create-meta.dto';
@@ -34,7 +32,7 @@ export class MetaController {
     private readonly updateMetaUseCase: UpdateMetaUseCase,
     private readonly deleteMetaUseCase: DeleteMetaUseCase,
     private readonly findMetaUseCase: FindMetaUseCase,
-  ) { }
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Criar uma nova Meta' })

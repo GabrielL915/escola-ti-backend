@@ -20,7 +20,7 @@ describe('MetaController (e2e)', () => {
   const MetaData = {
     id_inscrito: 'ac961430-b90f-4504-8229-23054ad45915',
     id_campanha: '3a092750-b478-47b2-b237-0f312b8c8e1e',
-    id_objetivo: 'c47cdfd7-b385-49af-8dc1-db4fe9457f13',
+    id_objetivo: 'ccf7babb-1d53-449f-9167-bf1e902e2371',
     valor_atingido: 50,
   };
 
@@ -115,8 +115,15 @@ describe('MetaController (e2e)', () => {
   });
 
   it('PUT /meta should update a meta', async () => {
+    const objetivoResponse = await request(app.getHttpServer())
+      .get(`/objective/${MetaData.id_objetivo}`)
+      .expect(200);
+    const valorTotalObjetivo = objetivoResponse.body.meta;
+
+    const valorAtingido = 75;
+
     const updatedMetaData = {
-      valor_atingido: 50
+      valor_atingido: valorAtingido,
     };
 
     const putResponse = await request(app.getHttpServer())
@@ -126,10 +133,12 @@ describe('MetaController (e2e)', () => {
       .send(updatedMetaData)
       .expect(200);
 
+    const expectedPercentage = valorAtingido / valorTotalObjetivo;
+
     expect(putResponse.body).toMatchObject({
-      ...updatedMetaData,
       id_objetivo: MetaData.id_objetivo,
       id_inscrito: MetaData.id_inscrito,
+      valor_atingido: expectedPercentage,
     });
   });
 

@@ -8,6 +8,8 @@ import {
   Param,
   UseGuards,
   Req,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -28,6 +30,8 @@ import { DeleteCampaignUseCase } from '../domain/use-cases/delete-campaign.use-c
 import { FindCampaignUseCase } from '../domain/use-cases/find-campaign.use-cases';
 import { ErrorResponseDto } from '../../auth/domain/dto/error-response.dto';
 import { AccessTokenGuard } from '../../auth/guards/access-token.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { IMAGEN_CREATE_PROVIDER } from '../../shared/constants/injection-tokens';
 
 @ApiTags('campaign')
 @ApiBearerAuth()
@@ -158,8 +162,12 @@ export class CampaignController {
       },
     },
   })
-  async create(@Body() input: CreateCampaignDto) {
-    return await this.createCampaignUseCase.create(input);
+  @UseInterceptors(FileInterceptor('image'))
+  async create(
+    @Body() input: CreateCampaignDto,
+    @UploadedFile() image: Express.Multer.File,
+  ) {
+    return await this.createCampaignUseCase.create(input, image);
   }
 
   @Put(':id')
@@ -193,8 +201,13 @@ export class CampaignController {
     type: UpdateCampaignDto,
     description: 'Dados para atualização da campanha',
   })
-  async update(@Param('id') id: string, @Body() input: UpdateCampaignDto) {
-    return await this.updateCampaignUseCase.update(id, input);
+  @UseInterceptors(FileInterceptor('image'))
+  async update(
+    @Param('id') id: string,
+    @Body() input: UpdateCampaignDto,
+    @UploadedFile() image: Express.Multer.File,
+  ) {
+    return await this.updateCampaignUseCase.update(id, input, image);
   }
 
   @Delete(':id')
