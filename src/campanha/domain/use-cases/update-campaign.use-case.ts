@@ -3,14 +3,13 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { Campaign } from '../entities/campaign.entity';
 import { CampaignRepository } from '../repository/campaign.repository';
 import { UpdateCampaignDto } from '../dto/update-campaign.dto';
 import { CloudinaryUseCase } from '../../../cloudinary/domain/use-cases/cloudinary.use-case';
-import { IMAGEN_UPDATE_PROVIDER } from 'src/shared/constants/injection-tokens';
-import { IUpdate } from 'src/shared/interfaces/update.interface';
-import { UpdateImagenDto } from 'src/imagens/domain/dto/update-imagen.dto';
-import { Imagen } from 'src/imagens/domain/entities/imagen.entity';
+import { IMAGEN_UPDATE_PROVIDER } from '../../../shared/constants/injection-tokens';
+import { IUpdate } from '../../../shared/interfaces/update.interface';
+import { UpdateImagenDto } from '../../../imagens/domain/dto/update-imagen.dto';
+import { Imagen } from '../../../imagens/domain/entities/imagen.entity';
 
 @Injectable()
 export class UpdateCampaignUseCase {

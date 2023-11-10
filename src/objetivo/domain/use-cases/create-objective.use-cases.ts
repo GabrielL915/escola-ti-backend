@@ -6,10 +6,7 @@ import {
 import { ObjectiveRepository } from '../repository/objective.repository';
 import { CreateObjectiveDto } from '../dto/create-objective.dto';
 import { CloudinaryUseCase } from '../../../cloudinary/domain/use-cases/cloudinary.use-case';
-import {
-  IMAGEN_CREATE_PROVIDER,
-  STOCK_CREATE_PROVIDER,
-} from '../../../shared/constants/injection-tokens';
+import { IMAGEN_CREATE_PROVIDER } from '../../../shared/constants/injection-tokens';
 import { ICreate } from '../../../shared/interfaces/create.interface';
 import { CreateImagenDto } from '../../../imagens/domain/dto/create-imagen.dto';
 import { Imagen } from '../../../imagens/domain/entities/imagen.entity';
@@ -20,7 +17,6 @@ export class CreateObjectiveUseCase {
     private readonly cloudinaryUseCase: CloudinaryUseCase,
     @Inject(IMAGEN_CREATE_PROVIDER)
     private readonly image: ICreate<CreateImagenDto, Imagen>,
-    @Inject(STOCK_CREATE_PROVIDER)
     private readonly objectiveRepository: ObjectiveRepository,
   ) {}
 
@@ -28,7 +24,7 @@ export class CreateObjectiveUseCase {
     try {
       const response = await this.objectiveRepository.create(input);
       const imageUrl = await this.cloudinaryUseCase.uploadImage(image);
-      const salvarImagem = await this.image.create({
+      await this.image.create({
         url: imageUrl,
         id_origem: response.id,
       });

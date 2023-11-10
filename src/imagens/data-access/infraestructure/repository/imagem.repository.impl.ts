@@ -20,19 +20,19 @@ export class ImagemRepositoryImpl implements ImagemRepository {
   async findById(id: string): Promise<Imagen> {
     const [imagen] = await this.knex('imagem')
       .select('*')
-      .where({ id_produto: id });
+      .where({ id_origem: id });
     return imagen;
   }
 
   async update(id: string, input: UpdateImagenDto): Promise<Imagen> {
     const [imagen] = await this.knex('imagem')
-      .where({ id_produto: id })
+      .where({ id_origem: id })
       .update(input)
       .returning('*');
     return imagen;
   }
 
   async delete(id: string): Promise<void> {
-    await this.knex('imagem').where({ id_produto: id }).del();
+    await this.knex('imagem').where({ id_origem: id }).del();
   }
 }

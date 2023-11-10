@@ -3,11 +3,10 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { Campaign } from '../entities/campaign.entity';
 import { CampaignRepository } from '../repository/campaign.repository';
-import { IMAGEN_FIND_BY_ID_PROVIDER } from 'src/shared/constants/injection-tokens';
-import { Imagen } from 'src/imagens/domain/entities/imagen.entity';
-import { IFindById } from 'src/shared/interfaces/find-by-id.interface';
+import { IMAGEN_FIND_BY_ID_PROVIDER } from '../../../shared/constants/injection-tokens';
+import { Imagen } from '../../../imagens/domain/entities/imagen.entity';
+import { IFindById } from '../../../shared/interfaces/find-by-id.interface';
 
 @Injectable()
 export class FindCampaignUseCase {

@@ -9,9 +9,11 @@ import { ObjectiveController } from './objective.controller';
 import { ObjectiveRepository } from '../domain/repository/objective.repository';
 import { AuthModule } from '../../auth/resource/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { CloudinaryModule } from '../../cloudinary/resource/cloudinary.module';
+import { ImagensModule } from '../../imagens/resource/imagens.module';
 
 @Module({
-  imports: [ConfigModule, AuthModule],
+  imports: [ConfigModule, AuthModule, CloudinaryModule, ImagensModule],
   controllers: [ObjectiveController],
   providers: [
     {

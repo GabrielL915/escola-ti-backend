@@ -28,12 +28,13 @@ export class CreateCampaignUseCase {
     try {
       const response = await this.campaignRepository.create(input);
       const imageUrl = await this.cloudinaryUseCase.uploadImage(image);
-      const salvarImagem = await this.image.create({
+      await this.image.create({
         url: imageUrl,
         id_origem: response.id,
       });
       return { ...response, imageUrl };
     } catch (error) {
+      console.error(error);
       throw new InternalServerErrorException('Erro ao criar campanha', error);
     }
   }
