@@ -35,3 +35,9 @@ describe('CreateImagenUseCase', () => {
     await expect(service.create({} as CreateImagenDto)).rejects.toThrowError();
   });
 });
+
+describe('CreateImagenDto', () => {
+  it('should be defined', () => {
+    expect(CreateImagenDto).toBeDefined();
+  });
+});

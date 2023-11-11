@@ -1,7 +1,8 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateCarrinhoDto } from './create-carrinho.dto';
+import { IsBoolean, IsNumber } from 'class-validator';
 
-export class UpdateCarrinhoDto extends PartialType(CreateCarrinhoDto) {
+export class UpdateCarrinhoDto {
+  @IsNumber()
   valor_total?: number;
+  @IsBoolean()
   status?: boolean;
 }

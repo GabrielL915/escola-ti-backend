@@ -35,3 +35,10 @@ describe('CreateStockUseCase', () => {
     await expect(service.create({} as CreateStockDto)).rejects.toThrowError();
   });
 });
+
+describe('CreateStockDto', () => {
+  it('should be defined', () => {
+    expect(CreateStockDto).toBeDefined();
+  });
+
+});

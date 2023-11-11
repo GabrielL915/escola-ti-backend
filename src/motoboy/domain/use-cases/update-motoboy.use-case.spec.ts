@@ -1,8 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MotoboyRepository } from '../repository/motoboy.repository';
-import { InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { UpdateMotoboyUseCase } from './update-motoboy.use-case';
-import { UpdateMotoboyRequestDto } from    '../dto/update-motoboy-request.dto';
+import { UpdateMotoboyRequestDto } from '../dto/update-motoboy-request.dto';
+import { UpdateMotoboyResponseDto } from '../dto/update-motoboy-response.dto';
 
 describe('UpdateMotoboyUseCase', () => {
   let service: UpdateMotoboyUseCase;
@@ -52,17 +56,29 @@ describe('UpdateMotoboyUseCase', () => {
     });
     mockMotoboyRepository.update.mockRejectedValue(new Error('Fake error'));
 
-    await expect(service.update('1', {} as UpdateMotoboyRequestDto)).rejects.toThrow(
-      InternalServerErrorException,
-    );
+    await expect(
+      service.update('1', {} as UpdateMotoboyRequestDto),
+    ).rejects.toThrow(InternalServerErrorException);
   });
 
   it('should throw NotFoundException when motoboy is not found', async () => {
     mockMotoboyRepository.findById.mockResolvedValue(null);
-   
+
     await expect(async () => {
       await service.update('1', {} as UpdateMotoboyRequestDto);
     }).rejects.toThrow(NotFoundException);
     expect(mockMotoboyRepository.findById).toBeCalledWith('1');
+  });
+});
+
+describe('UpdateMotoboyRequestDto', () => {
+  it('should be defined', () => {
+    expect(UpdateMotoboyRequestDto).toBeDefined();
+  });
+});
+
+describe('UpdateMotoboyResponseDto', () => {
+  it('should be defined', () => {
+    expect(UpdateMotoboyResponseDto).toBeDefined();
   });
 });
