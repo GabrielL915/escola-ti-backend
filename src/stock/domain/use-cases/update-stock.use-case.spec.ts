@@ -37,3 +37,9 @@ describe('UpdateStockUseCase', () => {
     ).rejects.toThrowError();
   });
 });
+
+describe('UpdateStockDto', () => {
+  it('should be defined', () => {
+    expect(UpdateStockDto).toBeDefined();
+  });
+});

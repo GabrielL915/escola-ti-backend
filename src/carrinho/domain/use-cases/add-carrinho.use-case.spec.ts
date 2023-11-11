@@ -1,8 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   BadRequestException,
-  Inject,
-  Injectable,
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
@@ -78,15 +76,6 @@ describe('AddCarrinhoUseCase', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
-/* 
-  it('should throw NotFoundException when carrinho is not found', async () => {
-    mockCarrinhoRepository.findByIdMotoboy.mockResolvedValue(null);
-    await expect(
-      service.addCarrinho('1', '2', { quantidade: 1 }),
-    ).rejects.toThrow(NotFoundException);
-    expect(mockCarrinhoRepository.findByIdMotoboy).toBeCalledWith('2');
-  });
- */
 
   it('should throw NotFoundException when product is not found', async () => {
     mockProducts.findById.mockResolvedValue(null);
@@ -120,7 +109,6 @@ describe('AddCarrinhoUseCase', () => {
     }).rejects.toThrow(BadRequestException);
   });
 
-
   it('should throw InternalServerErrorException when there is an error', async () => {
     mockProducts.findById.mockResolvedValue({
       id: '1',
@@ -150,5 +138,11 @@ describe('AddCarrinhoUseCase', () => {
     await expect(
       service.addCarrinho('1', '2', { quantidade: 5 }),
     ).rejects.toThrow(InternalServerErrorException);
+  });
+});
+
+describe('UpdateCarrinhoDto', () => {
+  it('should be defined', () => {
+    expect(UpdateCarrinhoDto).toBeDefined();
   });
 });
