@@ -6,7 +6,7 @@ import { createdAt } from '../../../../shared/utils/created-at';
 import { UpdateCarrinhoDto } from 'src/carrinho/domain/dto/update-carrinho.dto';
 export class CarrinhoRepositoryImpl implements CarrinhoRepository {
   constructor(@InjectKnex() private readonly knex: Knex) {}
-
+  
   async create(id_motoboy: string): Promise<Carrinho> {
     const newCarrinho = {
       id_entregador: id_motoboy,

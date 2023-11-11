@@ -1,3 +1,6 @@
+import { IsNumber } from 'class-validator';
+
 export class AddCarrinhoDto {
-    quantidade: number;
+  @IsNumber()
+  quantidade: number;
 }

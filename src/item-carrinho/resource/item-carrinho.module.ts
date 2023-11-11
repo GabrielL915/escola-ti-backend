@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ItemCarrinhoController } from './item-carrinho.controller';
 import { CreateItemCarrinhoUseCase } from '../domain/use-cases/create-item-carrinho.use-case';
 import { FindAllByIdItensCarrinhoUseCase } from '../domain/use-cases/find-all-by-id-itens-carrinho.use-case';
 import { ItemCarrinhoRepository } from '../domain/repository/item-carrinho.repository';
@@ -10,7 +9,7 @@ import {
 } from '../../shared/constants/injection-tokens';
 
 @Module({
-  controllers: [ItemCarrinhoController],
+  controllers: [],
   providers: [
     CreateItemCarrinhoUseCase,
     FindAllByIdItensCarrinhoUseCase,

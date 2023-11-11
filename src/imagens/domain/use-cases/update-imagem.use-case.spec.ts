@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ImagemRepository } from '../repository/imagem.repository';
 import { UpdateImagemUseCase } from './update-imagem.use-case';
+import { UpdateImagenDto } from '../dto/update-imagen.dto';
 
 describe('UpdateImagemUseCase', () => {
   let service: UpdateImagemUseCase;
@@ -32,5 +33,11 @@ describe('UpdateImagemUseCase', () => {
     mockImagemRepository.update.mockRejectedValue(new Error('Fake error'));
 
     await expect(service.update('id', {} as any)).rejects.toThrowError();
+  });
+});
+
+describe('UpdateImagenDto', () => {
+  it('should be defined', () => {
+    expect(UpdateImagenDto).toBeDefined();
   });
 });
