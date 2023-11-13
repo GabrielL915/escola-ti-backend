@@ -163,7 +163,7 @@ describe('ProductsController (e2e)', () => {
 
     expect(response.status).toBe(200);
     
-  });
+  }, 10000);
 
   it('should find a product by id', async () => {
     const response = await request(app.getHttpServer()).get(

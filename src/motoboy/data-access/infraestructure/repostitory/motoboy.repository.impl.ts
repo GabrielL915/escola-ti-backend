@@ -5,7 +5,6 @@ import { CreateMotoboyDto } from '../../../domain/dto/create-motoboy.dto';
 import { UpdateMotoboyRequestDto } from '../../../domain/dto/update-motoboy-request.dto';
 import { MotoboyRepository } from '../../../domain/repository/motoboy.repository';
 import {
-  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { UpdateMotoboyResponseDto } from 'src/motoboy/domain/dto/update-motoboy-response.dto';
@@ -66,41 +65,33 @@ export class MotoboyRepositoryImpl implements MotoboyRepository {
   }
 
   async update(id: string, input: UpdateMotoboyRequestDto): Promise<Motoboy> {
-    try {
-      const existingMotoboy = await this.knex('entregador')
-        .where({ id: id })
-        .select('*');
-      if (existingMotoboy.length === 0) {
-        throw new NotFoundException('Entregador não encontrado para atualizar');
-      }
-      const [motoboy] = await this.knex('entregador')
-        .where({ id: id })
-        .update({
-          nome: input.nome,
-          sobrenome: input.sobrenome,
-          email: input.email,
-          telefone: input.telefone,
-          data_de_nascimento: input.data_de_nascimento,
-          mochila: input.mochila,
-          cidade: input.cidade,
-        })
-        .returning([
-          'nome',
-          'sobrenome',
-          'email',
-          'telefone',
-          'data_de_nascimento',
-          'mochila',
-          'cidade',
-        ]);
-      return motoboy;
-    } catch (error) {
-      console.error(error);
-      throw new InternalServerErrorException(
-        'Erro ao atualizar Entregador',
-        error,
-      );
+    const existingMotoboy = await this.knex('entregador')
+      .where({ id: id })
+      .select('*');
+    if (existingMotoboy.length === 0) {
+      throw new NotFoundException('Entregador não encontrado para atualizar');
     }
+    const [motoboy] = await this.knex('entregador')
+      .where({ id: id })
+      .update({
+        nome: input.nome,
+        sobrenome: input.sobrenome,
+        email: input.email,
+        telefone: input.telefone,
+        data_de_nascimento: input.data_de_nascimento,
+        mochila: input.mochila,
+        cidade: input.cidade,
+      })
+      .returning([
+        'nome',
+        'sobrenome',
+        'email',
+        'telefone',
+        'data_de_nascimento',
+        'mochila',
+        'cidade',
+      ]);
+    return motoboy;
   }
 
   async updateAiqcoins(
@@ -125,6 +116,5 @@ export class MotoboyRepositoryImpl implements MotoboyRepository {
     }
     await this.knex('conta').where({ id_entregador: id }).del();
     await this.knex('entregador').where({ id: id }).del();
-    
   }
 }
