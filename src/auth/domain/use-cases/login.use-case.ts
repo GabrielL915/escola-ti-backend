@@ -3,6 +3,7 @@ import {
   NotFoundException,
   UnauthorizedException,
   InternalServerErrorException,
+  BadRequestException,
 } from '@nestjs/common';
 import { LoginDto } from '../dto/login.dto';
 import { timingSafeEqual } from 'crypto';
@@ -23,7 +24,6 @@ export class LoginUseCase {
 
   async login({ email, senha }: LoginDto) {
     try {
-
       const entregador = await this.validateEntregador(email, senha);
 
       const payload = { email: entregador.email, sub: entregador.id };
@@ -55,7 +55,7 @@ export class LoginUseCase {
           },
           {
             secret: this.configService.get<string>('KEY'),
-            expiresIn: '10000s',
+            expiresIn: '4d',
           },
         ),
         this.jwtService.signAsync(
@@ -83,15 +83,14 @@ export class LoginUseCase {
       if (!entregador) {
         throw new NotFoundException('Entregador não encontrado.');
       }
-      const validPassword = this.comparePassword(entregador.senha, senha);
-      if (!validPassword) {
-        throw new UnauthorizedException(
-          'Senha incorreta ou entregador inativo.',
-        );
-      }
+      this.comparePassword(entregador.senha, senha);
       return entregador;
     } catch (error) {
-      if (error instanceof NotFoundException) {
+      if (
+        error instanceof NotFoundException ||
+        error instanceof BadRequestException ||
+        error instanceof UnauthorizedException
+      ) {
         throw error;
       }
       throw new InternalServerErrorException(
@@ -102,10 +101,10 @@ export class LoginUseCase {
   }
 
   private comparePassword(storedPassword: string, inputPassword: string) {
+    if (!storedPassword.includes('.')) {
+      throw new BadRequestException('Senha armazenada em formato inválido');
+    }
     try {
-      if (!storedPassword.includes('.')) {
-        throw new UnauthorizedException('Senha armazenada em formato inválido');
-      }
       const [salt, hash] = storedPassword.split('.');
       const hashedInput = hashPassword(inputPassword, salt);
       const match = timingSafeEqual(

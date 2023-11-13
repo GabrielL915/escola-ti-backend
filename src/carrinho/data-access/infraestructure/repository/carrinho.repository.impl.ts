@@ -14,13 +14,13 @@ export class CarrinhoRepositoryImpl implements CarrinhoRepository {
       data_de_compra: createdAt,
     };
 
-    const [carrinho] = await this.knex('carrinho')
+    const [carrinho] = await this.knex.from('carrinho')
       .insert(newCarrinho)
       .returning('*');
     return carrinho;
   }
   async addCarrinho(id: string, input: UpdateCarrinhoDto): Promise<Carrinho> {
-    const [carrinho] = await this.knex('carrinho')
+    const [carrinho] = await this.knex.from('carrinho')
       .update(input)
       .where({ id })
       .returning('*');
@@ -28,13 +28,13 @@ export class CarrinhoRepositoryImpl implements CarrinhoRepository {
   }
 
   async findByIdMotoboy(id: string): Promise<Carrinho> {
-    const [cart] = await this.knex('carrinho')
+    const [cart] = await this.knex.from('carrinho')
       .select('*')
       .where({ id_entregador: id, status: true });
     return cart;
   }
   async findById(id: string): Promise<Carrinho> {
-    const [cart] = await this.knex('carrinho').select('*').where({ id });
+    const [cart] = await this.knex.from('carrinho').select('*').where({ id });
     return cart;
   }
   async delete(id: string): Promise<void> {

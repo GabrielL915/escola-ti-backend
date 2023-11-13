@@ -1,7 +1,5 @@
 import { SmsUseCase } from './sms.use-case';
-import {
-  BadRequestException,
-} from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 
 describe('SmsUseCase', () => {
   let smsUseCase: SmsUseCase;
@@ -10,26 +8,24 @@ describe('SmsUseCase', () => {
     smsUseCase = new SmsUseCase();
   });
 
-/* TODO: Fix this test
-  it('should generate a code', async () => {
-    const phone = '1234567890';
+  it('should be defined', () => {
+    expect(smsUseCase).toBeDefined();
+  });
+
+  it('should generate a new code and store it', async () => {
+    const phone = '123456789';
     const code = await smsUseCase.generateCode(phone);
-
-    expect(code).toBeGreaterThanOrEqual(1000);
-    expect(code).toBeLessThanOrEqual(9999);
+    expect(code).toBeDefined();
+    expect(smsUseCase.getTempPhones()).toContain(phone);
   });
- */
-/* TODO: Fix this test   
-it('should validate a code', async () => {
-    const phone = '1234567890';
-    const code = 1234;
 
-    await smsUseCase.generateCode(phone);
-
-    const isValid = await smsUseCase.validateCode(phone, code);
-    expect(isValid).toBeTruthy();
+  it('should validate the code correctly', async () => {
+    const phone = '123456789';
+    const code = await smsUseCase.generateCode(phone);
+    const validationResult = await smsUseCase.validateCode(phone, code);
+    expect(validationResult).toBe(true);
   });
- */
+
   it('should throw BadRequestException when validating an invalid code', async () => {
     const phone = '1234567890';
     const invalidCode = 9999;
@@ -45,5 +41,4 @@ it('should validate a code', async () => {
     const tempPhones = smsUseCase.getTempPhones();
     expect(Array.from(tempPhones)).toEqual([]);
   });
-
 });
