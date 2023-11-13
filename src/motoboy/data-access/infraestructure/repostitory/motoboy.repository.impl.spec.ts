@@ -128,33 +128,4 @@ describe('MotoboyRepositoryImpl', () => {
   afterAll(() => {
     jest.clearAllMocks();
   });
-
-  /* TODO: Fix this test 
-  it('should create a new motoboy', async () => {
-    mockKnex.insert.mockReturnThis();
-    mockKnex.returning.mockResolvedValueOnce([
-      {
-        nome: 'João',
-        sobrenome: 'Almeida',
-        email: 'joao.almeida@example.com',
-        data_de_nascimento: '01/01/1990',
-        mochila: true,
-        telefone: 'teste',
-    
-      },
-    ]);
-    const motoboy = await repository.create({
-      nome: 'João',
-      sobrenome: 'Almeida',
-      email: 'joao.almeida@example.com',
-      data_de_nascimento: '01/01/1990',
-      mochila: true,
-      cpf: '123.456.789-00',
-      cnpj: '12.345.678/0001-99',
-      telefone: 'teste',
-      senha: 'senhaSegura123',
-      id_endereco_de_servico: '00000000-0000-0000-0000-000000000000',
-  });
-    expect(motoboy).toBeDefined();
-  }); */
 });

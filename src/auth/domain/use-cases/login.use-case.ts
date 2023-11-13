@@ -55,7 +55,7 @@ export class LoginUseCase {
           },
           {
             secret: this.configService.get<string>('KEY'),
-            expiresIn: '10000s',
+            expiresIn: '4d',
           },
         ),
         this.jwtService.signAsync(

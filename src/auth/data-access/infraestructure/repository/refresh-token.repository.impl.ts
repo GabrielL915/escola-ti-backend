@@ -1,4 +1,3 @@
-import { InternalServerErrorException } from '@nestjs/common';
 import { Knex } from 'knex';
 import { RefreshTokenRepository } from '../../../domain/repository/refresh-token.repository';
 import { InjectKnex } from 'nestjs-knex';

@@ -7,7 +7,6 @@ import { RefreshTokenRepository } from '../repository/refresh-token.repository';
 import { MotoboyRepository } from '../../../motoboy/domain/repository/motoboy.repository';
 import { LoginUseCase } from './login.use-case';
 
-
 @Injectable()
 export class RefreshTokenUseCase {
   constructor(
@@ -17,13 +16,13 @@ export class RefreshTokenUseCase {
   ) {}
 
   async refreshToken(motoboyId: string, refreshToken: string) {
+    const storedTokens = await this.refreshTokenRepository.getStoredTokens(
+      motoboyId,
+    );
+    if (!storedTokens) {
+      throw new NotFoundException('Token não encontrado');
+    }
     try {
-      const storedTokens = await this.refreshTokenRepository.getStoredTokens(
-        motoboyId,
-      );
-      if (!storedTokens) {
-        throw new NotFoundException('Token não encontrado');
-      }
       const motoboy = await this.motoboyRepository.findById(motoboyId);
 
       const { access_token, refresh_token } =
@@ -36,12 +35,7 @@ export class RefreshTokenUseCase {
       );
       return { access_token, refresh_token };
     } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
       throw new InternalServerErrorException('Erro ao atualizar token.', error);
     }
   }
-
-  
 }
