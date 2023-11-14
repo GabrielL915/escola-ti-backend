@@ -25,7 +25,6 @@ export class UpdateMetaUseCase {
       throw new NotFoundException('Objetivo não encontrado.');
     }
     try {
-      console.log(input.valor_atingido)
       const porcentagemProgresso = input.valor_atingido / objetivo.meta;
       const updatedInput = { ...input, valor_atingido: porcentagemProgresso };
 

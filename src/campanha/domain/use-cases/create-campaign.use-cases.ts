@@ -34,7 +34,6 @@ export class CreateCampaignUseCase {
       });
       return { ...response, imageUrl };
     } catch (error) {
-      console.error(error);
       throw new InternalServerErrorException('Erro ao criar campanha', error);
     }
   }

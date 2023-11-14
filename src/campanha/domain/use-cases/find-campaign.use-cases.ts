@@ -35,11 +35,11 @@ export class FindCampaignUseCase {
     try {
       const response = await this.campaignRepository.findOne(id, motoboyId);
       const imagem = await this.image.findById(id);
+      console.log(response);
       return { ...response, imagem };
     } catch (error) {
       throw new InternalServerErrorException(
         'Erro ao buscar campanha por id',
-        error,
       );
     }
   }
