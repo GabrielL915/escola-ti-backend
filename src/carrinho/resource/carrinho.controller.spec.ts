@@ -17,22 +17,12 @@ import { ProductsModule } from '../../products/resource/products.module';
 import { ItemCarrinhoModule } from '../../item-carrinho/resource/item-carrinho.module';
 import {
   CARRINHO_FIND_ITENS_BY_ID_PROVIDER,
-  ITEM_CARRINHO_CREATE_PROVIDER,
-  ITEM_CARRINHO_FIND_ALL_BY_ID_PROVIDER,
-  PRODUCTS_FIND_BY_ID_PROVIDER,
-  STOCK_UPDATE_PROVIDER,
-  STOCK_FIND_BY_ID_PROVIDER,
-  MOTOBOY_UPDATE_PROVIDER,
-  MOTOBOY_FIND_BY_ID_PROVIDER,
 } from '../../shared/constants/injection-tokens';
-import { IFindAllById } from '../../shared/interfaces/find-all-by-id.interface';
-import { IFindById } from '../../shared/interfaces/find-by-id.interface';
 import { StockModule } from '../../stock/resource/stock.module';
 import { GenerateBearer } from '../../shared/utils/generate-bearer';
 import { LoginUseCase } from '../../auth/domain/use-cases/login.use-case';
 import { RegisterUseCase } from '../../auth/domain/use-cases/register.use-case';
 import { AuthModule } from '../../auth/resource/auth.module';
-import { hashPassword } from '../../auth/utils/hash-password';
 import { MotoboyRepository } from '../../motoboy/domain/repository/motoboy.repository';
 import { ProductRepository } from '../../products/domain/repository/products.repository';
 
@@ -40,9 +30,7 @@ describe('CarrinhoController (e2e)', () => {
   let app: INestApplication;
   let jwtToken: any;
   let generateBearer: GenerateBearer;
-  let carrinhoRepo: CarrinhoRepository;
   let motoboyRepo: MotoboyRepository;
-  let productsRepo: ProductRepository;
   let mockid: string;
   let productId: string;
   let carrinhoId: string;

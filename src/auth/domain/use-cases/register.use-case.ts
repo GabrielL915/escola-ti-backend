@@ -39,11 +39,9 @@ export class RegisterUseCase {
       const motoboy = await this.motoboyRepository.create(newRegister);
       return motoboy;
     } catch (error) {
-      console.log(error);
       if (error.code === '23505') {
         throw new ConflictException('Registro já existe.', error);
       }
-      console.log(error);
       throw new InternalServerErrorException(
         'Erro interno ao tentar realizar cadastro do Entregador.',
         error,

@@ -1,6 +1,6 @@
 import { HttpException, BadRequestException } from '@nestjs/common';
 import { HttpExceptionFilter } from './exception-filter';
-import { getErrorCodeForException } from '../../shared/utils/generate-error-code';
+import { getErrorCodeForException } from '../utils/generate-error-code';
 
 jest.mock('../../shared/utils/generate-error-code');
 

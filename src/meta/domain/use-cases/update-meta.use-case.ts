@@ -36,7 +36,6 @@ export class UpdateMetaUseCase {
 
       return response;
     } catch (error) {
-      console.error(error);
       throw new InternalServerErrorException('Erro ao atualizar Meta', error);
     }
   }
