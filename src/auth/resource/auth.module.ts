@@ -35,6 +35,6 @@ import { MotoboyModule } from '../../motoboy/resource/motoboy.module';
       useClass: RefreshTokenRepositoryImpl,
     },
   ],
-  exports: [SmsUseCase, LoginUseCase],
+  exports: [SmsUseCase, RegisterUseCase, LoginUseCase]
 })
-export class AuthModule {}
+export class AuthModule { }

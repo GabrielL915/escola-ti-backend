@@ -1,4 +1,4 @@
-export interface Registered {
+export interface Subscribe {
   id: string;
   id_entregador: string;
   id_campanha: string;
