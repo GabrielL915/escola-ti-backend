@@ -33,7 +33,7 @@ describe('ObjectiveController (e2e)', () => {
   let objectiveId: string;
 
   const objectiveData = {
-    descricao: 'Objetivo do Cassetão',
+    descricao: 'Objetivo do mês de março',
     id_campanha: 'ee52db7b-12da-42de-9d3f-d8d3bddf235f',
     titulo: 'Objetivo Março',
     premio_associado: 100,
@@ -160,29 +160,29 @@ describe('ObjectiveController (e2e)', () => {
     expect(typeof response.body.id).toBe('string');
   });
 
-  // it('PUT /objective/:id should update a objective', async () => {
-  //   const updatedObjectiveData = {
-  //     ...objectiveData,
-  //     titulo: 'Objetivo Abril',
-  //   };
+  it('PUT /objective/:id should update a objective', async () => {
+    // const updatedObjectiveData = {
+    //   ...objectiveData,
+    //   titulo: 'Objetivo Abril',
+    // };
 
-  //   const putResponse = await request(app.getHttpServer())
-  //     .put(`/objective/${objectiveId}`)
-  //     .field('descricao', objectiveData.descricao)
-  //     .field('id_campanha', objectiveData.id_campanha)
-  //     .field('titulo', objectiveData.titulo)
-  //     .field('premio_associado', objectiveData.premio_associado)
-  //     .field('meta', objectiveData.meta)
-  //     .attach('image', 'test/assets/moscando.jpg')
-  //     .expect(200);
+    await request(app.getHttpServer())
+      .put(`/objective/${objectiveId}`)
+      .field('descricao', objectiveData.descricao)
+      .field('id_campanha', objectiveData.id_campanha)
+      .field('titulo', 'Objetivo Abril')
+      .field('premio_associado', objectiveData.premio_associado)
+      .field('meta', objectiveData.meta)
+      .attach('image', 'test/assets/moscando.jpg')
+      .expect(200);
 
-  //   expect(putResponse.body).toMatchObject({ ...updatedObjectiveData });
-  //   expect(typeof putResponse.body.id).toBe('string');
-  // });
+    // expect(putResponse.body).toMatchObject({ ...updatedObjectiveData });
+    // expect(typeof putResponse.body.id).toBe('string');
+  });
 
-  // it('DELETE /objective/:id should delete a objective', async () => {
-  //   await request(app.getHttpServer())
-  //     .delete(`/objective/${objectiveId}`)
-  //     .expect(200);
-  // });
+  it('DELETE /objective/:id should delete a objective', async () => {
+    await request(app.getHttpServer())
+      .delete(`/objective/${objectiveId}`)
+      .expect(200);
+  });
 });

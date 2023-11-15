@@ -38,9 +38,10 @@ describe('CampaignController (e2e)', () => {
   let app: INestApplication;
   let jwtToken: any;
   let generateBearer: GenerateBearer;
+  let campaignId: string;
 
   const campaignData = {
-    tipo: 'Campanha do Cassetinho',
+    tipo: 'Campanha das Massas',
     dias: ['Segunda-feira', 'Terça-feira'],
     horario_inicial: '2023-09-18T09:00:00.000Z',
     horario_final: '2023-09-18T17:00:00.000Z',
@@ -156,6 +157,8 @@ describe('CampaignController (e2e)', () => {
 
     expect(response.status).toBe(201);
 
+    campaignId = response.body.id;
+
     // expect(response.body).toMatchObject({ ...campaignData, status: true });
     // expect(typeof response.body.id).toBe('string');
   });
@@ -190,28 +193,8 @@ describe('CampaignController (e2e)', () => {
   });
 
   it('GET /campaign/:id should get a campaign by its ID', async () => {
-    const postResponse = await request(app.getHttpServer())
-      .post('/campaign')
-      .field('tipo', campaignData.tipo)
-      .field('dias', campaignData.dias)
-      .field('horario_inicial', campaignData.horario_inicial)
-      .field('horario_final', campaignData.horario_final)
-      .field(
-        'limite_corridas_ignoradas',
-        campaignData.limite_corridas_ignoradas,
-      )
-      .field(
-        'limite_corridas_recusadas',
-        campaignData.limite_corridas_recusadas,
-      )
-      .field('tempo_de_tolerancia', campaignData.tempo_de_tolerancia)
-      .field('descricao', campaignData.descricao)
-      .attach('image', 'test/assets/moscando.jpg');
-
-    const createdCampaignId = postResponse.body.id;
-
     const response = await request(app.getHttpServer())
-      .get(`/campaign/${createdCampaignId}`)
+      .get(`/campaign/${campaignId}`)
       .set('Authorization', `Bearer ${jwtToken.access_token}`)
       .expect(200);
 
@@ -232,28 +215,8 @@ describe('CampaignController (e2e)', () => {
   });
 
   it('PUT /campaign/:id should update a campaign', async () => {
-    const postResponse = await request(app.getHttpServer())
-      .post('/campaign')
-      .field('tipo', campaignData.tipo)
-      .field('dias', ['Segunda-feira', 'Terça-feira'])
-      .field('horario_inicial', campaignData.horario_inicial)
-      .field('horario_final', campaignData.horario_final)
-      .field(
-        'limite_corridas_ignoradas',
-        campaignData.limite_corridas_ignoradas,
-      )
-      .field(
-        'limite_corridas_recusadas',
-        campaignData.limite_corridas_recusadas,
-      )
-      .field('tempo_de_tolerancia', campaignData.tempo_de_tolerancia)
-      .field('descricao', campaignData.descricao)
-      .attach('image', 'test/assets/moscando.jpg');
-
-    const createdCampaignId = postResponse.body.id;
-
     const response = await request(app.getHttpServer())
-      .put(`/campaign/${createdCampaignId}`)
+      .put(`/campaign/${campaignId}`)
       .field('tipo', 'Campnha foi Atualizada')
       .field('dias', campaignData.dias)
       .field('horario_inicial', campaignData.horario_inicial)
@@ -274,28 +237,8 @@ describe('CampaignController (e2e)', () => {
   });
 
   it('DELETE /campaign/:id should delete a campaign', async () => {
-    const postResponse = await request(app.getHttpServer())
-      .post('/campaign')
-      .field('tipo', campaignData.tipo)
-      .field('dias', ['Segunda-feira', 'Terça-feira'])
-      .field('horario_inicial', campaignData.horario_inicial)
-      .field('horario_final', campaignData.horario_final)
-      .field(
-        'limite_corridas_ignoradas',
-        campaignData.limite_corridas_ignoradas,
-      )
-      .field(
-        'limite_corridas_recusadas',
-        campaignData.limite_corridas_recusadas,
-      )
-      .field('tempo_de_tolerancia', campaignData.tempo_de_tolerancia)
-      .field('descricao', campaignData.descricao)
-      .attach('image', 'test/assets/moscando.jpg');
-
-    const createdCampaignId = postResponse.body.id;
-
     await request(app.getHttpServer())
-      .delete(`/campaign/${createdCampaignId}`)
+      .delete(`/campaign/${campaignId}`)
       .expect(200);
   });
 });
