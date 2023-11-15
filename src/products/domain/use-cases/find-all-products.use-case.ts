@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ProductRepository } from '../repository/products.repository';
 import { IFindById } from '../../../shared/interfaces/find-by-id.interface';
 import {
@@ -17,18 +17,22 @@ export class FindAllProductsUseCase {
     private readonly stock: IFindById<Stock>,
   ) {}
   async findAll() {
-    const products = await this.productRepository.findAll();
-    const productsWithImagens = await Promise.all(
-      products.map(async (product) => {
-        const imagem = await this.image.findById(product.id);
-        const stock = await this.stock.findById(product.id);
-        return {
-          ...product,
-          imagem,
-          stock,
-        };
-      }),
-    );
-    return productsWithImagens;
+    try {
+      const products = await this.productRepository.findAll();
+      const productsWithImagens = await Promise.all(
+        products.map(async (product) => {
+          const imagem = await this.image.findById(product.id);
+          const stock = await this.stock.findById(product.id);
+          return {
+            ...product,
+            imagem,
+            stock,
+          };
+        }),
+      );
+      return productsWithImagens;
+    } catch (error) {
+      throw new InternalServerErrorException('Erro ao buscar produtos', error);
+    }
   }
 }

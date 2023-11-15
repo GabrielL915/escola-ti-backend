@@ -2,6 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { DeleteCampaignUseCase } from './delete-campaign.use-cases';
 import { CampaignRepository } from '../repository/campaign.repository';
 import { InternalServerErrorException } from '@nestjs/common';
+import { IMAGEN_DELETE_PROVIDER } from '../../../shared/constants/injection-tokens';
+import { IDelete } from '../../../shared/interfaces/delete.interface';
 
 describe('DeleteCampaignUseCase', () => {
   let deleteCampaignUseCase: DeleteCampaignUseCase;
@@ -12,12 +14,20 @@ describe('DeleteCampaignUseCase', () => {
       delete: jest.fn(),
     };
 
+    const mockImageDeleteProvider = {
+      delete: jest.fn(),
+    } as unknown as jest.Mocked<IDelete<void>>;
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         DeleteCampaignUseCase,
         {
           provide: CampaignRepository,
           useValue: mockCampaignRepository,
+        },
+        {
+          provide: IMAGEN_DELETE_PROVIDER,
+          useValue: mockImageDeleteProvider,
         },
       ],
     }).compile();

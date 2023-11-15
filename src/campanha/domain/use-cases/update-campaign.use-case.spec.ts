@@ -3,15 +3,31 @@ import { UpdateCampaignUseCase } from './update-campaign.use-case';
 import { CampaignRepository } from '../repository/campaign.repository';
 import { InternalServerErrorException } from '@nestjs/common';
 import { UpdateCampaignDto } from '../dto/update-campaign.dto';
+import { CloudinaryUseCase } from '../../../cloudinary/domain/use-cases/cloudinary.use-case';
+import { UpdateImagenDto } from '../../../imagens/domain/dto/update-imagen.dto';
+import { Imagen } from '../../../imagens/domain/entities/imagen.entity';
+import { IUpdate } from '../../../shared/interfaces/update.interface';
+import { IMAGEN_UPDATE_PROVIDER } from '../../../shared/constants/injection-tokens';
 
 describe('UpdateCampaignUseCase', () => {
   let updateCampaignUseCase: UpdateCampaignUseCase;
   let mockCampaignRepository: Partial<jest.Mocked<CampaignRepository>>;
+  let mockCloudinaryUseCase: jest.Mocked<CloudinaryUseCase>;
+
 
   beforeEach(async () => {
     mockCampaignRepository = {
       update: jest.fn(),
     };
+
+    mockCloudinaryUseCase = {
+      uploadImage: jest.fn(),
+      cloudinaryProvider: {} as any,
+    } as unknown as jest.Mocked<CloudinaryUseCase>;
+
+    const mockImageUpdateProvider = {
+      update: jest.fn(),
+    } as unknown as jest.Mocked<IUpdate<UpdateImagenDto, Imagen>>;
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -19,6 +35,14 @@ describe('UpdateCampaignUseCase', () => {
         {
           provide: CampaignRepository,
           useValue: mockCampaignRepository,
+        },
+        {
+          provide: CloudinaryUseCase,
+          useValue: mockCloudinaryUseCase,
+        },
+        {
+          provide: IMAGEN_UPDATE_PROVIDER,
+          useValue: mockImageUpdateProvider,
         },
       ],
     }).compile();
@@ -50,7 +74,7 @@ describe('UpdateCampaignUseCase', () => {
     );
 
     await expect(
-      updateCampaignUseCase.update(mockCampaignId, mockUpdateDto),
+      updateCampaignUseCase.update(mockCampaignId, mockUpdateDto, {} as Express.Multer.File),
     ).rejects.toThrow(InternalServerErrorException);
   });
 });

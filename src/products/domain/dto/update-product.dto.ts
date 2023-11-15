@@ -1,6 +1,5 @@
 import { PartialType } from '@nestjs/swagger';
 import { CreateProductDto } from './create-product.dto';
-import { Transform } from 'class-transformer';
 import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {
@@ -14,7 +13,6 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
 
   @IsNumber()
   @IsOptional()
-  @Transform((value) => Number(value))
   valor?: number;
 
   @IsBoolean()
@@ -23,6 +21,5 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
 
   @IsNumber()
   @IsOptional()
-  @Transform((value) => Number(value))
   quantidade?: number;
 }

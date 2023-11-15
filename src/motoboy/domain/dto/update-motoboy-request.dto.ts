@@ -2,6 +2,7 @@ import {
   IsBoolean,
   IsEmail,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   MaxLength,
@@ -13,6 +14,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateMotoboyRequestDto extends PartialType(CreateMotoboyDto) {
   @IsString()
+  @IsOptional()
   @MinLength(2)
   @MaxLength(100)
   @ApiProperty({
@@ -26,6 +28,7 @@ export class UpdateMotoboyRequestDto extends PartialType(CreateMotoboyDto) {
   nome?: string;
 
   @IsString()
+  @IsOptional()
   @ApiProperty({
     description: 'Sobrenome do entregador',
     example: 'Almeida',
@@ -35,6 +38,7 @@ export class UpdateMotoboyRequestDto extends PartialType(CreateMotoboyDto) {
   sobrenome?: string;
 
   @IsString()
+  @IsOptional()
   @MaxLength(14)
   @MinLength(14)
   @ApiProperty({
@@ -47,6 +51,7 @@ export class UpdateMotoboyRequestDto extends PartialType(CreateMotoboyDto) {
 
 
   @IsString()
+  @IsOptional()
   @MaxLength(18)
   @MinLength(18)
   @ApiProperty({
@@ -60,6 +65,7 @@ export class UpdateMotoboyRequestDto extends PartialType(CreateMotoboyDto) {
 
   @IsString()
   @IsEmail()
+  @IsOptional()
   @ApiProperty({
     description: 'Email do entregador',
     example: 'joao.almeida@example.com',
@@ -69,6 +75,7 @@ export class UpdateMotoboyRequestDto extends PartialType(CreateMotoboyDto) {
   email?: string;
 
   @IsString()
+  @IsOptional()
   @MaxLength(13)
   @ApiProperty({
     description: 'Telefone do entregador',
@@ -78,6 +85,7 @@ export class UpdateMotoboyRequestDto extends PartialType(CreateMotoboyDto) {
   })
   telefone?: string;
 
+  @IsOptional()
   @ApiProperty({
     description: 'Data de nascimento do entregador',
     example: '01/01/1990',
@@ -87,6 +95,7 @@ export class UpdateMotoboyRequestDto extends PartialType(CreateMotoboyDto) {
   data_de_nascimento?: string;
 
   @IsString()
+  @IsOptional()
   @MinLength(8)
   @ApiProperty({
     description: 'Senha do entregador',
@@ -99,6 +108,7 @@ export class UpdateMotoboyRequestDto extends PartialType(CreateMotoboyDto) {
 
 
   @IsBoolean()
+  @IsOptional()
   @ApiProperty({
     description: 'Se o entregador possui mochila',
     example: true,
@@ -107,6 +117,8 @@ export class UpdateMotoboyRequestDto extends PartialType(CreateMotoboyDto) {
   })
   mochila?: boolean;
 
+  @IsOptional()
+  @IsNumber()
   aiqcoins?: number;
 
   @IsOptional()

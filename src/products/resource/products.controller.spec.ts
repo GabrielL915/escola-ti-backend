@@ -155,19 +155,21 @@ describe('ProductsController (e2e)', () => {
       .attach('image', 'test/assets/moscando.jpg');
 
     expect(response.status).toBe(201);
+    
   });
 
   it('should find all products', async () => {
     const response = await request(app.getHttpServer()).get('/products');
 
     expect(response.status).toBe(200);
+    
   });
 
   it('should find a product by id', async () => {
     const response = await request(app.getHttpServer()).get(
       '/products/2f5ef218-063a-4b5e-b695-3fe97071c706',
     );
-
+    
     expect(response.status).toBe(200);
   });
 
@@ -177,6 +179,7 @@ describe('ProductsController (e2e)', () => {
       descricao: 'descricao atualizada',
       valor: 1000,
       quantidade: 20,
+
     };
 
     const response = await request(app.getHttpServer())
@@ -185,10 +188,11 @@ describe('ProductsController (e2e)', () => {
       .field('valor', updateProductDto.valor)
       .field('descricao', updateProductDto.descricao)
       .field('quantidade', updateProductDto.quantidade)
-      /*    .field('status', updateProductDto.status) */
+   /*    .field('status', updateProductDto.status) */
       .attach('image', 'test/assets/moscando.jpg');
-
+     
     expect(response.status).toBe(200);
+
   });
 
   it('should delete a product', async () => {

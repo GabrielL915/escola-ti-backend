@@ -5,12 +5,10 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { MotoboyRepository } from '../../../motoboy/domain/repository/motoboy.repository';
-import { CityRepository } from '../../../city/domain/repository/city.repository';
 
 describe('RegisterUseCase', () => {
   let registerUseCase: RegisterUseCase;
   let mockRepository: Partial<MotoboyRepository>;
-  let mockCityRepository: Partial<CityRepository>;
 
   beforeEach(async () => {
     mockRepository = {
@@ -21,11 +19,14 @@ describe('RegisterUseCase', () => {
       providers: [
         RegisterUseCase,
         { provide: MotoboyRepository, useValue: mockRepository },
-        { provide: CityRepository, useValue: mockCityRepository },
       ],
     }).compile();
 
     registerUseCase = module.get<RegisterUseCase>(RegisterUseCase);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should be defined', () => {
@@ -34,17 +35,16 @@ describe('RegisterUseCase', () => {
 
   it('should throw an InternalServerErrorException on trying to register', async () => {
     const mockRegister = {
-      nome: 'João',
-      sobrenome: 'Almeida',
-      email: '',
-      data_de_nascimento: '',
-      mochila: false,
-      cpf: '',
-      cnpj: '',
-      telefone: '',
-      senha: '',
-      token_dispositivo: '',
-      cidade: '',
+      nome: 'Silva',
+      sobrenome: 'Kleber',
+      cpf: '11111111111',
+      cnpj: '11111111111111',
+      email: 'emailteste005@gmail.com',
+      telefone: '44999999999',
+      data_de_nascimento: '01/01/2000',
+      senha: '12345678',
+      mochila: true,
+      cidade: 'Maringá',
     };
     (mockRepository.create as jest.Mock).mockRejectedValueOnce(new Error());
 
@@ -53,26 +53,26 @@ describe('RegisterUseCase', () => {
     );
   });
 
-   /*  it('should throw an ConflictException on trying to register', async () => {
-        const mockRegister = {
-        nome: 'João',
-        sobrenome: 'Almeida',
-        email: '',
-        data_de_nascimento: '',
-        mochila: false,
-        cpf: '',
-        cnpj: '',
-        telefone: '',
-        senha: '',
-        token_dispositivo: '',
-        cidade: '',
-        };
-        (mockRepository.create as jest.Mock).mockRejectedValueOnce({
-        code: '23505',
-        });
-    
-        await expect(registerUseCase.register(mockRegister)).rejects.toThrow(
-        ConflictException,
-        );
-    }); */
+  it('should throw a ConflictException on trying to register with an email that already exists', async () => {
+    const mockRegister = {
+      nome: 'Silva',
+      sobrenome: 'Kleber',
+      cpf: '11111111111',
+      cnpj: '11111111111111',
+      email: 'emailteste005@gmail.com',
+      telefone: '44999999999',
+      data_de_nascimento: '01/01/2000',
+      senha: '12345678',
+      mochila: true,
+      cidade: 'Maringá',
+    };
+    const uniqueViolationError = new Error('Unique violation') as Error & { code: string };
+    uniqueViolationError.code = '23505'; // Mimic the unique violation error code
+
+    (mockRepository.create as jest.Mock).mockRejectedValueOnce(uniqueViolationError);
+
+    await expect(registerUseCase.register(mockRegister)).rejects.toThrow(
+      ConflictException,
+    );
+  });
 });

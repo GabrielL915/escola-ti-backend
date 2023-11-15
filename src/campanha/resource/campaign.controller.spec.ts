@@ -153,9 +153,8 @@ describe('CampaignController (e2e)', () => {
       )
       .field('tempo_de_tolerancia', campaignData.tempo_de_tolerancia)
       .field('descricao', campaignData.descricao)
-      .attach('image', 'test/assets/moscando.jpg');
-
-    expect(response.status).toBe(201);
+      .attach('image', 'test/assets/moscando.jpg')
+      .expect(201);
 
     campaignId = response.body.id;
 
@@ -178,7 +177,6 @@ describe('CampaignController (e2e)', () => {
     expect(campaignFirst).toHaveProperty('limite_corridas_recusadas');
     expect(campaignFirst).toHaveProperty('tempo_de_tolerancia');
     expect(campaignFirst).toHaveProperty('descricao');
-    // expect(campaignFirst).toHaveProperty('imagem');
 
     const campaignLast = response.body[response.body.length - 1];
     expect(campaignLast).toHaveProperty('tipo');
@@ -189,7 +187,6 @@ describe('CampaignController (e2e)', () => {
     expect(campaignLast).toHaveProperty('limite_corridas_recusadas');
     expect(campaignLast).toHaveProperty('tempo_de_tolerancia');
     expect(campaignLast).toHaveProperty('descricao');
-    // expect(campaignLast).toHaveProperty('imagem');
   });
 
   it('GET /campaign/:id should get a campaign by its ID', async () => {
@@ -237,6 +234,27 @@ describe('CampaignController (e2e)', () => {
   });
 
   it('DELETE /campaign/:id should delete a campaign', async () => {
+    const postResponse = await request(app.getHttpServer())
+      .post('/campaign')
+      .field('tipo', campaignData.tipo)
+      .field('dias', ['Segunda-feira', 'Terça-feira'])
+      .field('horario_inicial', campaignData.horario_inicial)
+      .field('horario_final', campaignData.horario_final)
+      .field(
+        'limite_corridas_ignoradas',
+        campaignData.limite_corridas_ignoradas,
+      )
+      .field(
+        'limite_corridas_recusadas',
+        campaignData.limite_corridas_recusadas,
+      )
+      .field('tempo_de_tolerancia', campaignData.tempo_de_tolerancia)
+      .field('descricao', campaignData.descricao)
+      .attach('image', 'test/assets/moscando.jpg')
+      .expect(201);
+
+    const campaignId = postResponse.body.id;
+
     await request(app.getHttpServer())
       .delete(`/campaign/${campaignId}`)
       .expect(200);

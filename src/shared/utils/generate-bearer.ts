@@ -8,7 +8,7 @@ export class GenerateBearer {
     sobrenome: 'Kleber',
     cpf: '11111111111',
     cnpj: '11111111111111',
-    email: 'email_teste_51@teste.com',
+    email: 'emailteste094@gmail.com',
     telefone: '44999999999',
     data_de_nascimento: '01/01/2000',
     senha: '12345678',

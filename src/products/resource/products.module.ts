@@ -30,6 +30,6 @@ import { PRODUCTS_FIND_BY_ID_PROVIDER } from '../../shared/constants/injection-t
       useClass: FindByIdProductsUseCase,
     },
   ],
-  exports: [FindByIdProductsUseCase, PRODUCTS_FIND_BY_ID_PROVIDER],
+  exports: [FindByIdProductsUseCase, PRODUCTS_FIND_BY_ID_PROVIDER, ProductRepository],
 })
 export class ProductsModule {}

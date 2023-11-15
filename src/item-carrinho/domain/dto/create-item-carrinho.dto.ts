@@ -1,6 +1,12 @@
+import { IsNumber, IsString } from 'class-validator';
+
 export class CreateItemCarrinhoDto {
-    id_carrinho: string;
-    id_produto: string;
-    quantidade: number;
-    valor: number;
+  @IsString()
+  id_carrinho: string;
+  @IsString()
+  id_produto: string;
+  @IsNumber()
+  quantidade: number;
+  @IsNumber()
+  valor: number;
 }

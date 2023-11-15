@@ -1,4 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { ProductRepository } from '../repository/products.repository';
 import { IDelete } from '../../../shared/interfaces/delete.interface';
 import {
@@ -17,8 +21,12 @@ export class DeleteProductsUseCase {
   ) {}
 
   async delete(id: string) {
-    await this.image.delete(id);
-    await this.stock.delete(id);
-    return await this.productRepository.delete(id);
+    try {
+      await this.image.delete(id);
+      await this.stock.delete(id);
+      return await this.productRepository.delete(id);
+    } catch (error) {
+      throw new InternalServerErrorException('Erro ao deletar produto', error);
+    }
   }
 }

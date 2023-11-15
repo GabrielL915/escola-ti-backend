@@ -3,15 +3,30 @@ import { CreateObjectiveUseCase } from './create-objective.use-cases';
 import { ObjectiveRepository } from '../repository/objective.repository';
 import { InternalServerErrorException } from '@nestjs/common';
 import { CreateObjectiveDto } from '../dto/create-objective.dto';
+import { CloudinaryUseCase } from '../../../cloudinary/domain/use-cases/cloudinary.use-case';
+import { CreateImagenDto } from '../../../imagens/domain/dto/create-imagen.dto';
+import { Imagen } from '../../../imagens/domain/entities/imagen.entity';
+import { IMAGEN_CREATE_PROVIDER } from '../../../shared/constants/injection-tokens';
+import { ICreate } from '../../../shared/interfaces/create.interface';
 
 describe('CreateObjectiveUseCase', () => {
   let createObjectiveUseCase: CreateObjectiveUseCase;
   let mockObjectiveRepository: Partial<jest.Mocked<ObjectiveRepository>>;
+  let mockCloudinaryUseCase: jest.Mocked<CloudinaryUseCase>;
 
   beforeEach(async () => {
     mockObjectiveRepository = {
       create: jest.fn(),
     };
+
+    mockCloudinaryUseCase = {
+      uploadImage: jest.fn(),
+      cloudinaryProvider: {} as any,
+    } as unknown as jest.Mocked<CloudinaryUseCase>;
+
+    const mockImageCreateProvider = {
+      create: jest.fn(),
+    } as unknown as jest.Mocked<ICreate<CreateImagenDto, Imagen>>;
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -19,6 +34,14 @@ describe('CreateObjectiveUseCase', () => {
         {
           provide: ObjectiveRepository,
           useValue: mockObjectiveRepository,
+        },
+        {
+          provide: CloudinaryUseCase,
+          useValue: mockCloudinaryUseCase,
+        },
+        {
+          provide: IMAGEN_CREATE_PROVIDER,
+          useValue: mockImageCreateProvider,
         },
       ],
     }).compile();
@@ -46,7 +69,7 @@ describe('CreateObjectiveUseCase', () => {
     };
 
     await expect(
-      createObjectiveUseCase.create(mockObjectiveDto),
+      createObjectiveUseCase.create(mockObjectiveDto, {} as Express.Multer.File),
     ).rejects.toThrow(InternalServerErrorException);
   });
 });

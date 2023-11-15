@@ -4,7 +4,7 @@ import { SubscribeRepository } from '../repository/subscribe.repository';
 
 @Injectable()
 export class FindSubscribeUseCase {
-  constructor(private readonly subscribeRepository: SubscribeRepository) {}
+  constructor(private readonly subscribeRepository: SubscribeRepository) { }
 
   async findAll(): Promise<Subscribe[]> {
     try {
@@ -18,7 +18,6 @@ export class FindSubscribeUseCase {
     try {
       return await this.subscribeRepository.findOne(id);
     } catch (error) {
-      console.error(error);
       throw new InternalServerErrorException('Erro ao buscar Inscrito por id', error);
     }
   }

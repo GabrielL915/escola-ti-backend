@@ -15,6 +15,7 @@ import { CreateMotoboyUseCase } from '../domain/use-cases/create-motoboy.use-cas
 import { FindAllMotoboyUseCase } from '../domain/use-cases/find-all-motoboy.use-case';
 import { FindByIdMotoboyUseCase } from '../domain/use-cases/find-by-id-motoboy.use-case';
 import { UpdateMotoboyUseCase } from '../domain/use-cases/update-motoboy.use-case';
+import { DeleteMotoboyUseCase } from '../domain/use-cases/delete-motoboy.use-case';
 import { AccessTokenGuard } from '../../auth/guards/access-token.guard';
 
 @Controller('motoboy')
@@ -24,9 +25,9 @@ export class MotoboyController {
     private readonly findAllMotoboyUseCase: FindAllMotoboyUseCase,
     private readonly findByIdMotoboyUseCase: FindByIdMotoboyUseCase,
     private readonly updateMotoboyUseCase: UpdateMotoboyUseCase,
+    private readonly deleteMotoboyUseCase: DeleteMotoboyUseCase,
   ) {}
 
-  @UseGuards(AccessTokenGuard)
   @Post()
   create(@Body() input: CreateMotoboyDto) {
     return this.createMotoboyUseCase.create(input);
@@ -50,5 +51,10 @@ export class MotoboyController {
   update(@Req() req: Request, @Body() input: UpdateMotoboyRequestDto) {
     const id = req['user'].sub;
     return this.updateMotoboyUseCase.update( id, input );
+  }
+
+  @Delete('delete')
+  delete(@Param('id') id: string) {
+    return this.deleteMotoboyUseCase.delete(id);
   }
 }

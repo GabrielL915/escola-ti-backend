@@ -14,7 +14,7 @@ export class ImagemRepositoryImpl implements ImagemRepository {
   }
 
   async findAll(): Promise<Imagen[]> {
-    return this.knex('imagem').select('*');
+    return await this.knex('imagem').select('*');
   }
 
   async findById(id: string): Promise<Imagen> {

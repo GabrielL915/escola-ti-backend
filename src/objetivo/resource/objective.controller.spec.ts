@@ -122,9 +122,6 @@ describe('ObjectiveController (e2e)', () => {
       .attach('image', 'test/assets/moscando.jpg')
       .expect(201);
 
-    // expect(response.body).toMatchObject({ ...objectiveData });
-    // expect(typeof response.body.id).toBe('string');
-
     objectiveId = response.body.id;
   });
 
@@ -161,11 +158,6 @@ describe('ObjectiveController (e2e)', () => {
   });
 
   it('PUT /objective/:id should update a objective', async () => {
-    // const updatedObjectiveData = {
-    //   ...objectiveData,
-    //   titulo: 'Objetivo Abril',
-    // };
-
     await request(app.getHttpServer())
       .put(`/objective/${objectiveId}`)
       .field('descricao', objectiveData.descricao)
@@ -175,12 +167,21 @@ describe('ObjectiveController (e2e)', () => {
       .field('meta', objectiveData.meta)
       .attach('image', 'test/assets/moscando.jpg')
       .expect(200);
-
-    // expect(putResponse.body).toMatchObject({ ...updatedObjectiveData });
-    // expect(typeof putResponse.body.id).toBe('string');
   });
 
   it('DELETE /objective/:id should delete a objective', async () => {
+    const postResponse = await request(app.getHttpServer())
+      .post('/objective')
+      .field('descricao', objectiveData.descricao)
+      .field('id_campanha', objectiveData.id_campanha)
+      .field('titulo', objectiveData.titulo)
+      .field('premio_associado', objectiveData.premio_associado)
+      .field('meta', objectiveData.meta)
+      .attach('image', 'test/assets/moscando.jpg')
+      .expect(201);
+
+    const objectiveId = postResponse.body.id;
+
     await request(app.getHttpServer())
       .delete(`/objective/${objectiveId}`)
       .expect(200);

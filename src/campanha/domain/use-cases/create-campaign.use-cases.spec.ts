@@ -3,15 +3,31 @@ import { CreateCampaignUseCase } from './create-campaign.use-cases';
 import { CampaignRepository } from '../repository/campaign.repository';
 import { InternalServerErrorException } from '@nestjs/common';
 import { CreateCampaignDto } from '../dto/create-campaign.dto';
+import { CloudinaryUseCase } from '../../../cloudinary/domain/use-cases/cloudinary.use-case';
+import { CreateImagenDto } from '../../../imagens/domain/dto/create-imagen.dto';
+import { Imagen } from '../../../imagens/domain/entities/imagen.entity';
+import { IMAGEN_CREATE_PROVIDER } from '../../../shared/constants/injection-tokens';
+import { ICreate } from '../../../shared/interfaces/create.interface';
 
 describe('CreateCampaignUseCase', () => {
   let createCampaignUseCase: CreateCampaignUseCase;
   let mockCampaignRepository: Partial<jest.Mocked<CampaignRepository>>;
+  let mockCloudinaryUseCase: jest.Mocked<CloudinaryUseCase>;
+
 
   beforeEach(async () => {
     mockCampaignRepository = {
       create: jest.fn(),
     };
+
+    mockCloudinaryUseCase = {
+      uploadImage: jest.fn(),
+      cloudinaryProvider: {} as any,
+    } as unknown as jest.Mocked<CloudinaryUseCase>;
+
+    const mockImageCreateProvider = {
+      create: jest.fn(),
+    } as unknown as jest.Mocked<ICreate<CreateImagenDto, Imagen>>;
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -19,6 +35,14 @@ describe('CreateCampaignUseCase', () => {
         {
           provide: CampaignRepository,
           useValue: mockCampaignRepository,
+        },
+        {
+          provide: CloudinaryUseCase,
+          useValue: mockCloudinaryUseCase,
+        },
+        {
+          provide: IMAGEN_CREATE_PROVIDER,
+          useValue: mockImageCreateProvider,
         },
       ],
     }).compile();
@@ -48,7 +72,7 @@ describe('CreateCampaignUseCase', () => {
       descricao: 'Descrição Teste',
     };
 
-    await expect(createCampaignUseCase.create(mockCampaignDto)).rejects.toThrow(
+    await expect(createCampaignUseCase.create(mockCampaignDto, {} as Express.Multer.File)).rejects.toThrow(
       InternalServerErrorException,
     );
   });

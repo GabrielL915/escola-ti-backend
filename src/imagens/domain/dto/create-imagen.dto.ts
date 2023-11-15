@@ -1,4 +1,8 @@
+import { IsString } from 'class-validator';
+
 export class CreateImagenDto {
-    url: string;
-    id_origem: string;
+  @IsString()
+  url: string;
+  @IsString()
+  id_origem: string;
 }

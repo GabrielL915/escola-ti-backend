@@ -9,18 +9,18 @@ export class ProductRepositoryImpl implements ProductRepository {
   constructor(@InjectKnex() private knex: Knex) {}
 
   async create(input: CreateProductDto): Promise<Product> {
-    const [product] = await this.knex('produto').insert(input).returning('*');
+    const [product] = await this.knex.from('produto').insert(input).returning('*');
     return product;
   }
   async findAll(): Promise<Product[]> {
-    return this.knex('produto').select('*');
+    return this.knex.from('produto').select('*');
   }
   async findById(id: string): Promise<Product> {
-    const [product] = await this.knex('produto').select('*').where({ id });
+    const [product] = await this.knex.from('produto').select('*').where({ id });
     return product;
   }
   async update(id: string, input: UpdateProductDto): Promise<Product> {
-    const [product] = await this.knex('produto')
+    const [product] = await this.knex.from('produto')
       .update({
         nome: input.nome,
         descricao: input.descricao,
@@ -32,6 +32,6 @@ export class ProductRepositoryImpl implements ProductRepository {
     return product;
   }
   async delete(id: string): Promise<void> {
-    await this.knex('produto').where({ id }).del();
+    await this.knex.from('produto').where({ id }).del();
   }
 }

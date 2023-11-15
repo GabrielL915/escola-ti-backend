@@ -14,11 +14,13 @@ export class StockRepositoryImpl implements StockRepository {
   }
 
   async findAll(): Promise<Stock[]> {
-    return this.knex('estoque').select('*');
+    return await this.knex('estoque').select('*');
   }
 
   async findById(id: string): Promise<Stock> {
-    const [stock] = await this.knex('estoque').select('*').where({ id_produto: id });
+    const [stock] = await this.knex('estoque')
+      .select('*')
+      .where({ id_produto: id });
     return stock;
   }
 

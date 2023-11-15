@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { RefreshTokenRepositoryImpl } from './refresh-token.repository.impl';
-import { InternalServerErrorException } from '@nestjs/common';
 
 describe('RefreshTokenRepositoryImpl', () => {
   let repository: RefreshTokenRepositoryImpl;
@@ -33,5 +32,13 @@ describe('RefreshTokenRepositoryImpl', () => {
 
   it('should be defined', () => {
     expect(repository).toBeDefined();
+  });
+
+  it('should get stored tokens', async () => {
+    const id = '123';
+    await repository.getStoredTokens(id);
+    expect(mockKnex.from).toHaveBeenCalledWith('conta');
+    expect(mockKnex.select).toHaveBeenCalledWith('refresh_token');
+    expect(mockKnex.where).toHaveBeenCalledWith({ id_entregador: id });
   });
 });

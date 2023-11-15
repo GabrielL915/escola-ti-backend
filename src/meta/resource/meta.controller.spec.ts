@@ -18,9 +18,9 @@ describe('MetaController (e2e)', () => {
   let app: INestApplication;
 
   const MetaData = {
-    id_inscrito: 'ac961430-b90f-4504-8229-23054ad45915',
-    id_campanha: '3a092750-b478-47b2-b237-0f312b8c8e1e',
-    id_objetivo: 'ccf7babb-1d53-449f-9167-bf1e902e2371',
+    id_inscrito: 'e840772f-2d75-4626-9985-cc46ad16a255',
+    id_campanha: 'ee52db7b-12da-42de-9d3f-d8d3bddf235f',
+    id_objetivo: '62f5ad37-c5ca-4470-a209-6a14496586c5',
     valor_atingido: 50,
   };
 

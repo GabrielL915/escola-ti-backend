@@ -30,7 +30,6 @@ export class CreateObjectiveUseCase {
       });
       return { ...response, imageUrl };
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException('Erro ao criar Objetivo', error);
     }
   }

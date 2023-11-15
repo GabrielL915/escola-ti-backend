@@ -1,57 +1,39 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MotoboyRepository } from '../repository/motoboy.repository';
 import { CreateMotoboyUseCase } from './create-motoboy.use-case';
+import { MotoboyRepository } from '../repository/motoboy.repository';
 import { InternalServerErrorException } from '@nestjs/common';
-import { CreateMotoboyDto } from '../dto/create-motoboy.dto';
 
 describe('CreateMotoboyUseCase', () => {
-  let createMotoboyUseCase: CreateMotoboyUseCase;
-  let mockRepository: Partial<MotoboyRepository>;
-
-  const validDto = {
-    nome: 'Kleber',
-    sobrenome: 'Silva',
-    cpf: '000.000.000-00',
-    cnpj: '00.000.000/0000-00',
-    email: 'emailtest@example.com',
-    telefone: '(44) 99999-9999',
-    data_de_nascimento: '01/01/2000',
-    senha: '12345678',
-    mochila: true,
-    id_endereco_de_servico: '00000000-0000-0000-0000-000000000000',
-  };
+  let service: CreateMotoboyUseCase;
+  let mockMotoboyRepository: jest.Mocked<MotoboyRepository>;
 
   beforeEach(async () => {
-    mockRepository = {
-      create: jest.fn().mockResolvedValue({} as any),
-    };
+    mockMotoboyRepository = {
+      create: jest.fn(),
+    } as unknown as jest.Mocked<MotoboyRepository>;
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         CreateMotoboyUseCase,
-        { provide: MotoboyRepository, useValue: mockRepository },
+        {
+          provide: MotoboyRepository,
+          useValue: mockMotoboyRepository,
+        },
       ],
     }).compile();
 
-    createMotoboyUseCase =
-      module.get<CreateMotoboyUseCase>(CreateMotoboyUseCase);
+    service = module.get<CreateMotoboyUseCase>(CreateMotoboyUseCase);
   });
 
   it('should be defined', () => {
-    expect(createMotoboyUseCase).toBeDefined();
+    expect(service).toBeDefined();
   });
 
-  it('should throw an error if the repository throws an HttpException', async () => {
-    const dto: CreateMotoboyDto = {
-      ...validDto,
-    };
+  it('should throw InternalServerErrorException when there is an error', async () => {
+    mockMotoboyRepository.create.mockRejectedValue(new Error('Fake error'));
 
-    (mockRepository.create as jest.Mock).mockRejectedValue(
-      new InternalServerErrorException('Erro ao criar Entregador'),
-    );
-
-    await expect(createMotoboyUseCase.create(dto)).rejects.toThrow(
-      new InternalServerErrorException('Erro ao criar Entregador'),
+    await expect(service.create({} as any)).rejects.toThrow(
+      InternalServerErrorException,
     );
   });
 });

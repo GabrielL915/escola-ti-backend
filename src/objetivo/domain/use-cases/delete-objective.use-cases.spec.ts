@@ -2,6 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { DeleteObjectiveUseCase } from './delete-objective.use-cases';
 import { ObjectiveRepository } from '../repository/objective.repository';
 import { InternalServerErrorException } from '@nestjs/common';
+import { IMAGEN_DELETE_PROVIDER } from '../../../shared/constants/injection-tokens';
+import { IDelete } from '../../../shared/interfaces/delete.interface';
 
 describe('DeleteObjectiveUseCase', () => {
   let deleteObjectiveUseCase: DeleteObjectiveUseCase;
@@ -12,12 +14,20 @@ describe('DeleteObjectiveUseCase', () => {
       delete: jest.fn(),
     };
 
+    const mockImageDeleteProvider = {
+      delete: jest.fn(),
+    } as unknown as jest.Mocked<IDelete<void>>;
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         DeleteObjectiveUseCase,
         {
           provide: ObjectiveRepository,
           useValue: mockObjectiveRepository,
+        },
+        {
+          provide: IMAGEN_DELETE_PROVIDER,
+          useValue: mockImageDeleteProvider,
         },
       ],
     }).compile();

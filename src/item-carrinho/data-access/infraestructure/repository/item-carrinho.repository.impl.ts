@@ -14,8 +14,8 @@ export class ItemCarrinhoRepositoryImpl implements ItemCarrinhoRepository {
     return itemCarrinho;
   }
   
-  findAllById(idCarrinho: string): Promise<ItemCarrinho[]> {
-      return this.knex('item_carrinho')
+  async findAllById(idCarrinho: string): Promise<ItemCarrinho[]> {
+      return await this.knex.from('item_carrinho')
         .select('*')
         .where({ id_carrinho: idCarrinho });
   }

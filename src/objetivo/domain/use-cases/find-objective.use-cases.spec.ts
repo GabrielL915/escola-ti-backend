@@ -2,6 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { FindObjectiveUseCase } from './find-objective.use-cases';
 import { ObjectiveRepository } from '../repository/objective.repository';
 import { InternalServerErrorException } from '@nestjs/common';
+import { IMAGEN_FIND_BY_ID_PROVIDER } from '../../../shared/constants/injection-tokens';
+import { Imagen } from '../../../imagens/domain/entities/imagen.entity';
+import { IFindById } from '../../../shared/interfaces/find-by-id.interface';
 
 describe('FindObjectiveUseCase', () => {
   let findObjectiveUseCase: FindObjectiveUseCase;
@@ -13,12 +16,20 @@ describe('FindObjectiveUseCase', () => {
       findOne: jest.fn(),
     };
 
+    const mockImageFindByIdProvider = {
+      findById: jest.fn(),
+    } as unknown as jest.Mocked<IFindById<Imagen>>;
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         FindObjectiveUseCase,
         {
           provide: ObjectiveRepository,
           useValue: mockObjectiveRepository,
+        },
+        {
+          provide: IMAGEN_FIND_BY_ID_PROVIDER,
+          useValue: mockImageFindByIdProvider,
         },
       ],
     }).compile();
