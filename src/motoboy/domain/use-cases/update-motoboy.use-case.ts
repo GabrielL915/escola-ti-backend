@@ -9,7 +9,9 @@ import { UpdateMotoboyResponseDto } from '../dto/update-motoboy-response.dto';
 
 @Injectable()
 export class UpdateMotoboyUseCase {
-  constructor(private readonly motoboyRepository: MotoboyRepository) {}
+  constructor(
+    private readonly motoboyRepository: MotoboyRepository
+  ) { }
 
   async update(id: string, input: UpdateMotoboyRequestDto): Promise<UpdateMotoboyResponseDto> {
     const motoboy = await this.motoboyRepository.findById(id);

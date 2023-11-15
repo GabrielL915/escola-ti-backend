@@ -18,7 +18,7 @@ export class UpdateCampaignDto extends CreateCampaignDto {
   })
   @IsString()
   @IsNotEmpty()
-  id: string;
+  id?: string;
 
   @ApiProperty({
     description: 'Nome identificador da campanha',

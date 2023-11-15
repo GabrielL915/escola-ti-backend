@@ -5,10 +5,11 @@ import {
   IsDate,
   IsNumber,
   Min,
-  IsISO8601,
 } from 'class-validator';
 
-export class CreateRegisteredDto {
+import { CreateSubscribeDto } from './create-subscribe.dto';
+
+export class UpdateSubscribeDto extends CreateSubscribeDto {
   @ApiProperty({
     description: 'ID do entregador',
     example: '1234-5678',
@@ -32,11 +33,9 @@ export class CreateRegisteredDto {
     example: '2023-09-21',
     type: String,
   })
-  /* @IsDate() */
+  @IsDate()
   @IsNotEmpty()
-  @IsString()
-/*   @IsISO8601() */
-data_de_inscricao: string;
+  data_de_inscricao: string;
 
   @ApiProperty({
     description: 'Número de corridas ignoradas pelo entregador',

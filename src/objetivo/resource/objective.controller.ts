@@ -6,6 +6,8 @@ import {
   Put,
   Delete,
   Param,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -25,6 +27,7 @@ import { UpdateObjectiveUseCase } from '../domain/use-cases/update-objective.use
 import { DeleteObjectiveUseCase } from '../domain/use-cases/delete-objective.use-cases';
 import { FindObjectiveUseCase } from '../domain/use-cases/find-objective.use-cases';
 import { ErrorResponseDto } from '../../auth/domain/dto/error-response.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Objective')
 @ApiBearerAuth()
@@ -79,8 +82,12 @@ export class ObjectiveController {
     type: CreateObjectiveDto,
     description: 'Dados do Objetivo a ser criado',
   })
-  async create(@Body() input: CreateObjectiveDto) {
-    return this.createObjectiveUseCase.create(input);
+  @UseInterceptors(FileInterceptor('image'))
+  async create(
+    @Body() input: CreateObjectiveDto,
+    @UploadedFile() image: Express.Multer.File,
+  ) {
+    return this.createObjectiveUseCase.create(input, image);
   }
 
   @Put(':id')
@@ -110,8 +117,13 @@ export class ObjectiveController {
     type: UpdateObjectiveDto,
     description: 'Dados atualizados do Objetivo',
   })
-  async update(@Param('id') id: string, @Body() input: UpdateObjectiveDto) {
-    return this.updateObjectiveUseCase.update(id, input);
+  @UseInterceptors(FileInterceptor('image'))
+  async update(
+    @Param('id') id: string,
+    @Body() input: UpdateObjectiveDto,
+    @UploadedFile() image: Express.Multer.File,
+  ) {
+    return this.updateObjectiveUseCase.update(id, input, image);
   }
 
   @Delete(':id')

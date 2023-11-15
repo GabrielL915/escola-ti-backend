@@ -2,16 +2,12 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { HttpExceptionFilter } from './common/filters/exception-filter';
-import {
-  FastifyAdapter,
-  NestFastifyApplication,
-} from '@nestjs/platform-fastify';
+import { HttpExceptionFilter } from './shared/filters/exception-filter';
+
 
 async function bootstrap() {
   const app = await NestFactory.create(
     AppModule,
-    /* new FastifyAdapter({ logger: true }), */
   );
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(new ValidationPipe());

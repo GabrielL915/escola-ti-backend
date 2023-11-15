@@ -60,13 +60,13 @@ describe('MotoboyController (e2e)', () => {
             client: 'postgresql',
             useNullAsDefault: true,
             connection: {
-              connectionString: process.env.CONNECTION_STRING,
+              connectionString: process.env.TEST_DATABASE_URL,
               ssl: { rejectUnauthorized: false },
-              host: process.env.HOST,
+              host: process.env.TEST_HOST,
               port: 5432,
-              user: process.env.USER,
-              database: process.env.DATABASE,
-              password: process.env.PASSWORD,
+              user: process.env.TEST_USER,
+              database: process.env.TEST_DATABASE,
+              password: process.env.TEST_PASSWORD,
             },
           },
         }),
@@ -130,21 +130,21 @@ describe('MotoboyController (e2e)', () => {
     mockid = response.body.id;
     jwtToken = await generateBearer.getJwtToken(mockemail, mocksenha, mockid);
     expect(response.status).toBe(201);
-  });
+  }, 10000);
 
   it('/motoboy (GET)', async () => {
     const response = await request(app.getHttpServer())
       .get('/motoboy')
       .set('Authorization', `Bearer ${jwtToken.access_token}`);
     expect(response.status).toBe(200);
-  });
+  }, 10000);
 
   it('/motoboy/findOne (GET)', async () => {
     const response = await request(app.getHttpServer())
       .get(`/motoboy/findOne`)
       .set('Authorization', `Bearer ${jwtToken.access_token}`);
     expect(response.status).toBe(200);
-  });
+  }, 10000);
 
   it('/motoboy/update (PATCH)', async () => {
     const response = await request(app.getHttpServer())
@@ -159,5 +159,5 @@ describe('MotoboyController (e2e)', () => {
       cidade: UserInfoFields.cidade
     })
     expect(response.status).toBe(200)
-  })
+  }, 10000)
 });

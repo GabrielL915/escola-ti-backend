@@ -1,15 +1,18 @@
 import { Module } from '@nestjs/common';
 import { ObjectiveRepositoryImpl } from '../data-access/infraestructure/repository/objective.repository.impl';
-
 import { CreateObjectiveUseCase } from '../domain/use-cases/create-objective.use-cases';
 import { UpdateObjectiveUseCase } from '../domain/use-cases/update-objective.use-case';
 import { DeleteObjectiveUseCase } from '../domain/use-cases/delete-objective.use-cases';
 import { FindObjectiveUseCase } from '../domain/use-cases/find-objective.use-cases';
 import { ObjectiveController } from './objective.controller';
-import { ObjectiveRepository } from '../domain/repository/objetivo.repository';
+import { ObjectiveRepository } from '../domain/repository/objective.repository';
+import { AuthModule } from '../../auth/resource/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import { CloudinaryModule } from '../../cloudinary/resource/cloudinary.module';
+import { ImagensModule } from '../../imagens/resource/imagens.module';
 
 @Module({
-  imports: [],
+  imports: [ConfigModule, AuthModule, CloudinaryModule, ImagensModule],
   controllers: [ObjectiveController],
   providers: [
     {

@@ -123,5 +123,11 @@ export class UpdateMotoboyRequestDto extends PartialType(CreateMotoboyDto) {
 
   @IsOptional()
   @IsString()
+  @ApiProperty({
+    description: 'Id da cidade do entregador',
+    example: '00000000-0000-0000-0000-000000000000',
+    type: String,
+    required: true,
+  })
   cidade?: string;
 }

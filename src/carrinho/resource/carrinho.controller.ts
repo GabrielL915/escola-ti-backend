@@ -1,14 +1,12 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
   Patch,
   Param,
   Delete,
   UseGuards,
   Req,
-  Put,
 } from '@nestjs/common';
 import { AddCarrinhoDto } from '../domain/dto/add-carrinho.dto';
 import { AddCarrinhoUseCase } from '../domain/use-cases/add-carrinho.use-case';
