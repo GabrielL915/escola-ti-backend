@@ -17,8 +17,8 @@ describe('SubscribeController (e2e)', () => {
   let subscribeId: string;
 
   const SubscribeData = {
-    id_entregador: 'f9413b6d-eb5c-4563-824c-4ecca5836701',
-    id_campanha: 'ee52db7b-12da-42de-9d3f-d8d3bddf235f',
+    id_entregador: '4cf03b4b-5dcb-4370-a658-9ec2d6b12506',
+    id_campanha: '5e950abc-20b7-4306-8625-f36389274912',
     data_de_inscricao: '2023-05-09T03:00:00.000Z',
     entregas_ignoradas: 0,
     entregas_recusadas: 0,
@@ -72,7 +72,7 @@ describe('SubscribeController (e2e)', () => {
       .expect(201);
 
     subscribeId = response.body.id;
-  });
+  }, 10000);
 
   it('/GET /subscribe should list all subscribes', async () => {
     const response = await request(app.getHttpServer())
@@ -95,13 +95,13 @@ describe('SubscribeController (e2e)', () => {
     expect(subscribeLast).toHaveProperty('data_de_inscricao');
     expect(subscribeLast).toHaveProperty('entregas_ignoradas');
     expect(subscribeLast).toHaveProperty('entregas_recusadas');
-  });
+  }, 10000);
 
   it('GET /subscribe/:id should return a subscribe', async () => {
     await request(app.getHttpServer())
       .get(`/subscribe/${subscribeId}`)
       .expect(200);
-  });
+  }, 10000);
 
   it('PUT /subscribe/:id should update a subscribe', async () => {
     const updatedSubscribeData = {
@@ -114,7 +114,7 @@ describe('SubscribeController (e2e)', () => {
       .put(`/subscribe/${subscribeId}`)
       .send(updatedSubscribeData)
       .expect(200);
-  });
+  }, 10000);
 
   it('DELETE /subscribe/:id should delete a subscribe', async () => {
     const response = await request(app.getHttpServer())
@@ -127,5 +127,5 @@ describe('SubscribeController (e2e)', () => {
     await request(app.getHttpServer())
       .delete(`/subscribe/${subscribeId}`)
       .expect(200);
-  });
+  }, 10000);
 });

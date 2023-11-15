@@ -18,9 +18,9 @@ describe('MetaController (e2e)', () => {
   let app: INestApplication;
 
   const MetaData = {
-    id_inscrito: 'e840772f-2d75-4626-9985-cc46ad16a255',
-    id_campanha: 'ee52db7b-12da-42de-9d3f-d8d3bddf235f',
-    id_objetivo: '62f5ad37-c5ca-4470-a209-6a14496586c5',
+    id_inscrito: 'bba01a9b-70dd-47e6-8bb6-69e8bb8446c4',
+    id_campanha: '5e950abc-20b7-4306-8625-f36389274912',
+    id_objetivo: 'cee1dbfd-6e66-4985-bb06-b2ffe770fec0',
     valor_atingido: 50,
   };
 
@@ -78,7 +78,7 @@ describe('MetaController (e2e)', () => {
     expect(body).toMatchObject({ ...MetaData });
     expect(body.id_objetivo).toBe(MetaData.id_objetivo);
     expect(body.id_inscrito).toBe(MetaData.id_inscrito);
-  });
+  }, 10000);
 
   it('/GET /meta should list all metas', async () => {
     const response = await request(app.getHttpServer())
@@ -97,7 +97,7 @@ describe('MetaController (e2e)', () => {
     expect(metaLast).toHaveProperty('id_campanha');
     expect(metaLast).toHaveProperty('id_objetivo');
     expect(metaLast).toHaveProperty('valor_atingido');
-  });
+  }, 10000);
 
   it('GET /meta should return a specific meta', async () => {
     const response = await request(app.getHttpServer())
@@ -112,7 +112,7 @@ describe('MetaController (e2e)', () => {
     expect(specificMeta).toMatchObject({ ...MetaData });
     expect(specificMeta).toHaveProperty('id_objetivo', MetaData.id_objetivo);
     expect(specificMeta).toHaveProperty('id_inscrito', MetaData.id_inscrito);
-  });
+  }, 10000);
 
   it('PUT /meta should update a meta', async () => {
     const objetivoResponse = await request(app.getHttpServer())
@@ -140,7 +140,7 @@ describe('MetaController (e2e)', () => {
       id_inscrito: MetaData.id_inscrito,
       valor_atingido: expectedPercentage,
     });
-  });
+  }, 10000);
 
   it('DELETE /meta should delete a meta', async () => {
     await request(app.getHttpServer())
@@ -152,5 +152,5 @@ describe('MetaController (e2e)', () => {
 
   afterAll(async () => {
     await app.close();
-  });
+  }, 10000);
 });

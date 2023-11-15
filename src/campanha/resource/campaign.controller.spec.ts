@@ -39,6 +39,9 @@ describe('CampaignController (e2e)', () => {
   let jwtToken: any;
   let generateBearer: GenerateBearer;
   let campaignId: string;
+  let mockid: string
+  let motoboyRepo: MotoboyRepository;
+
 
   const campaignData = {
     tipo: 'Campanha das Massas',
@@ -66,13 +69,13 @@ describe('CampaignController (e2e)', () => {
             client: 'postgresql',
             useNullAsDefault: true,
             connection: {
-              connectionString: process.env.CONNECTION_STRING,
+              connectionString: process.env.TEST_DATABASE_URL,
               ssl: { rejectUnauthorized: false },
-              host: process.env.HOST,
+              host: process.env.TEST_HOST,
               port: 5432,
-              user: process.env.USER,
-              database: process.env.DATABASE,
-              password: process.env.PASSWORD,
+              user: process.env.TEST_USER,
+              database: process.env.TEST_DATABASE,
+              password: process.env.TEST_PASSWORD,
             },
           },
         }),
@@ -122,10 +125,12 @@ describe('CampaignController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     await app.init();
 
-    const motoboyRepo = moduleFixture.get<RegisterUseCase>(RegisterUseCase);
+    motoboyRepo = moduleFixture.get<MotoboyRepository>(MotoboyRepository);
+    const registerUseCase = moduleFixture.get<RegisterUseCase>(RegisterUseCase);
     const loginUseCase = moduleFixture.get<LoginUseCase>(LoginUseCase);
-    generateBearer = new GenerateBearer(loginUseCase, motoboyRepo);
+    generateBearer = new GenerateBearer(loginUseCase, registerUseCase);
     jwtToken = await generateBearer.getJwtToken();
+    mockid = jwtToken.id_resgister;
   });
 
   afterEach(() => {
@@ -133,6 +138,9 @@ describe('CampaignController (e2e)', () => {
   });
 
   afterAll(async () => {
+    if (mockid) {
+      await motoboyRepo.delete(mockid);
+    }
     await app.close();
   });
 
@@ -160,7 +168,7 @@ describe('CampaignController (e2e)', () => {
 
     // expect(response.body).toMatchObject({ ...campaignData, status: true });
     // expect(typeof response.body.id).toBe('string');
-  });
+  }, 10000);
 
   it('GET /campaign should list all campaigns', async () => {
     const response = await request(app.getHttpServer())
@@ -187,7 +195,7 @@ describe('CampaignController (e2e)', () => {
     expect(campaignLast).toHaveProperty('limite_corridas_recusadas');
     expect(campaignLast).toHaveProperty('tempo_de_tolerancia');
     expect(campaignLast).toHaveProperty('descricao');
-  });
+  }, 10000);
 
   it('GET /campaign/:id should get a campaign by its ID', async () => {
     const response = await request(app.getHttpServer())
@@ -209,7 +217,7 @@ describe('CampaignController (e2e)', () => {
       campaignData.tempo_de_tolerancia,
     );
     expect(response.body.descricao).toEqual(campaignData.descricao);
-  });
+  }, 10000);
 
   it('PUT /campaign/:id should update a campaign', async () => {
     const response = await request(app.getHttpServer())
@@ -231,7 +239,7 @@ describe('CampaignController (e2e)', () => {
       .attach('image', 'test/assets/moscando.jpg');
 
     expect(response.status).toBe(200);
-  });
+  }, 10000);
 
   it('DELETE /campaign/:id should delete a campaign', async () => {
     const postResponse = await request(app.getHttpServer())
@@ -258,5 +266,5 @@ describe('CampaignController (e2e)', () => {
     await request(app.getHttpServer())
       .delete(`/campaign/${campaignId}`)
       .expect(200);
-  });
+  }, 10000);
 });

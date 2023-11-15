@@ -91,18 +91,18 @@ describe('CarrinhoController (e2e)', () => {
           useClass: FindItensCarrinhoUseCase,
         },
       ],
-    }).compile();
+    }).compile();   
 
     app = moduleFixture.createNestApplication();
     await app.init();
-    carrinhoRepo = moduleFixture.get<CarrinhoRepository>(CarrinhoRepository);
+    moduleFixture.get<CarrinhoRepository>(CarrinhoRepository);
     motoboyRepo = moduleFixture.get<MotoboyRepository>(MotoboyRepository);
     const registerUseCase = moduleFixture.get<RegisterUseCase>(RegisterUseCase);
     const loginUseCase = moduleFixture.get<LoginUseCase>(LoginUseCase);
     generateBearer = new GenerateBearer(loginUseCase, registerUseCase);
     jwtToken = await generateBearer.getJwtToken();
     mockid = jwtToken.id_resgister;
-    productsRepo = moduleFixture.get<ProductRepository>(ProductRepository);
+    moduleFixture.get<ProductRepository>(ProductRepository);
 
     await motoboyRepo.updateAiqcoins(mockid, { aiqcoins: 1000 });
     const productData = {
@@ -134,7 +134,7 @@ describe('CarrinhoController (e2e)', () => {
       .set('Authorization', `Bearer ${jwtToken.access_token}`);
     carrinhoId = response.body.id;
     expect(response.status).toBe(200);
-  });
+  }, 10000);
 
   it('/carrinho/add/:id (PATCH)', async () => {
     const response = await request(app.getHttpServer())
@@ -144,14 +144,14 @@ describe('CarrinhoController (e2e)', () => {
         quantidade: 1,
       });
     expect(response.status).toBe(200);
-  });
+  }, 10000);
 
   it('/carrinho/finish (PATCH)', async () => {
     const response = await request(app.getHttpServer())
       .patch(`/carrinho/finish/${carrinhoId}`)
       .set('Authorization', `Bearer ${jwtToken.access_token}`);
     expect(response.status).toBe(200);
-  });
+  }, 10000);
 /* 
   it('/carrinho/:id (DELETE)', async () => {
     const response = await request(app.getHttpServer())

@@ -31,7 +31,6 @@ import { FindCampaignUseCase } from '../domain/use-cases/find-campaign.use-cases
 import { ErrorResponseDto } from '../../auth/domain/dto/error-response.dto';
 import { AccessTokenGuard } from '../../auth/guards/access-token.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { IMAGEN_CREATE_PROVIDER } from '../../shared/constants/injection-tokens';
 
 @ApiTags('campaign')
 @ApiBearerAuth()

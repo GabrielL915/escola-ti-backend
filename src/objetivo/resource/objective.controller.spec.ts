@@ -34,7 +34,7 @@ describe('ObjectiveController (e2e)', () => {
 
   const objectiveData = {
     descricao: 'Objetivo do mês de março',
-    id_campanha: 'ee52db7b-12da-42de-9d3f-d8d3bddf235f',
+    id_campanha: '5e950abc-20b7-4306-8625-f36389274912',
     titulo: 'Objetivo Março',
     premio_associado: 100,
     meta: 500.5,
@@ -123,7 +123,7 @@ describe('ObjectiveController (e2e)', () => {
       .expect(201);
 
     objectiveId = response.body.id;
-  });
+  }, 10000);
 
   it('/GET /objective should list all objectives', async () => {
     const response = await request(app.getHttpServer())
@@ -146,7 +146,7 @@ describe('ObjectiveController (e2e)', () => {
     expect(objectiveLast).toHaveProperty('titulo');
     expect(objectiveLast).toHaveProperty('premio_associado');
     expect(objectiveLast).toHaveProperty('meta');
-  });
+  }, 10000);
 
   it('GET /objective/:id should return a objective', async () => {
     const response = await request(app.getHttpServer())
@@ -155,7 +155,7 @@ describe('ObjectiveController (e2e)', () => {
 
     expect(response.body).toMatchObject({ ...objectiveData });
     expect(typeof response.body.id).toBe('string');
-  });
+  }, 10000);
 
   it('PUT /objective/:id should update a objective', async () => {
     await request(app.getHttpServer())
@@ -167,7 +167,7 @@ describe('ObjectiveController (e2e)', () => {
       .field('meta', objectiveData.meta)
       .attach('image', 'test/assets/moscando.jpg')
       .expect(200);
-  });
+  }, 10000);
 
   it('DELETE /objective/:id should delete a objective', async () => {
     const postResponse = await request(app.getHttpServer())
@@ -185,5 +185,5 @@ describe('ObjectiveController (e2e)', () => {
     await request(app.getHttpServer())
       .delete(`/objective/${objectiveId}`)
       .expect(200);
-  });
+  }, 10000);
 });

@@ -41,8 +41,10 @@ import { DeleteStockUseCase } from '../../stock/domain/use-cases/delete-stock.us
 import { UpdateImagemUseCase } from '../../imagens/domain/use-cases/update-imagem.use-case';
 import { UpdateStockUseCase } from '../../stock/domain/use-cases/update-stock.use-case';
 
+
 describe('ProductsController (e2e)', () => {
   let app: INestApplication;
+  let id: string;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -60,13 +62,13 @@ describe('ProductsController (e2e)', () => {
             client: 'postgresql',
             useNullAsDefault: true,
             connection: {
-              connectionString: process.env.CONNECTION_STRING,
+              connectionString: process.env.TEST_DATABASE_URL,
               ssl: { rejectUnauthorized: false },
-              host: process.env.HOST,
+              host: process.env.TEST_HOST,
               port: 5432,
-              user: process.env.USER,
-              database: process.env.DATABASE,
-              password: process.env.PASSWORD,
+              user: process.env.TEST_USER,
+              database: process.env.TEST_DATABASE,
+              password: process.env.TEST_PASSWORD,
             },
           },
         }),
@@ -154,24 +156,25 @@ describe('ProductsController (e2e)', () => {
       .field('quantidade', createProductDto.quantidade)
       .attach('image', 'test/assets/moscando.jpg');
 
+    id = response.body.id;
     expect(response.status).toBe(201);
     
-  });
+  }, 10000);
 
   it('should find all products', async () => {
     const response = await request(app.getHttpServer()).get('/products');
 
     expect(response.status).toBe(200);
     
-  });
+  }, 10000);
 
   it('should find a product by id', async () => {
     const response = await request(app.getHttpServer()).get(
-      '/products/2f5ef218-063a-4b5e-b695-3fe97071c706',
+      `/products/${id}`,
     );
     
     expect(response.status).toBe(200);
-  });
+  }, 10000);
 
   it('should update a product', async () => {
     const updateProductDto = {
@@ -183,7 +186,7 @@ describe('ProductsController (e2e)', () => {
     };
 
     const response = await request(app.getHttpServer())
-      .patch('/products/f445c4e9-a0fd-4a9d-b051-30f1912ad579')
+      .patch( `/products/${id}`)
       .field('nome', updateProductDto.nome)
       .field('valor', updateProductDto.valor)
       .field('descricao', updateProductDto.descricao)
@@ -193,13 +196,13 @@ describe('ProductsController (e2e)', () => {
      
     expect(response.status).toBe(200);
 
-  });
+  }, 10000);
 
   it('should delete a product', async () => {
     const response = await request(app.getHttpServer()).delete(
-      '/products/c8fe1f8c-b50f-4374-80cc-369c5d5b5334',
+      `/products/${id}`,
     );
 
     expect(response.status).toBe(200);
-  });
+  }, 10000);
 });

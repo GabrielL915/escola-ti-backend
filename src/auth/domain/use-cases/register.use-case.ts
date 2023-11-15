@@ -43,6 +43,7 @@ export class RegisterUseCase {
       if (error.code === '23505') {
         throw new ConflictException('Registro já existe.', error);
       }
+      console.log(error);
       throw new InternalServerErrorException(
         'Erro interno ao tentar realizar cadastro do Entregador.',
         error,
