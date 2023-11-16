@@ -2,10 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { MetaController } from './meta.controller';
-import { CreateMetaUseCase } from '../domain/use-cases/create-meta.use-cases';
-import { FindMetaUseCase } from '../domain/use-cases/find-meta.use-cases';
-import { UpdateMetaUseCase } from '../domain/use-cases/update-meta.use-case';
-import { DeleteMetaUseCase } from '../domain/use-cases/delete-meta.use-cases';
+import { CreateMetaUseCase } from '../domain/service/create-meta.use-cases';
+import { FindMetaUseCase } from '../domain/service/find-meta.use-cases';
+import { UpdateMetaUseCase } from '../domain/service/update-meta.use-case';
+import { DeleteMetaUseCase } from '../domain/service/delete-meta.use-cases';
 import { MetaRepository } from '../domain/repository/meta.repository';
 import { ConfigModule } from '@nestjs/config';
 import { MetaRepositoryImpl } from '../data-access/infraestructure/repository/meta.repository.impl';
@@ -18,9 +18,9 @@ describe('MetaController (e2e)', () => {
   let app: INestApplication;
 
   const MetaData = {
-    id_inscrito: 'bba01a9b-70dd-47e6-8bb6-69e8bb8446c4',
-    id_campanha: '5e950abc-20b7-4306-8625-f36389274912',
-    id_objetivo: 'cee1dbfd-6e66-4985-bb06-b2ffe770fec0',
+    id_inscrito: '304db165-3681-4c52-85aa-4ef4c9d80095',
+    id_campanha: '0df8e235-d3cf-46ee-926b-d65d480b8ebd',
+    id_objetivo: '378d2369-53d2-493a-877d-b7e8aca700b7',
     valor_atingido: 50,
   };
 
@@ -37,13 +37,13 @@ describe('MetaController (e2e)', () => {
             client: 'postgresql',
             useNullAsDefault: true,
             connection: {
-              connectionString: process.env.CONNECTION_STRING,
+              connectionString: process.env.TEST_DATABASE_URL,
               ssl: { rejectUnauthorized: false },
-              host: process.env.HOST,
+              host: process.env.TEST_HOST,
               port: 5432,
-              user: process.env.USER,
-              password: process.env.PASSWORD,
-              database: process.env.DATABASE,
+              user: process.env.TEST_USER,
+              database: process.env.TEST_DATABASE,
+              password: process.env.TEST_PASSWORD,
             },
           },
         }),

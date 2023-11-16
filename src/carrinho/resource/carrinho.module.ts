@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { CarrinhoController } from './carrinho.controller';
-import { CreateCarrinhoUseCase } from '../domain/use-cases/create-carrinho.use-case';
-import { AddCarrinhoUseCase } from '../domain/use-cases/add-carrinho.use-case';
-import { FindItensCarrinhoUseCase } from '../domain/use-cases/find-item-by-id-carrinho.use-case';
-import { FinishCompraCarrinhoUseCase } from '../domain/use-cases/finish-compra-carrinho.use-case';
-import { DeleteCarrinhoUseCase } from '../domain/use-cases/delete-carrinho.use-case';
+import { CreateCarrinhoUseCase } from '../domain/service/create-carrinho.use-case';
+import { AddCarrinhoUseCase } from '../domain/service/add-carrinho.use-case';
+import { FindItensCarrinhoUseCase } from '../domain/service/find-item-by-id-carrinho.use-case';
+import { FinishCompraCarrinhoUseCase } from '../domain/service/finish-compra-carrinho.use-case';
+import { DeleteCarrinhoUseCase } from '../domain/service/delete-carrinho.use-case';
+import { DeleteItemCarrinhoUseCase } from '../domain/service/delete-item-carrinho.use-case';
 import { CarrinhoRepositoryImpl } from '../data-access/infraestructure/repository/carrinho.repository.impl';
 import { CarrinhoRepository } from '../domain/repository/carrinho.repository';
 import { ProductsModule } from '../../products/resource/products.module';
@@ -28,6 +29,7 @@ import { AuthModule } from '../../auth/resource/auth.module';
     FinishCompraCarrinhoUseCase,
     DeleteCarrinhoUseCase,
     FindItensCarrinhoUseCase,
+    DeleteItemCarrinhoUseCase,
     {
       provide: CarrinhoRepository,
       useClass: CarrinhoRepositoryImpl,

@@ -22,10 +22,10 @@ import {
 
 import { CreateObjectiveDto } from '../domain/dto/create-objective.dto';
 import { UpdateObjectiveDto } from '../domain/dto/update-objective.dto';
-import { CreateObjectiveUseCase } from '../domain/use-cases/create-objective.use-cases';
-import { UpdateObjectiveUseCase } from '../domain/use-cases/update-objective.use-case';
-import { DeleteObjectiveUseCase } from '../domain/use-cases/delete-objective.use-cases';
-import { FindObjectiveUseCase } from '../domain/use-cases/find-objective.use-cases';
+import { CreateObjectiveUseCase } from '../domain/service/create-objective.use-cases';
+import { UpdateObjectiveUseCase } from '../domain/service/update-objective.use-case';
+import { DeleteObjectiveUseCase } from '../domain/service/delete-objective.use-cases';
+import { FindObjectiveUseCase } from '../domain/service/find-objective.use-cases';
 import { ErrorResponseDto } from '../../auth/domain/dto/error-response.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 

@@ -6,5 +6,6 @@ export abstract class CarrinhoRepository {
   abstract findByIdMotoboy(id: string): Promise<Carrinho>;
   abstract findById(id: string): Promise<Carrinho>;
   abstract delete(id: string): Promise<void>;
+  abstract deleteItemCarrinho(id_itens: string): Promise<void>;
   abstract addCarrinho(id: string, input: UpdateCarrinhoDto): Promise<Carrinho>;
 }

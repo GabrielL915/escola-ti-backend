@@ -18,10 +18,10 @@ import {
 
 import { CreateSubscribeDto } from '../domain/dto/create-subscribe.dto';
 import { UpdateSubscribeDto } from '../domain/dto/update-subscribe.dto';
-import { CreateSubscribeUseCase } from '../domain/use-cases/create-subscribe.use-cases';
-import { UpdateSubscribeUseCase } from '../domain/use-cases/update-subscribe.use-cases';
-import { DeleteSubscribeUseCase } from '../domain/use-cases/delete-subscribe.use-cases';
-import { FindSubscribeUseCase } from '../domain/use-cases/find-subscribe.use-cases';
+import { CreateSubscribeUseCase } from '../domain/service/create-subscribe.use-cases';
+import { UpdateSubscribeUseCase } from '../domain/service/update-subscribe.use-cases';
+import { DeleteSubscribeUseCase } from '../domain/service/delete-subscribe.use-cases';
+import { FindSubscribeUseCase } from '../domain/service/find-subscribe.use-cases';
 
 @ApiTags('subscribe')
 @ApiBearerAuth()

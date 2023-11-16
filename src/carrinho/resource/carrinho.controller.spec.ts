@@ -6,25 +6,24 @@ import request from 'supertest';
 import { ConfigModule } from '@nestjs/config';
 import { KnexModule } from 'nestjs-knex';
 import { CarrinhoController } from './carrinho.controller';
-import { CreateCarrinhoUseCase } from '../domain/use-cases/create-carrinho.use-case';
-import { AddCarrinhoUseCase } from '../domain/use-cases/add-carrinho.use-case';
-import { FindItensCarrinhoUseCase } from '../domain/use-cases/find-item-by-id-carrinho.use-case';
-import { FinishCompraCarrinhoUseCase } from '../domain/use-cases/finish-compra-carrinho.use-case';
-import { DeleteCarrinhoUseCase } from '../domain/use-cases/delete-carrinho.use-case';
+import { CreateCarrinhoUseCase } from '../domain/service/create-carrinho.use-case';
+import { AddCarrinhoUseCase } from '../domain/service/add-carrinho.use-case';
+import { FindItensCarrinhoUseCase } from '../domain/service/find-item-by-id-carrinho.use-case';
+import { FinishCompraCarrinhoUseCase } from '../domain/service/finish-compra-carrinho.use-case';
+import { DeleteCarrinhoUseCase } from '../domain/service/delete-carrinho.use-case';
 import { CarrinhoRepositoryImpl } from '../data-access/infraestructure/repository/carrinho.repository.impl';
 import { CarrinhoRepository } from '../domain/repository/carrinho.repository';
 import { ProductsModule } from '../../products/resource/products.module';
 import { ItemCarrinhoModule } from '../../item-carrinho/resource/item-carrinho.module';
-import {
-  CARRINHO_FIND_ITENS_BY_ID_PROVIDER,
-} from '../../shared/constants/injection-tokens';
+import { CARRINHO_FIND_ITENS_BY_ID_PROVIDER } from '../../shared/constants/injection-tokens';
 import { StockModule } from '../../stock/resource/stock.module';
 import { GenerateBearer } from '../../shared/utils/generate-bearer';
-import { LoginUseCase } from '../../auth/domain/use-cases/login.use-case';
-import { RegisterUseCase } from '../../auth/domain/use-cases/register.use-case';
+import { LoginUseCase } from '../../auth/domain/service/login.use-case';
+import { RegisterUseCase } from '../../auth/domain/service/register.use-case';
 import { AuthModule } from '../../auth/resource/auth.module';
 import { MotoboyRepository } from '../../motoboy/domain/repository/motoboy.repository';
 import { ProductRepository } from '../../products/domain/repository/products.repository';
+import { DeleteItemCarrinhoUseCase } from '../domain/service/delete-item-carrinho.use-case';
 
 describe('CarrinhoController (e2e)', () => {
   let app: INestApplication;
@@ -52,13 +51,13 @@ describe('CarrinhoController (e2e)', () => {
             client: 'postgresql',
             useNullAsDefault: true,
             connection: {
-              connectionString: process.env.CONNECTION_STRING,
+              connectionString: process.env.TEST_DATABASE_URL,
               ssl: { rejectUnauthorized: false },
-              host: process.env.HOST,
+              host: process.env.TEST_HOST,
               port: 5432,
-              user: process.env.USER,
-              database: process.env.DATABASE,
-              password: process.env.PASSWORD,
+              user: process.env.TEST_USER,
+              database: process.env.TEST_DATABASE,
+              password: process.env.TEST_PASSWORD,
             },
           },
         }),
@@ -70,6 +69,7 @@ describe('CarrinhoController (e2e)', () => {
         FinishCompraCarrinhoUseCase,
         DeleteCarrinhoUseCase,
         FindItensCarrinhoUseCase,
+        DeleteItemCarrinhoUseCase,
         {
           provide: CarrinhoRepository,
           useClass: CarrinhoRepositoryImpl,
@@ -79,7 +79,7 @@ describe('CarrinhoController (e2e)', () => {
           useClass: FindItensCarrinhoUseCase,
         },
       ],
-    }).compile();   
+    }).compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
@@ -140,11 +140,11 @@ describe('CarrinhoController (e2e)', () => {
       .set('Authorization', `Bearer ${jwtToken.access_token}`);
     expect(response.status).toBe(200);
   }, 10000);
-/* 
+
   it('/carrinho/:id (DELETE)', async () => {
     const response = await request(app.getHttpServer())
       .delete(`/carrinho/${carrinhoId}`)
       .set('Authorization', `Bearer ${jwtToken.access_token}`);
     expect(response.status).toBe(200);
-  }); */
+  });
 });

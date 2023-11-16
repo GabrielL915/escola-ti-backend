@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { CreateImagenUseCase } from '../domain/use-cases/create-imagem.use-case';
+import { CreateImagenUseCase } from '../domain/service/create-imagem.use-case';
 import { ImagemRepositoryImpl } from '../data-access/infraestructure/repository/imagem.repository.impl';
 import { ImagemRepository } from '../domain/repository/imagem.repository';
-import { DeleteImagensUseCase } from '../domain/use-cases/delete-imagem.use-case';
-import { FindAllImagensUseCase } from '../domain/use-cases/find-all-imagem.use-case';
-import { FindByIdImagemUseCase } from '../domain/use-cases/find-by-id-imagem.use-case';
-import { UpdateImagemUseCase } from '../domain/use-cases/update-imagem.use-case';
+import { DeleteImagensUseCase } from '../domain/service/delete-imagem.use-case';
+import { FindAllImagensUseCase } from '../domain/service/find-all-imagem.use-case';
+import { FindByIdImagemUseCase } from '../domain/service/find-by-id-imagem.use-case';
+import { UpdateImagemUseCase } from '../domain/service/update-imagem.use-case';
 import {
   IMAGEN_CREATE_PROVIDER,
   IMAGEN_FIND_BY_ID_PROVIDER,

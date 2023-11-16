@@ -2,10 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { SubscribeController } from './subscribe.controller';
-import { CreateSubscribeUseCase } from '../domain/use-cases/create-subscribe.use-cases';
-import { FindSubscribeUseCase } from '../domain/use-cases/find-subscribe.use-cases';
-import { UpdateSubscribeUseCase } from '../domain/use-cases/update-subscribe.use-cases';
-import { DeleteSubscribeUseCase } from '../domain/use-cases/delete-subscribe.use-cases';
+import { CreateSubscribeUseCase } from '../domain/service/create-subscribe.use-cases';
+import { FindSubscribeUseCase } from '../domain/service/find-subscribe.use-cases';
+import { UpdateSubscribeUseCase } from '../domain/service/update-subscribe.use-cases';
+import { DeleteSubscribeUseCase } from '../domain/service/delete-subscribe.use-cases';
 import { SubscribeRepository } from '../domain/repository/subscribe.repository';
 import { ConfigModule } from '@nestjs/config';
 import { SubscribeRepositoryImpl } from '../data-access/infraestructure/repository/subscribe.repository.impl';
@@ -17,8 +17,8 @@ describe('SubscribeController (e2e)', () => {
   let subscribeId: string;
 
   const SubscribeData = {
-    id_entregador: '4cf03b4b-5dcb-4370-a658-9ec2d6b12506',
-    id_campanha: '5e950abc-20b7-4306-8625-f36389274912',
+    id_entregador: '4342ee83-d628-4114-b664-90c1acd1ab0f',
+    id_campanha: '0df8e235-d3cf-46ee-926b-d65d480b8ebd',
     data_de_inscricao: '2023-05-09T03:00:00.000Z',
     entregas_ignoradas: 0,
     entregas_recusadas: 0,
@@ -37,13 +37,13 @@ describe('SubscribeController (e2e)', () => {
             client: 'postgresql',
             useNullAsDefault: true,
             connection: {
-              connectionString: process.env.CONNECTION_STRING,
+              connectionString: process.env.TEST_DATABASE_URL,
               ssl: { rejectUnauthorized: false },
-              host: process.env.HOST,
+              host: process.env.TEST_HOST,
               port: 5432,
-              user: process.env.USER,
-              password: process.env.PASSWORD,
-              database: process.env.DATABASE,
+              user: process.env.TEST_USER,
+              database: process.env.TEST_DATABASE,
+              password: process.env.TEST_PASSWORD,
             },
           },
         }),
