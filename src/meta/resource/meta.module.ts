@@ -3,10 +3,10 @@ import { MetaController } from './meta.controller';
 import { MetaRepository } from '../domain/repository/meta.repository';
 import { MetaRepositoryImpl } from '../data-access/infraestructure/repository/meta.repository.impl';
 
-import { CreateMetaUseCase } from '../domain/use-cases/create-meta.use-cases';
-import { UpdateMetaUseCase } from '../domain/use-cases/update-meta.use-case';
-import { DeleteMetaUseCase } from '../domain/use-cases/delete-meta.use-cases';
-import { FindMetaUseCase } from '../domain/use-cases/find-meta.use-cases';
+import { CreateMetaUseCase } from '../domain/service/create-meta.use-cases';
+import { UpdateMetaUseCase } from '../domain/service/update-meta.use-case';
+import { DeleteMetaUseCase } from '../domain/service/delete-meta.use-cases';
+import { FindMetaUseCase } from '../domain/service/find-meta.use-cases';
 import { ObjectiveModule } from '../../objetivo/resource/objective.module';
 
 @Module({

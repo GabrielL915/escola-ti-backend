@@ -9,11 +9,11 @@ import {
   Req,
 } from '@nestjs/common';
 import { AddCarrinhoDto } from '../domain/dto/add-carrinho.dto';
-import { AddCarrinhoUseCase } from '../domain/use-cases/add-carrinho.use-case';
-import { FindItensCarrinhoUseCase } from '../domain/use-cases/find-item-by-id-carrinho.use-case';
-import { FinishCompraCarrinhoUseCase } from '../domain/use-cases/finish-compra-carrinho.use-case';
-import { DeleteCarrinhoUseCase } from '../domain/use-cases/delete-carrinho.use-case';
-import { DeleteItemCarrinhoUseCase } from '../domain/use-cases/delete-item-carrinho.use-case';
+import { AddCarrinhoUseCase } from '../domain/service/add-carrinho.use-case';
+import { FindItensCarrinhoUseCase } from '../domain/service/find-item-by-id-carrinho.use-case';
+import { FinishCompraCarrinhoUseCase } from '../domain/service/finish-compra-carrinho.use-case';
+import { DeleteCarrinhoUseCase } from '../domain/service/delete-carrinho.use-case';
+import { DeleteItemCarrinhoUseCase } from '../domain/service/delete-item-carrinho.use-case';
 import { AccessTokenGuard } from '../../auth/guards/access-token.guard';
 
 @Controller('carrinho')

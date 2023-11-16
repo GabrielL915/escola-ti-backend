@@ -5,13 +5,13 @@ import { ConfigModule } from '@nestjs/config';
 import { KnexModule } from 'nestjs-knex';
 import { MotoboyModule } from './motoboy.module';
 import { MotoboyController } from './motoboy.controller';
-import { CreateMotoboyUseCase } from '../domain/use-cases/create-motoboy.use-case';
-import { FindAllMotoboyUseCase } from '../domain/use-cases/find-all-motoboy.use-case';
-import { FindByIdMotoboyUseCase } from '../domain/use-cases/find-by-id-motoboy.use-case';
-import { FindByEmailMotoboyUseCase } from '../domain/use-cases/find-by-email-motoboy.use-case';
-import { UpdateMotoboyUseCase } from '../domain/use-cases/update-motoboy.use-case';
-import { UpdateMotoboyAiqcoinsUseCase } from '../domain/use-cases/update-motoboy-aiqcoins.use-case';
-import { DeleteMotoboyUseCase } from '../domain/use-cases/delete-motoboy.use-case';
+import { CreateMotoboyUseCase } from '../domain/service/create-motoboy.use-case';
+import { FindAllMotoboyUseCase } from '../domain/service/find-all-motoboy.use-case';
+import { FindByIdMotoboyUseCase } from '../domain/service/find-by-id-motoboy.use-case';
+import { FindByEmailMotoboyUseCase } from '../domain/service/find-by-email-motoboy.use-case';
+import { UpdateMotoboyUseCase } from '../domain/service/update-motoboy.use-case';
+import { UpdateMotoboyAiqcoinsUseCase } from '../domain/service/update-motoboy-aiqcoins.use-case';
+import { DeleteMotoboyUseCase } from '../domain/service/delete-motoboy.use-case';
 import { MotoboyRepository } from '../domain/repository/motoboy.repository';
 import { MotoboyRepositoryImpl } from '../data-access/infraestructure/repostitory/motoboy.repository.impl';
 import {
@@ -19,7 +19,7 @@ import {
   MOTOBOY_FIND_BY_ID_PROVIDER,
 } from '../../shared/constants/injection-tokens';
 import { GenerateBearer } from '../../shared/utils/generate-bearer';
-import { LoginUseCase } from '../../auth/domain/use-cases/login.use-case';
+import { LoginUseCase } from '../../auth/domain/service/login.use-case';
 import { AuthModule } from '../../auth/resource/auth.module';
 import { hashPassword } from '../../auth/utils/hash-password';
 

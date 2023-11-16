@@ -3,10 +3,10 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { CampaignController } from './campaign.controller';
 import { CampaignRepository } from '../domain/repository/campaign.repository';
-import { DeleteCampaignUseCase } from '../domain/use-cases/delete-campaign.use-cases';
-import { CreateCampaignUseCase } from '../domain/use-cases/create-campaign.use-cases';
-import { FindCampaignUseCase } from '../domain/use-cases/find-campaign.use-cases';
-import { UpdateCampaignUseCase } from '../domain/use-cases/update-campaign.use-case';
+import { DeleteCampaignUseCase } from '../domain/service/delete-campaign.use-cases';
+import { CreateCampaignUseCase } from '../domain/service/create-campaign.use-cases';
+import { FindCampaignUseCase } from '../domain/service/find-campaign.use-cases';
+import { UpdateCampaignUseCase } from '../domain/service/update-campaign.use-case';
 import { MotoboyRepository } from '../../motoboy/domain/repository/motoboy.repository';
 import { ConfigModule } from '@nestjs/config';
 import { MotoboyRepositoryImpl } from '../../motoboy/data-access/infraestructure/repostitory/motoboy.repository.impl';
@@ -14,8 +14,8 @@ import { CampaignRepositoryImpl } from '../data-access/infraestructure/repositor
 import { CampaignModule } from './campaign.module';
 import { KnexModule } from 'nestjs-knex';
 import { GenerateBearer } from '../../shared/utils/generate-bearer';
-import { LoginUseCase } from '../../auth/domain/use-cases/login.use-case';
-import { RegisterUseCase } from '../../auth/domain/use-cases/register.use-case';
+import { LoginUseCase } from '../../auth/domain/service/login.use-case';
+import { RegisterUseCase } from '../../auth/domain/service/register.use-case';
 import { CloudinaryModule } from '../../cloudinary/resource/cloudinary.module';
 import { ImagensModule } from '../../imagens/resource/imagens.module';
 import {
@@ -24,15 +24,15 @@ import {
   IMAGEN_FIND_BY_ID_PROVIDER,
   IMAGEN_UPDATE_PROVIDER,
 } from '../../shared/constants/injection-tokens';
-import { CreateImagenUseCase } from '../../imagens/domain/use-cases/create-imagem.use-case';
-import { DeleteImagensUseCase } from '../../imagens/domain/use-cases/delete-imagem.use-case';
-import { FindByIdImagemUseCase } from '../../imagens/domain/use-cases/find-by-id-imagem.use-case';
-import { UpdateImagemUseCase } from '../../imagens/domain/use-cases/update-imagem.use-case';
+import { CreateImagenUseCase } from '../../imagens/domain/service/create-imagem.use-case';
+import { DeleteImagensUseCase } from '../../imagens/domain/service/delete-imagem.use-case';
+import { FindByIdImagemUseCase } from '../../imagens/domain/service/find-by-id-imagem.use-case';
+import { UpdateImagemUseCase } from '../../imagens/domain/service/update-imagem.use-case';
 import { CloudinaryProvider } from '../../cloudinary/data-access/infraestructure/storage/cloudinary.provider';
 import { ICloudinaryProvider } from '../../cloudinary/domain/interfaces/icloudinary.provider';
 import { ImagemRepositoryImpl } from '../../imagens/data-access/infraestructure/repository/imagem.repository.impl';
 import { ImagemRepository } from '../../imagens/domain/repository/imagem.repository';
-import { CloudinaryUseCase } from '../../cloudinary/domain/use-cases/cloudinary.use-case';
+import { CloudinaryUseCase } from '../../cloudinary/domain/service/cloudinary.use-case';
 
 describe('CampaignController (e2e)', () => {
   let app: INestApplication;
@@ -44,7 +44,7 @@ describe('CampaignController (e2e)', () => {
 
 
   const campaignData = {
-    tipo: 'Campanha das Massas',
+    tipo: 'Campanha da Comida Oriental',
     dias: ['Segunda-feira', 'Terça-feira'],
     horario_inicial: '2023-09-18T09:00:00.000Z',
     horario_final: '2023-09-18T17:00:00.000Z',
@@ -161,7 +161,7 @@ describe('CampaignController (e2e)', () => {
       )
       .field('tempo_de_tolerancia', campaignData.tempo_de_tolerancia)
       .field('descricao', campaignData.descricao)
-      .attach('image', 'test/assets/moscando.jpg')
+      .attach('image', 'test/assets/campaings/CARD1.png')
       .expect(201);
 
     campaignId = response.body.id;

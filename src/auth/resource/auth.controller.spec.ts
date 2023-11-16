@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
-import { LoginUseCase } from '../domain/use-cases/login.use-case';
-import { RegisterUseCase } from '../domain/use-cases/register.use-case';
-import { ProfileUseCase } from '../domain/use-cases/profile.use-case';
-import { RefreshTokenUseCase } from '../domain/use-cases/refresh-token.use-case';
-import { SmsUseCase } from '../domain/use-cases/sms.use-case';
+import { LoginUseCase } from '../domain/service/login.use-case';
+import { RegisterUseCase } from '../domain/service/register.use-case';
+import { ProfileUseCase } from '../domain/service/profile.use-case';
+import { RefreshTokenUseCase } from '../domain/service/refresh-token.use-case';
+import { SmsUseCase } from '../domain/service/sms.use-case';
 import { ProfileDto } from '../domain/dto/profile.dto';
 
 const mockAuthService = {

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { LocalStrategy } from './local.strategy';
 import { UnauthorizedException } from '@nestjs/common';
-import { LoginUseCase } from '../domain/use-cases/login.use-case';
+import { LoginUseCase } from '../domain/service/login.use-case';
 
 describe('LocalStrategy', () => {
   let localStrategy: LocalStrategy;
