@@ -15,9 +15,7 @@ import { CarrinhoRepositoryImpl } from '../data-access/infraestructure/repositor
 import { CarrinhoRepository } from '../domain/repository/carrinho.repository';
 import { ProductsModule } from '../../products/resource/products.module';
 import { ItemCarrinhoModule } from '../../item-carrinho/resource/item-carrinho.module';
-import {
-  CARRINHO_FIND_ITENS_BY_ID_PROVIDER,
-} from '../../shared/constants/injection-tokens';
+import { CARRINHO_FIND_ITENS_BY_ID_PROVIDER } from '../../shared/constants/injection-tokens';
 import { StockModule } from '../../stock/resource/stock.module';
 import { GenerateBearer } from '../../shared/utils/generate-bearer';
 import { LoginUseCase } from '../../auth/domain/use-cases/login.use-case';
@@ -25,6 +23,7 @@ import { RegisterUseCase } from '../../auth/domain/use-cases/register.use-case';
 import { AuthModule } from '../../auth/resource/auth.module';
 import { MotoboyRepository } from '../../motoboy/domain/repository/motoboy.repository';
 import { ProductRepository } from '../../products/domain/repository/products.repository';
+import { DeleteItemCarrinhoUseCase } from '../domain/use-cases/delete-item-carrinho.use-case';
 
 describe('CarrinhoController (e2e)', () => {
   let app: INestApplication;
@@ -70,6 +69,7 @@ describe('CarrinhoController (e2e)', () => {
         FinishCompraCarrinhoUseCase,
         DeleteCarrinhoUseCase,
         FindItensCarrinhoUseCase,
+        DeleteItemCarrinhoUseCase,
         {
           provide: CarrinhoRepository,
           useClass: CarrinhoRepositoryImpl,
@@ -79,7 +79,7 @@ describe('CarrinhoController (e2e)', () => {
           useClass: FindItensCarrinhoUseCase,
         },
       ],
-    }).compile();   
+    }).compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
@@ -140,11 +140,11 @@ describe('CarrinhoController (e2e)', () => {
       .set('Authorization', `Bearer ${jwtToken.access_token}`);
     expect(response.status).toBe(200);
   }, 10000);
-/* 
+
   it('/carrinho/:id (DELETE)', async () => {
     const response = await request(app.getHttpServer())
       .delete(`/carrinho/${carrinhoId}`)
       .set('Authorization', `Bearer ${jwtToken.access_token}`);
     expect(response.status).toBe(200);
-  }); */
+  });
 });

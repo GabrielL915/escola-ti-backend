@@ -6,7 +6,7 @@ import { createdAt } from '../../../../shared/utils/created-at';
 import { UpdateCarrinhoDto } from 'src/carrinho/domain/dto/update-carrinho.dto';
 export class CarrinhoRepositoryImpl implements CarrinhoRepository {
   constructor(@InjectKnex() private readonly knex: Knex) {}
-  
+
   async create(id_motoboy: string): Promise<Carrinho> {
     const newCarrinho = {
       id_entregador: id_motoboy,
@@ -14,13 +14,15 @@ export class CarrinhoRepositoryImpl implements CarrinhoRepository {
       data_de_compra: createdAt,
     };
 
-    const [carrinho] = await this.knex.from('carrinho')
+    const [carrinho] = await this.knex
+      .from('carrinho')
       .insert(newCarrinho)
       .returning('*');
     return carrinho;
   }
   async addCarrinho(id: string, input: UpdateCarrinhoDto): Promise<Carrinho> {
-    const [carrinho] = await this.knex.from('carrinho')
+    const [carrinho] = await this.knex
+      .from('carrinho')
       .update(input)
       .where({ id })
       .returning('*');
@@ -28,7 +30,8 @@ export class CarrinhoRepositoryImpl implements CarrinhoRepository {
   }
 
   async findByIdMotoboy(id: string): Promise<Carrinho> {
-    const [cart] = await this.knex.from('carrinho')
+    const [cart] = await this.knex
+      .from('carrinho')
       .select('*')
       .where({ id_entregador: id, status: true });
     return cart;
@@ -38,6 +41,10 @@ export class CarrinhoRepositoryImpl implements CarrinhoRepository {
     return cart;
   }
   async delete(id: string): Promise<void> {
-    await this.knex('carrinho').where({ id }).del();
+    await this.knex.from('item_carrinho').where({ id_carrinho: id }).del();
+  }
+
+  async deleteItemCarrinho(id_itens: string): Promise<void> {
+    await this.knex.from('item_carrinho').where({ id: id_itens }).del();
   }
 }
