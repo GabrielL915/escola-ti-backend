@@ -30,6 +30,8 @@ export class CampaignRepositoryImpl implements CampaignRepository {
   }
 
   async delete(id: string): Promise<void> {
+    await this.knex('inscrito').where({ id_campanha: id }).del();
+    await this.knex('objetivo').where({ id_campanha: id }).del();
     await this.knex('campanha').where({ id }).del();
   }
 

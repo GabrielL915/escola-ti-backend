@@ -33,8 +33,8 @@ describe('ObjectiveController (e2e)', () => {
   let objectiveId: string;
 
   const objectiveData = {
-    descricao: 'Objetivo do mês de março',
-    id_campanha: '5e950abc-20b7-4306-8625-f36389274912',
+    descricao: 'NOVO TESTE Objeticvo do mês de março',
+    id_campanha: '0df8e235-d3cf-46ee-926b-d65d480b8ebd',
     titulo: 'Objetivo Março',
     premio_associado: 100,
     meta: 500.5,
@@ -55,13 +55,13 @@ describe('ObjectiveController (e2e)', () => {
             client: 'postgresql',
             useNullAsDefault: true,
             connection: {
-              connectionString: process.env.CONNECTION_STRING,
+              connectionString: process.env.TEST_DATABASE_URL,
               ssl: { rejectUnauthorized: false },
-              host: process.env.HOST,
+              host: process.env.TEST_HOST,
               port: 5432,
-              user: process.env.USER,
-              password: process.env.PASSWORD,
-              database: process.env.DATABASE,
+              user: process.env.TEST_USER,
+              database: process.env.TEST_DATABASE,
+              password: process.env.TEST_PASSWORD,
             },
           },
         }),

@@ -166,8 +166,7 @@ describe('CampaignController (e2e)', () => {
 
     campaignId = response.body.id;
 
-    // expect(response.body).toMatchObject({ ...campaignData, status: true });
-    // expect(typeof response.body.id).toBe('string');
+    expect(response.status).toBe(201);
   }, 10000);
 
   it('GET /campaign should list all campaigns', async () => {

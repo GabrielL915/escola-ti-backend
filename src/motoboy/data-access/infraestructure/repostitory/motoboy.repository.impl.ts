@@ -114,6 +114,7 @@ export class MotoboyRepositoryImpl implements MotoboyRepository {
     if (existingMotoboy.length === 0) {
       throw new NotFoundException('Entregador não encontrado para deletar');
     }
+    await this.knex('inscrito').where({ id_entregador: id }).del();
     await this.knex('conta').where({ id_entregador: id }).del();
     await this.knex('entregador').where({ id: id }).del();
   }
