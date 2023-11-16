@@ -11,11 +11,11 @@ import {
 } from '@nestjs/common';
 import { CreateMotoboyDto } from '../domain/dto/create-motoboy.dto';
 import { UpdateMotoboyRequestDto } from '../domain/dto/update-motoboy-request.dto';
-import { CreateMotoboyUseCase } from '../domain/use-cases/create-motoboy.use-case';
-import { FindAllMotoboyUseCase } from '../domain/use-cases/find-all-motoboy.use-case';
-import { FindByIdMotoboyUseCase } from '../domain/use-cases/find-by-id-motoboy.use-case';
-import { UpdateMotoboyUseCase } from '../domain/use-cases/update-motoboy.use-case';
-import { DeleteMotoboyUseCase } from '../domain/use-cases/delete-motoboy.use-case';
+import { CreateMotoboyUseCase } from '../domain/service/create-motoboy.use-case';
+import { FindAllMotoboyUseCase } from '../domain/service/find-all-motoboy.use-case';
+import { FindByIdMotoboyUseCase } from '../domain/service/find-by-id-motoboy.use-case';
+import { UpdateMotoboyUseCase } from '../domain/service/update-motoboy.use-case';
+import { DeleteMotoboyUseCase } from '../domain/service/delete-motoboy.use-case';
 import { AccessTokenGuard } from '../../auth/guards/access-token.guard';
 
 @Controller('motoboy')

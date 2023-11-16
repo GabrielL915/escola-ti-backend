@@ -1,6 +1,6 @@
 import { Injectable, NestMiddleware, NotFoundException } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { SmsUseCase } from '../../auth/domain/use-cases/sms.use-case';
+import { SmsUseCase } from '../../auth/domain/service/sms.use-case';
 
 @Injectable()
 export class SmsPhoneMiddleware implements NestMiddleware {

@@ -11,11 +11,11 @@ import {
 } from '@nestjs/common';
 import { CreateProductDto } from '../domain/dto/create-product.dto';
 import { UpdateProductDto } from '../domain/dto/update-product.dto';
-import { CreateProductsUseCase } from '../domain/use-cases/create-products.use-case';
-import { FindAllProductsUseCase } from '../domain/use-cases/find-all-products.use-case';
-import { FindByIdProductsUseCase } from '../domain/use-cases/find-by-id-products.use-case';
-import { UpdateProductsUseCase } from '../domain/use-cases/update-products.use-case';
-import { DeleteProductsUseCase } from '../domain/use-cases/delete-products.use-case';
+import { CreateProductsUseCase } from '../domain/service/create-products.use-case';
+import { FindAllProductsUseCase } from '../domain/service/find-all-products.use-case';
+import { FindByIdProductsUseCase } from '../domain/service/find-by-id-products.use-case';
+import { UpdateProductsUseCase } from '../domain/service/update-products.use-case';
+import { DeleteProductsUseCase } from '../domain/service/delete-products.use-case';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('products')

@@ -24,13 +24,13 @@ import {
 import { LoginDto } from '../domain/dto/login.dto';
 import { ProfileDto } from '../domain/dto/profile.dto';
 import { SmsDto } from '../domain/dto/sms.dto';
-import { RegisterUseCase } from '../domain/use-cases/register.use-case';
-import { LoginUseCase } from '../domain/use-cases/login.use-case';
-import { ProfileUseCase } from '../domain/use-cases/profile.use-case';
+import { RegisterUseCase } from '../domain/service/register.use-case';
+import { LoginUseCase } from '../domain/service/login.use-case';
+import { ProfileUseCase } from '../domain/service/profile.use-case';
 import { AccessTokenGuard } from '../guards/access-token.guard';
 import { RefreshTokenGuard } from '../guards/refresh-token.guard';
-import { SmsUseCase } from '../domain/use-cases/sms.use-case';
-import { RefreshTokenUseCase } from '../domain/use-cases/refresh-token.use-case';
+import { SmsUseCase } from '../domain/service/sms.use-case';
+import { RefreshTokenUseCase } from '../domain/service/refresh-token.use-case';
 import { ErrorResponseDto } from '../domain/dto/error-response.dto';
 @ApiTags('auth')
 @ApiBearerAuth()

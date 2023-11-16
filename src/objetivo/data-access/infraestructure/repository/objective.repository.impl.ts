@@ -1,5 +1,4 @@
 import {
-  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { Knex } from 'knex';
@@ -28,6 +27,7 @@ export class ObjectiveRepositoryImpl implements ObjectiveRepository {
   }
 
   async delete(id: string): Promise<void> {
+    await this.knex('meta_atingida').where({ id_objetivo: id }).del();
     await this.knex('objetivo').where({ id }).del();
   }
 

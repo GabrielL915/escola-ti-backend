@@ -93,17 +93,14 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s",
       "!<rootDir>/app.module.ts",
-      "!<rootDir>/main.ts",
-      "!<rootDir>/motoboy/resource/motoboy.module.ts",
-      "!<rootDir>/auth/resource/auth.module.ts"
+      "!<rootDir>/main.ts"
+
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
     "testPathIgnorePatterns": [
       "<rootDir>/app.module.ts",
-      "<rootDir>/main.ts",
-      "<rootDir>/motoboy/resource/motoboy.module.ts",
-      "!<rootDir>/auth/resource/auth.module.ts"
+      "<rootDir>/main.ts"
     ]
   }
 }

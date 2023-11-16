@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { CreateItemCarrinhoUseCase } from '../domain/use-cases/create-item-carrinho.use-case';
-import { FindAllByIdItensCarrinhoUseCase } from '../domain/use-cases/find-all-by-id-itens-carrinho.use-case';
+import { CreateItemCarrinhoUseCase } from '../domain/service/create-item-carrinho.use-case';
+import { FindAllByIdItensCarrinhoUseCase } from '../domain/service/find-all-by-id-itens-carrinho.use-case';
 import { ItemCarrinhoRepository } from '../domain/repository/item-carrinho.repository';
 import { ItemCarrinhoRepositoryImpl } from '../data-access/infraestructure/repository/item-carrinho.repository.impl';
 import {

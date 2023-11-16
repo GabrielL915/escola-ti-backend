@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { CloudinaryUseCase } from '../domain/use-cases/cloudinary.use-case';
+import { CloudinaryUseCase } from '../domain/service/cloudinary.use-case';
 import { CloudinaryProvider } from '../data-access/infraestructure/storage/cloudinary.provider';
 import { ICloudinaryProvider } from '../domain/interfaces/icloudinary.provider';
 import { ConfigModule } from '@nestjs/config';

@@ -1,5 +1,5 @@
-import { LoginUseCase } from '../../auth/domain/use-cases/login.use-case';
-import { RegisterUseCase } from '../../auth/domain/use-cases/register.use-case';
+import { LoginUseCase } from '../../auth/domain/service/login.use-case';
+import { RegisterUseCase } from '../../auth/domain/service/register.use-case';
 import { RegisterDto } from '../../auth/domain/dto/register.dto';
 
 export class GenerateBearer {

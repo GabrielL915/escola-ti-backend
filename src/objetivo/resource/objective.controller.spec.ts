@@ -3,10 +3,10 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { ObjectiveController } from './objective.controller';
 import { ObjectiveRepository } from '../domain/repository/objective.repository';
-import { DeleteObjectiveUseCase } from '../domain/use-cases/delete-objective.use-cases';
-import { CreateObjectiveUseCase } from '../domain/use-cases/create-objective.use-cases';
-import { FindObjectiveUseCase } from '../domain/use-cases/find-objective.use-cases';
-import { UpdateObjectiveUseCase } from '../domain/use-cases/update-objective.use-case';
+import { DeleteObjectiveUseCase } from '../domain/service/delete-objective.use-cases';
+import { CreateObjectiveUseCase } from '../domain/service/create-objective.use-cases';
+import { FindObjectiveUseCase } from '../domain/service/find-objective.use-cases';
+import { UpdateObjectiveUseCase } from '../domain/service/update-objective.use-case';
 import { ConfigModule } from '@nestjs/config';
 import { ObjectiveRepositoryImpl } from '../data-access/infraestructure/repository/objective.repository.impl';
 import { ObjectiveModule } from './objective.module';
@@ -19,10 +19,10 @@ import {
   IMAGEN_FIND_BY_ID_PROVIDER,
   IMAGEN_UPDATE_PROVIDER,
 } from '../../shared/constants/injection-tokens';
-import { CreateImagenUseCase } from '../../imagens/domain/use-cases/create-imagem.use-case';
-import { FindByIdImagemUseCase } from '../../imagens/domain/use-cases/find-by-id-imagem.use-case';
-import { DeleteImagensUseCase } from '../../imagens/domain/use-cases/delete-imagem.use-case';
-import { UpdateImagemUseCase } from '../../imagens/domain/use-cases/update-imagem.use-case';
+import { CreateImagenUseCase } from '../../imagens/domain/service/create-imagem.use-case';
+import { FindByIdImagemUseCase } from '../../imagens/domain/service/find-by-id-imagem.use-case';
+import { DeleteImagensUseCase } from '../../imagens/domain/service/delete-imagem.use-case';
+import { UpdateImagemUseCase } from '../../imagens/domain/service/update-imagem.use-case';
 import { ICloudinaryProvider } from '../../cloudinary/domain/interfaces/icloudinary.provider';
 import { CloudinaryProvider } from '../../cloudinary/data-access/infraestructure/storage/cloudinary.provider';
 import { ImagemRepository } from '../../imagens/domain/repository/imagem.repository';
@@ -33,11 +33,11 @@ describe('ObjectiveController (e2e)', () => {
   let objectiveId: string;
 
   const objectiveData = {
-    descricao: 'Objetivo do mês de março',
-    id_campanha: '5e950abc-20b7-4306-8625-f36389274912',
-    titulo: 'Objetivo Março',
-    premio_associado: 100,
-    meta: 500.5,
+    descricao: 'Entregar 3 cheeseburgers',
+    id_campanha: '0df8e235-d3cf-46ee-926b-d65d480b8ebd',
+    titulo: 'Objetivo dos Hamburgueres',
+    premio_associado: 80,
+    meta: 0.3,
   };
 
   beforeAll(async () => {
@@ -55,13 +55,13 @@ describe('ObjectiveController (e2e)', () => {
             client: 'postgresql',
             useNullAsDefault: true,
             connection: {
-              connectionString: process.env.CONNECTION_STRING,
+              connectionString: process.env.TEST_DATABASE_URL,
               ssl: { rejectUnauthorized: false },
-              host: process.env.HOST,
+              host: process.env.TEST_HOST,
               port: 5432,
-              user: process.env.USER,
-              password: process.env.PASSWORD,
-              database: process.env.DATABASE,
+              user: process.env.TEST_USER,
+              database: process.env.TEST_DATABASE,
+              password: process.env.TEST_PASSWORD,
             },
           },
         }),
@@ -119,7 +119,7 @@ describe('ObjectiveController (e2e)', () => {
       .field('titulo', objectiveData.titulo)
       .field('premio_associado', objectiveData.premio_associado)
       .field('meta', objectiveData.meta)
-      .attach('image', 'test/assets/moscando.jpg')
+      .attach('image', 'test/assets/objectives/achievement-badge-01.png')
       .expect(201);
 
     objectiveId = response.body.id;

@@ -24,10 +24,10 @@ import {
 
 import { CreateCampaignDto } from '../domain/dto/create-campaign.dto';
 import { UpdateCampaignDto } from '../domain/dto/update-campaign.dto';
-import { CreateCampaignUseCase } from '../domain/use-cases/create-campaign.use-cases';
-import { UpdateCampaignUseCase } from '../domain/use-cases/update-campaign.use-case';
-import { DeleteCampaignUseCase } from '../domain/use-cases/delete-campaign.use-cases';
-import { FindCampaignUseCase } from '../domain/use-cases/find-campaign.use-cases';
+import { CreateCampaignUseCase } from '../domain/service/create-campaign.use-cases';
+import { UpdateCampaignUseCase } from '../domain/service/update-campaign.use-case';
+import { DeleteCampaignUseCase } from '../domain/service/delete-campaign.use-cases';
+import { FindCampaignUseCase } from '../domain/service/find-campaign.use-cases';
 import { ErrorResponseDto } from '../../auth/domain/dto/error-response.dto';
 import { AccessTokenGuard } from '../../auth/guards/access-token.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
