@@ -32,10 +32,10 @@ export class SubscribeController {
     private readonly updateSubscribeUseCase: UpdateSubscribeUseCase,
     private readonly deleteSubscribeUseCase: DeleteSubscribeUseCase,
     private readonly findSubscribeUseCase: FindSubscribeUseCase,
-  ) {}
+  ) { }
 
   @Post()
-  @ApiOperation({ summary: 'Registrar entidade' })
+  @ApiOperation({ summary: 'Registrar entidade', description: 'Registra uma nova entidade com base nos dados fornecidos.' })
   @ApiBody({ type: CreateSubscribeDto, description: 'Dados para registro' })
   @ApiResponse({ status: 201, description: 'Entidade registrada com sucesso.' })
   @ApiResponse({ status: 400, description: 'Requisição inválida.' })
@@ -44,7 +44,7 @@ export class SubscribeController {
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'Atualizar registro' })
+  @ApiOperation({ summary: 'Atualizar registro', description: 'Atualiza um registro existente com base no ID fornecido e nos dados atualizados.' })
   @ApiParam({ name: 'id', description: 'ID do registro' })
   @ApiBody({ type: UpdateSubscribeDto, description: 'Dados para atualização do registro' })
   @ApiResponse({ status: 200, description: 'Registro atualizado com sucesso.' })
@@ -58,7 +58,7 @@ export class SubscribeController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Deletar registro' })
+  @ApiOperation({ summary: 'Deletar registro', description: 'Exclui um registro com base no ID fornecido.' })
   @ApiParam({ name: 'id', description: 'ID do registro' })
   @ApiResponse({ status: 200, description: 'Registro deletado com sucesso.' })
   @ApiResponse({ status: 404, description: 'Registro não encontrado.' })
@@ -67,14 +67,14 @@ export class SubscribeController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Listar todos os registros' })
+  @ApiOperation({ summary: 'Listar todos os registros', description: 'Lista todos os registros cadastrados.' })
   @ApiResponse({ status: 200, description: 'Lista de registros.' })
   async findAll() {
     return this.findSubscribeUseCase.findAll();
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Buscar registro por ID' })
+  @ApiOperation({ summary: 'Buscar registro por ID', description: 'Recupera detalhes de um registro com base no ID fornecido.' })
   @ApiParam({ name: 'id', description: 'ID do registro' })
   @ApiResponse({ status: 200, description: 'Registro encontrado.' })
   @ApiResponse({ status: 404, description: 'Registro não encontrado.' })
