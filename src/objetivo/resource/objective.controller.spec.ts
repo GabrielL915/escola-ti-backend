@@ -34,8 +34,8 @@ describe('ObjectiveController (e2e)', () => {
 
   const objectiveData = {
     descricao: 'Entregar 3 cheeseburgers',
-    id_campanha: '0df8e235-d3cf-46ee-926b-d65d480b8ebd',
-    titulo: 'Objetivo dos Hamburgueres',
+    id_campanha: 'f2e5dbd8-dc65-4724-aa18-9fffd7944a02',
+    titulo: 'Entregar sushi',
     premio_associado: 80,
     meta: 0.3,
   };

@@ -105,7 +105,7 @@ describe('CarrinhoController (e2e)', () => {
       .field('valor', productData.valor)
       .field('descricao', productData.descricao)
       .field('quantidade', productData.quantidade)
-      .attach('image', 'test/assets/moscando.jpg');
+      .attach('image', 'test/assets/products/bag-aiqfome.png');
     productId = response.body.id;
   }, 10000);
 
