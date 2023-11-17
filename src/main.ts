@@ -14,7 +14,7 @@ async function bootstrap() {
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
   const config = new DocumentBuilder()
-    .setTitle('AiqApi')
+    .setTitle('AiqpontosApi')
     .setDescription('Api de fidelizar entregadores')
     .setVersion('1.0')
     .addBearerAuth(
