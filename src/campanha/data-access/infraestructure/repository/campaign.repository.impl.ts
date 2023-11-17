@@ -46,6 +46,11 @@ export class CampaignRepositoryImpl implements CampaignRepository {
     const objectives = await this.knex('objetivo')
       .where({ id_campanha: id })
       .select('*');
+      for (const objetivo of objectives) {
+        const [image] = await this.knex('imagem').where({ id_origem: objetivo.id}).select('url');
+        const url = image.url 
+        objetivo.imagem = url;
+      }
     campaign.objetivos = objectives;
     const isRegistered = await this.knex('inscrito')
       .where({ id_entregador: motoboyId, id_campanha: id })

@@ -17,8 +17,8 @@ describe('SubscribeController (e2e)', () => {
   let subscribeId: string;
 
   const SubscribeData = {
-    id_entregador: '4342ee83-d628-4114-b664-90c1acd1ab0f',
-    id_campanha: '0df8e235-d3cf-46ee-926b-d65d480b8ebd',
+    id_entregador: '4f076933-48d5-4e8c-8b81-da0c39e8154f',
+    id_campanha: 'f2e5dbd8-dc65-4724-aa18-9fffd7944a02',
     data_de_inscricao: '2023-05-09T03:00:00.000Z',
     entregas_ignoradas: 0,
     entregas_recusadas: 0,

@@ -41,7 +41,6 @@ import { DeleteStockUseCase } from '../../stock/domain/service/delete-stock.use-
 import { UpdateImagemUseCase } from '../../imagens/domain/service/update-imagem.use-case';
 import { UpdateStockUseCase } from '../../stock/domain/service/update-stock.use-case';
 
-
 describe('ProductsController (e2e)', () => {
   let app: INestApplication;
   let id: string;
@@ -142,10 +141,10 @@ describe('ProductsController (e2e)', () => {
 
   it('should create a product', async () => {
     const createProductDto = {
-      nome: 'Produto 009',
-      descricao: 'Descrição do produto',
-      valor: 1000,
-      quantidade: 20,
+      nome: 'Garrafinha',
+      descricao: 'garrafinha de agua',
+      valor: 2,
+      quantidade: 500,
     };
 
     const response = await request(app.getHttpServer())
@@ -154,25 +153,21 @@ describe('ProductsController (e2e)', () => {
       .field('valor', createProductDto.valor)
       .field('descricao', createProductDto.descricao)
       .field('quantidade', createProductDto.quantidade)
-      .attach('image', 'test/assets/moscando.jpg');
+      .attach('image', 'test/assets/products/garrafinha-aiqfome.png'/* 'test/assets/products/bag-aiqfome.png' */);
 
     id = response.body.id;
     expect(response.status).toBe(201);
-    
   }, 10000);
 
   it('should find all products', async () => {
     const response = await request(app.getHttpServer()).get('/products');
 
     expect(response.status).toBe(200);
-    
   }, 10000);
 
   it('should find a product by id', async () => {
-    const response = await request(app.getHttpServer()).get(
-      `/products/${id}`,
-    );
-    
+    const response = await request(app.getHttpServer()).get(`/products/${id}`);
+
     expect(response.status).toBe(200);
   }, 10000);
 
@@ -182,20 +177,18 @@ describe('ProductsController (e2e)', () => {
       descricao: 'descricao atualizada',
       valor: 1000,
       quantidade: 20,
-
     };
 
     const response = await request(app.getHttpServer())
-      .patch( `/products/${id}`)
+      .patch(`/products/${id}`)
       .field('nome', updateProductDto.nome)
       .field('valor', updateProductDto.valor)
       .field('descricao', updateProductDto.descricao)
       .field('quantidade', updateProductDto.quantidade)
-   /*    .field('status', updateProductDto.status) */
-      .attach('image', 'test/assets/moscando.jpg');
-     
-    expect(response.status).toBe(200);
+      /*    .field('status', updateProductDto.status) */
+      .attach('image', 'test/assets/products/bag-aiqfome.png');
 
+    expect(response.status).toBe(200);
   }, 10000);
 
   it('should delete a product', async () => {
