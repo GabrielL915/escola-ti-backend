@@ -25,27 +25,20 @@ export class CreateSubscribeDto {
     example: '2023-09-21',
     type: String,
   })
-  /* @IsDate() */
-  @IsNotEmpty()
-  @IsString()
-  /*   @IsISO8601() */
-  data_de_inscricao: string;
+
+  data_de_inscricao?: string;
 
   @ApiProperty({
     description: 'Número de corridas ignoradas pelo entregador',
     example: 5,
     type: Number,
   })
-  @IsNumber()
-  @Min(0)
-  entregas_ignoradas: number;
+  entregas_ignoradas?: number;
 
   @ApiProperty({
     description: 'Número de corridas recusadas pelo entregador',
     example: 3,
     type: Number,
   })
-  @IsNumber()
-  @Min(0)
-  entregas_recusadas: number;
+  entregas_recusadas?: number;
 }
