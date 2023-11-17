@@ -38,10 +38,10 @@ export class ObjectiveController {
     private readonly updateObjectiveUseCase: UpdateObjectiveUseCase,
     private readonly deleteObjectiveUseCase: DeleteObjectiveUseCase,
     private readonly findObjectiveUseCase: FindObjectiveUseCase,
-  ) {}
+  ) { }
 
   @Post()
-  @ApiOperation({ summary: 'Criar um novo Objetivo' })
+  @ApiOperation({ summary: 'Criar um novo Objetivo', description: 'Cria um novo Objetivo com base nos dados fornecidos.' })
   @ApiBadRequestResponse({
     description: 'Bad request',
     type: ErrorResponseDto,
@@ -91,7 +91,7 @@ export class ObjectiveController {
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'Atualizar um Objetivo existente' })
+  @ApiOperation({ summary: 'Atualizar um Objetivo existente', description: 'Atualiza um Objetivo existente com base no ID fornecido e nos dados atualizados.' })
   @ApiInternalServerErrorResponse({
     description: 'Internal server error',
     type: ErrorResponseDto,
@@ -127,7 +127,7 @@ export class ObjectiveController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Excluir um Objetivo' })
+  @ApiOperation({ summary: 'Excluir um Objetivo', description: 'Exclui um Objetivo com base no ID fornecido.' })
   @ApiInternalServerErrorResponse({
     description: 'Internal server error',
     type: ErrorResponseDto,
@@ -148,7 +148,7 @@ export class ObjectiveController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Listar todos os Objetivos' })
+  @ApiOperation({ summary: 'Listar todos os Objetivos', description: 'Lista todos os Objetivos cadastrados.' })
   @ApiInternalServerErrorResponse({
     description: 'Internal server error',
     type: ErrorResponseDto,
@@ -168,7 +168,7 @@ export class ObjectiveController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Buscar um Objetivo específico' })
+  @ApiOperation({ summary: 'Buscar um Objetivo específico', description: 'Recupera detalhes de um Objetivo com base no ID fornecido.' })
   @ApiNotFoundResponse({
     description: 'Objetivo não encontrado',
     type: ErrorResponseDto,

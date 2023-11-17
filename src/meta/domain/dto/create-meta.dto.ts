@@ -34,7 +34,7 @@ export class CreateMetaDto {
 
   @ApiProperty({
     description: 'Valor atingido pelo entregador',
-    example: '25%',
+    example: '0.25',
     type: String,
   })
 
