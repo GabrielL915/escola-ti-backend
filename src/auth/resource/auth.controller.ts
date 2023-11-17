@@ -20,6 +20,7 @@ import {
   ApiConflictResponse,
   ApiUnauthorizedResponse,
   ApiNotFoundResponse,
+  ApiOperation,
 } from '@nestjs/swagger';
 import { LoginDto } from '../domain/dto/login.dto';
 import { ProfileDto } from '../domain/dto/profile.dto';
@@ -42,7 +43,7 @@ export class AuthController {
     private readonly profileUseCase: ProfileUseCase,
     private readonly smsUseCase: SmsUseCase,
     private readonly refreshTokenUseCase: RefreshTokenUseCase,
-  ) {}
+  ) { }
 
   @Post('sendNumber')
   @ApiBadRequestResponse({
@@ -77,6 +78,7 @@ export class AuthController {
       },
     },
   })
+  @ApiOperation({ summary: 'Gera código de verificação para um número de telefone', description: 'Este endpoint gera um código de verificação para um número de telefone fornecido.' })
   generateCode(@Body() body: SmsDto) {
     return this.smsUseCase.generateCode(body.telefone);
   }
@@ -99,6 +101,21 @@ export class AuthController {
       },
     },
   })
+  @ApiBody({
+    description: 'Body for validate code',
+    type: 'object',
+    required: true,
+    examples: {
+      'validate-code': {
+        summary: 'Example body for validate code',
+        value: {
+          telefone: '(00) 00000-0000',
+          codigo: 1234,
+        },
+      },
+    },
+  })
+  @ApiOperation({ summary: 'Valida o código de verificação enviado para o telefone', description: 'Este endpoint valida o código de verificação enviado para um número de telefone fornecido.' })
   validateCode(@Body() body: { telefone: string; codigo: number }) {
     return this.smsUseCase.validateCode(body.telefone, body.codigo);
   }
@@ -178,7 +195,8 @@ export class AuthController {
     type: LoginDto,
     required: true,
     examples: {
-      'login-1': {
+      'login-example': {
+        summary: 'Example login payload',
         value: {
           email: 'joao.almeida@example.com',
           senha: 'senhaSegura123',
@@ -186,6 +204,7 @@ export class AuthController {
       },
     },
   })
+  @ApiOperation({ summary: 'Autentica o usuário com e-mail e senha', description: 'Este endpoint autentica um usuário com base em seu e-mail e senha fornecidos.' })
   login(@Body() loginDto: LoginDto) {
     return this.loginUseCase.login(loginDto);
   }
@@ -271,11 +290,11 @@ export class AuthController {
     type: RegisterDto,
     required: true,
   })
+  @ApiOperation({ summary: 'Registra um novo usuário no sistema', description: 'Este endpoint registra um novo usuário no sistema com base nos dados fornecidos.' })
   create(@Body() createCadastroDto: RegisterDto): Promise<RegisterDto> {
     return this.registerUseCase.register(createCadastroDto);
   }
 
-  @UseGuards(AccessTokenGuard)
   @ApiInternalServerErrorResponse({
     description: 'Internal server error',
     type: ErrorResponseDto,
@@ -309,7 +328,10 @@ export class AuthController {
     description: 'Profile do entregador',
     type: ProfileDto,
   })
+  @ApiBearerAuth('access-token')
+  @UseGuards(AccessTokenGuard)
   @Get('profile')
+  @ApiOperation({ summary: 'Obtém o perfil do usuário autenticado', description: 'Este endpoint obtém o perfil do usuário autenticado com base no token de acesso fornecido.' })
   getProfile(@Req() req: Request) {
     const email = req.user['email'];
     return this.profileUseCase.profile(email);
@@ -317,6 +339,7 @@ export class AuthController {
 
   @UseGuards(RefreshTokenGuard)
   @Get('refresh')
+  @ApiBearerAuth('refresh-token')
   @ApiInternalServerErrorResponse({
     description: 'Internal server error',
     type: ErrorResponseDto,
@@ -349,6 +372,7 @@ export class AuthController {
     status: 200,
     description: 'Token atualizado',
   })
+  @ApiOperation({ summary: 'Atualiza o token de acesso do usuário', description: 'Este endpoint atualiza o token de acesso do usuário com base no token de atualização fornecido.' })
   getRefreshToken(@Req() req: Request) {
     const motoboyId = req.user['sub'];
     const refreshToken = req.user['refreshToken'];

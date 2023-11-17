@@ -32,10 +32,10 @@ export class MetaController {
     private readonly updateMetaUseCase: UpdateMetaUseCase,
     private readonly deleteMetaUseCase: DeleteMetaUseCase,
     private readonly findMetaUseCase: FindMetaUseCase,
-  ) {}
+  ) { }
 
   @Post()
-  @ApiOperation({ summary: 'Criar uma nova Meta' })
+  @ApiOperation({ summary: 'Criar uma nova Meta', description: 'Cria uma nova Meta com base nos dados fornecidos.' })
   @ApiBody({ type: CreateMetaDto, description: 'Dados da Meta a ser criada' })
   @ApiResponse({ status: 201, description: 'Meta criada com sucesso.' })
   @ApiResponse({ status: 400, description: 'Entrada inválida.' })
@@ -44,7 +44,7 @@ export class MetaController {
   }
 
   @Put()
-  @ApiOperation({ summary: 'Atualizar uma Meta existente' })
+  @ApiOperation({ summary: 'Atualizar uma Meta existente', description: 'Atualiza uma Meta existente com base no ID fornecido e nos dados atualizados.' })
   @ApiParam({
     name: 'id_objetivo',
     description: 'ID do Objetivo da Meta a ser atualizada',
@@ -66,7 +66,7 @@ export class MetaController {
   }
 
   @Delete()
-  @ApiOperation({ summary: 'Excluir uma Meta' })
+  @ApiOperation({ summary: 'Excluir uma Meta', description: 'Exclui uma Meta com base no ID fornecido.' })
   @ApiParam({
     name: 'id_objetivo',
     description: 'ID do Objetivo da Meta a ser excluída',
@@ -85,7 +85,7 @@ export class MetaController {
   }
 
   @Get('/all')
-  @ApiOperation({ summary: 'Listar todas as Metas' })
+  @ApiOperation({ summary: 'Listar todas as Metas', description: 'Lista todas as Metas cadastradas.' })
   @ApiResponse({
     status: 200,
     description: 'Lista de Metas',
@@ -96,7 +96,7 @@ export class MetaController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Buscar uma Meta específica' })
+  @ApiOperation({ summary: 'Buscar uma Meta específica', description: 'Recupera detalhes de uma Meta com base no ID fornecido.' })
   @ApiParam({
     name: 'id_objetivo',
     description: 'ID do Objetivo da Meta a ser recuperada',

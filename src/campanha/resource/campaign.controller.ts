@@ -41,10 +41,10 @@ export class CampaignController {
     private readonly updateCampaignUseCase: UpdateCampaignUseCase,
     private readonly deleteCampaignUseCase: DeleteCampaignUseCase,
     private readonly findCampaignUseCase: FindCampaignUseCase,
-  ) {}
+  ) { }
 
   @Post()
-  @ApiOperation({ summary: 'Criar campanha' })
+  @ApiOperation({ summary: 'Criar campanha', description: 'Cria uma nova campanha com base nos dados fornecidos.' })
   @ApiBody({
     type: CreateCampaignDto,
     description: 'Dados para criação da campanha',
@@ -170,7 +170,7 @@ export class CampaignController {
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'Atualizar campanha' })
+  @ApiOperation({ summary: 'Atualizar campanha', description: 'Atualiza uma campanha existente com base no ID fornecido e nos dados atualizados.' })
   @ApiInternalServerErrorResponse({
     description: 'Internal server error',
     type: ErrorResponseDto,
@@ -210,7 +210,7 @@ export class CampaignController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Deletar campanha' })
+  @ApiOperation({ summary: 'Deletar campanha', description: 'Exclui uma campanha com base no ID fornecido.' })
   @ApiInternalServerErrorResponse({
     description: 'Internal server error',
     type: ErrorResponseDto,
@@ -231,7 +231,7 @@ export class CampaignController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Listar todas as campanhas' })
+  @ApiOperation({ summary: 'Listar todas as campanhas', description: 'Lista todas as campanhas cadastradas.' })
   @ApiInternalServerErrorResponse({
     description: 'Internal server error',
     type: ErrorResponseDto,
@@ -250,9 +250,10 @@ export class CampaignController {
     return await this.findCampaignUseCase.findAll();
   }
 
+  @ApiBearerAuth('access-token')
   @UseGuards(AccessTokenGuard)
   @Get(':id')
-  @ApiOperation({ summary: 'Buscar campanha por ID' })
+  @ApiOperation({ summary: 'Buscar campanha por ID', description: 'Recupera detalhes de uma campanha com base no ID fornecido.' })
   @ApiNotFoundResponse({
     description: 'Campanha não encontrada',
     type: ErrorResponseDto,
